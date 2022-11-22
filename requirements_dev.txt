@@ -8,4 +8,3 @@ coverage
 Sphinx
 twine
 grip
-liverload

@@ -1,14 +1,10 @@
 import matplotlib.pyplot as plt
-import my_functions as spep
+import spectrapepper as spep
 import pandas as pd
 import numpy as np
-import pickle
 import math
-import time
-import glob
 import copy
-import sys
-import os
+
 
 class pudu:
     def __init__(self, x, y, pf):

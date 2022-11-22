@@ -25,8 +25,8 @@ setup_requirements = [ ]
 test_requirements = [ ]
 
 setup(
-    author="Enric Tomas Grau-Luque",
-    author_email='patenric@gmail.com',
+    author="pudu",
+    author_email='puduhola@gmail.com',
     python_requires='>=3.7',
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
@@ -39,7 +39,7 @@ setup(
         'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
     ],
-    description="pudu is a python library to perform Local Importance Gradient (LIG)",
+    description="A Python package to perform Local Importance Gradient (LIG), an explanability method for machine learning algorithms.",
     install_requires=install_requires,
     dependency_links=dependency_links,
     license="MIT license",
@@ -52,7 +52,7 @@ setup(
     setup_requires=setup_requirements,
     test_suite='tests',
     tests_require=test_requirements,
-    url='https://github.com/enricgrau/pudu',
+    url='https://github.com/pudu-py/pudu',
     version='0.0.1',
     zip_safe=False,
 )

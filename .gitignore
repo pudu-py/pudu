@@ -103,4 +103,8 @@ ENV/
 .mypy_cache/
 
 # IDE settings
-.vscode/
+.vscode//docs/_build
+
+# Files in tests
+tests/pudu.py
+tests/datasets/

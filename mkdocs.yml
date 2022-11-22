@@ -1,8 +1,8 @@
 site_name: pudu
 
-site_url: https://enricgrau.github.io/pudu
+site_url: https://pudu-py.github.io/pudu
 
-repo_url: https://github.com/enricgrau/pudu
+repo_url: https://github.com/pudu-py/pudu
 
 theme:
     palette:
@@ -15,7 +15,7 @@ theme:
         - search.highlight
         # - navigation.expand
         # - navigation.tabs
-    custom_dir: "docs/overrides"
+    custom_dir: "docs"
 
 plugins:
     - search
@@ -23,9 +23,7 @@ plugins:
     - git-revision-date
     - mkdocs-jupyter:
           include_source: True
-        #   ignore_h1_titles: True
         #   execute: True
-        #   execute_ignore: "*.ipynb"
           
 markdown_extensions:
     - attr_list
@@ -41,12 +39,10 @@ markdown_extensions:
 #         property: UA-XXXXXXXXX-X
 
 nav:
-    - Home: index.md
-    - Installation: installation.md
-    - Usage: usage.md
-    - Contributing: contributing.md
-    - FAQ: faq.md
-    - Changelog: changelog.md
-    - Report Issues: https://github.com/enricgrau/pudu/issues
+    - Home: docs/index.rst
+    - Installation: docs/quickstart.rst
+    - Usage: docs/
+    - Contributing: docs/contributions.rst
+    - Report Issues: https://github.com/pudu-py/pudu/issues
     - API Reference:
-          - pudu module: pudu.md
+          - pudu module: docs/pudu.rst

@@ -12,8 +12,8 @@ pudu
         :target: https://github.com/pudu-py/pudu/actions/workflows/codeql.yml
 .. image:: https://github.com/pudu-py/pudu/workflows/docs/badge.svg
         :target: https://pudu-py.github.io/pudu
-.. image:: https://codecov.io/gh/pudu-py/pudu/branch/main/graph/badge.svg?token=DC0QIwuYel
-        :target: https://codecov.io/gh/pudu-py/pudu
+.. image:: https://codecov.io/gh/spectrapepper/pudu/branch/main/graph/badge.svg?token=DC0QIwuYel
+        :target: https://codecov.io/gh/spectrapepper/spectrapepper
 .. image:: https://img.shields.io/conda/dn/conda-forge/pudu.svg?color=blue&label=conda%20downloads
         :target: https://pepy.tech/project/pudu
 .. image:: https://static.pepy.tech/personalized-badge/pudu?period=total&units=international_system&left_color=grey&left_text=pypi%20downloads&right_color=blue

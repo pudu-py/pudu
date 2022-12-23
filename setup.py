@@ -39,7 +39,7 @@ setup(
         'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
     ],
-    description="A Python package to perform Local Importance Gradient (LIG), an explanability method for machine learning algorithms.",
+    description="A Python library for explainability of machine learinng algorithms in an agnostic, deterministic, and simple way.",
     install_requires=install_requires,
     dependency_links=dependency_links,
     license="MIT license",

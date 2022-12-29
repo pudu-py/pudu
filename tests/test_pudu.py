@@ -2,11 +2,8 @@
 
 """Tests for `pudu` package."""
 
-
 import unittest
-
-from pudu import pudu
-
+import pudu as pudu
 
 class TestPudu(unittest.TestCase):
     """Tests for `pudu` package."""

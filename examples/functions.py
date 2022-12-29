@@ -1,6 +1,6 @@
 from matplotlib.colors import ListedColormap, LinearSegmentedColormap
 import matplotlib.pyplot as plt
-import my_functions as spep
+import spectrapepper as spep
 import pandas as pd
 import numpy as np
 import math
@@ -8,7 +8,7 @@ import copy
 import sys
 
 
-class pudu:
+class du:
     def __init__(self, x, y, pf):
         """
         Description.
@@ -409,6 +409,7 @@ class pudu:
         :type figsize: tuple
         :param figsize: Size of the figure. Default is `(14, 4)`.
         """
+
         dims = np.array(image).shape
 
         image = np.array(image)[0,:,:,0]

@@ -8,7 +8,7 @@ import copy
 import sys
 
 
-class pudu:
+class du:
     def __init__(self, x, y, pf):
         """
         Description.

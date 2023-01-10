@@ -1,4 +1,0 @@
- 
-# pudu module
-
-::: pudu.pudu

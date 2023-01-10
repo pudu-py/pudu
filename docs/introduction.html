@@ -58,8 +58,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>pudu</li>
+      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">pudu</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/introduction.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -80,12 +80,14 @@
 <a class="reference external image-reference" href="https://pepy.tech/project/pudu"><img alt="https://img.shields.io/conda/dn/conda-forge/pudu.svg?color=blue&amp;label=conda%20downloads" src="https://img.shields.io/conda/dn/conda-forge/pudu.svg?color=blue&amp;label=conda%20downloads" /></a>
 <a class="reference external image-reference" href="https://pepy.tech/project/pudu"><img alt="https://static.pepy.tech/personalized-badge/pudu?period=total&amp;units=international_system&amp;left_color=grey&amp;left_text=pypi%20downloads&amp;right_color=blue" src="https://static.pepy.tech/personalized-badge/pudu?period=total&amp;units=international_system&amp;left_color=grey&amp;left_text=pypi%20downloads&amp;right_color=blue" /></a>
 <a class="reference external image-reference" href="https://stackoverflow.com/questions/tagged/pudu"><img alt="https://img.shields.io/badge/stackoverflow-Ask%20a%20question-brown" src="https://img.shields.io/badge/stackoverflow-Ask%20a%20question-brown" /></a>
-<p><strong>A Python library for explainability of machine learinng algorithms in an agnostic, deterministic, and simple way.</strong>
-* GitHub repo: <a class="reference external" href="https://github.com/pudu-py/pudu">https://github.com/pudu-py/pudu</a>
-* Documentation: <a class="reference external" href="https://pudu-py.github.io/pudu">https://pudu-py.github.io/pudu</a>
-* PyPI: <a class="reference external" href="https://pypi.python.org/pypi/pudu">https://pypi.python.org/pypi/pudu</a>
-* Conda-forge: <a class="reference external" href="https://anaconda.org/conda-forge/pudu">https://anaconda.org/conda-forge/pudu</a>
-* Free software: MIT license</p>
+<p><strong>A Python library for explainability of machine learinng algorithms in an agnostic, deterministic, and simple way.</strong></p>
+<ul class="simple">
+<li><p>GitHub repo: <a class="reference external" href="https://github.com/pudu-py/pudu">https://github.com/pudu-py/pudu</a></p></li>
+<li><p>Documentation: <a class="reference external" href="https://pudu-py.github.io/pudu">https://pudu-py.github.io/pudu</a></p></li>
+<li><p>PyPI: <a class="reference external" href="https://pypi.python.org/pypi/pudu">https://pypi.python.org/pypi/pudu</a></p></li>
+<li><p>Conda-forge: <a class="reference external" href="https://anaconda.org/conda-forge/pudu">https://anaconda.org/conda-forge/pudu</a></p></li>
+<li><p>Free software: MIT license</p></li>
+</ul>
 <section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading"></a></h2>
 <p><strong>pudu</strong> is a Python package that helps intepret and explore the results of machinme learning algorythms. It does this by quantifying the change
@@ -104,26 +106,26 @@ in probability according to the change in the features. This library works with 
 <h3>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this heading"></a></h3>
 <ol class="arabic">
 <li><p>Install this library using <code class="docutils literal notranslate"><span class="pre">pip</span></code>:</p>
-<blockquote>
-<div><p>pip install pudu</p>
-</div></blockquote>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">pudu</span>
+</pre></div>
+</div>
 </li>
 <li><p>Install this library using <code class="docutils literal notranslate"><span class="pre">conda-forge</span></code>:</p>
-<blockquote>
-<div><p>conda install -c conda-forge pudu</p>
-</div></blockquote>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">pudu</span>
+</pre></div>
+</div>
 </li>
 <li><p>Test it by running one of the examples in the <code class="docutils literal notranslate"><span class="pre">docs</span></code>.</p></li>
 <li><p>If you find this library useful, please consider a reference or citation as:</p>
-<blockquote>
-<div><p>…</p>
-</div></blockquote>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
+</pre></div>
+</div>
 </li>
 <li><p>Stay up-to-date by updating the library using:</p>
-<blockquote>
-<div><p>conda update pudu
-pip install –update pudu</p>
-</div></blockquote>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">update</span> <span class="n">pudu</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">update</span> <span class="n">pudu</span>
+</pre></div>
+</div>
 </li>
 <li><p>If you encounter problems when updating, try uninstalling and then re-installing:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">uninstall</span> <span class="n">pudu</span>

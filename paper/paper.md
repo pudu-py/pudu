@@ -31,6 +31,7 @@ date: 09 January 2023
 bibliography: paper.bib
 ---
 
+
 # Statement of need
 
 Interpreting the results of machine learning algorithms has become an increasingly important topic in the field, as concerns about the lack of interpretability of these models have grown. While many libraries and frameworks provide tools for making predictions and evaluating model performance, it can be challenging to understand how the predictions are being made and the factors that are driving them. This lack of interpretability can make it difficult to trust the results of these models, particularly when they are being used to make important decisions.
@@ -39,9 +40,10 @@ One approach to improving the interpretability of machine learning algorithms is
 
 
 # Overview
+
 The **`pudu`** library is a Python tool that aims to address the challenge of interpretability in machine learning by providing a deterministic and non-random approach for conducting sensitivity analysis on classification and regression tasks. In this paper, we present three examples to demonstrate the utility of **`pudu`** for interpreting the results of machine learning algorithms.
 
-**`pudu`** is built in Python 3 [@VanRossumGuidoDrake2009], and also uses third-party packages including `numpy` [@Harris2020], `pandas` [@Reback2021], and `matpotlib` [@Hunter2007]. **`pudu`** comes with complete documentation, including quick start, examples, and contribution guidelines. Source code and documentation can  be
+**`pudu`** is built in Python 3 [@VanRossumGuidoDrake2009], and also uses third-party packages including `numpy` [@Harris2020] and `matpotlib` [@Hunter2007]. **`pudu`** comes with complete documentation, including quick start, examples, and contribution guidelines. Source code and documentation can  be
 downloaded from https://github.com/pudu-py/pudu.
 
 
@@ -54,8 +56,19 @@ A brief list of features includes:
 - Synergy: tests teh synergy between features and the change in classification probability.
 - Easy plotting of the results from the above.
 
+
 # Acknowledgements
 
 This work has received funding from the European Union's Horizon 2020 Research and Innovation Programme under grant agreement no. 952982 (Custom-Art project) and Fast Track to Innovation Programme under grant agreement no. 870004 (Solar-Win project). Authors from IREC belong to the SEMS (Solar Energy Materials and Systems) Consolidated Research Group of the “Generalitat de Catalunya” (ref. 2017 SGR 862) and are grateful to European Regional Development Funds (ERDF, FEDER Programa Competitivitat de Catalunya 2007–2013). MG acknowledges the financial support from Spanish Ministry of Science, Innovation and Universities within the Juan de la Cierva fellowship (IJC2018-038199-I).
+
+
+# Authors contribution with [CRediT](/guides/content/editing-an-existing-page)
+
+- Enric Grau-Luque: Conceptualization, Data curation, Software, Writing – original draft
+- Ignacio Becerril-Romero: Investigation, Methodology, Writing – review & edition
+- Alejandro Perez-Rodriguez: Funding acquisition, Project administration, Resources, Supervision
+- Maxim Guc: Formal analysis, Validation, Methodology, Writing – review & edition
+- Victor Izquierdo-Roca: Funding acquisition, Project administration, Supervision
+
 
 # References

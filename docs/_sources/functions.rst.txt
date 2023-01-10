@@ -1,6 +1,6 @@
 Functions
 ---------
 
-.. automodule:: functions
-   :members:
+.. automodule:: pudu
+   :members: pudu
    :exclude-members:

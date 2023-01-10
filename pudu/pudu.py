@@ -1,17 +1,13 @@
-from matplotlib.colors import ListedColormap, LinearSegmentedColormap
 import matplotlib.pyplot as plt
 import spectrapepper as spep
-import pandas as pd
 import numpy as np
-import math
 import copy
-import sys
 
 
 class pudu:
     def __init__(self, x, y, pf):
         """
-        Description.
+        `pudu` constructor.
 
         :type x: list
         :param x: Features (input) to be analyzed. Must have same format as 
@@ -26,17 +22,21 @@ class pudu:
             of classification algorithm). If the default function does not work
             this way (i.e.: needs a batch as input), it must be wrapped to do so. Please refer to the 
             documentation's example about this.
-          
-        :returns:
-        :rtype:
         """
+        # Store the main parameters
         self.x = x
         self.y = y
         self.pf = pf
         
+        # Main results
         self.imp = None
-        self.grad = None
+        self.spe = None
         self.syn = None
+
+        # Normalized results are calculated automatically so if the user needs them
+        self.imp_norm = None
+        self.spe_norm = None
+        self.syn_norm = None
         
         # Some dimension error handling
         if len(np.array(x).shape) != 4:
@@ -45,16 +45,7 @@ class pudu:
         if len(np.array(y).shape) != 0:
             raise ValueError(f"Expected integer. Got array with shape: %s" % str(np.array(y).shape))
         
-        # self.delta = 0.1
-        # self.window = None
-        # self.scope = None
-        # self.calc = 'absolute'
-        # self.evolution = None
-        # self.padding = 'center'
-        # self.bias = 0
-        # slef.mask = None
-        
-        
+
     def importance(self, delta=0.1, window=1, scope=None, calc='absolute', 
                        evolution=None, padding='center', bias=0):
         """
@@ -85,9 +76,6 @@ class pudu:
             added and `window`starts from `0`. If `left`, padding to the left
             is applyied and `window` ends at length `x`. If perfet `center` is
             not possible, then ipadding left is added `1`.
-            
-        :returns:
-        :rtype:
         """
         # Initial values
         sh = np.array(self.x).shape
@@ -143,13 +131,19 @@ class pudu:
                 elif calc == 'relative':
                     val = ((p[2]-p[0]) + (p[1]-p[0]))/2
                 
-                d_temp[0, row:row+window[0], col:col+window[1], 0] = val[evolution]
+                if np.shape(val):
+                    d_temp[0, row:row+window[0], col:col+window[1], 0] = val[evolution]
+                else:
+                    d_temp[0, row:row+window[0], col:col+window[1], 0] = val
 
                 col += window[1]
             row += window[0]
-            
+
         self.imp = d_temp
         
+        max_val, min_val = d_temp.max(), d_temp.min()
+        self.imp_norm = (d_temp - min_val) / (max_val - min_val)
+
 
     def speed(self, delta=0.1, window=1, scope=None, calc='absolute', 
                        evolution=None, padding='center', steps=3, bias=0):
@@ -183,9 +177,6 @@ class pudu:
             added and `window`starts from `0`. If `left`, padding to the left
             is applyied and `window` ends at length `x`. If perfet `center` is
             not possible, then ipadding left is added `1`.
-            
-        :returns:
-        :rtype:
         """
         # Initial values
         sh = np.array(self.x).shape
@@ -244,7 +235,10 @@ class pudu:
                 col += window[1]
             row += window[0]
 
-        self.grad = d_temp
+        self.spe = d_temp
+        
+        max_val, min_val = d_temp.max(), d_temp.min()
+        self.spe_norm = (d_temp - min_val) / (max_val - min_val)
 
     
     def synergy(self, delta=0.1, window=1, inspect=0, scope=None, calc='absolute', 
@@ -277,9 +271,6 @@ class pudu:
             added and `window`starts from `0`. If `left`, padding to the left
             is applyied and `window` ends at length `x`. If perfet `center` is
             not possible, then ipadding left is added `1`.
-            
-        :returns:
-        :rtype:
         """
         # Initial values
         sh = np.array(self.x).shape
@@ -356,44 +347,25 @@ class pudu:
             row += window[0]
 
         self.syn = d_temp
+        
+        max_val, min_val = d_temp.max(), d_temp.min()
+        self.syn_norm = (d_temp - min_val) / (max_val - min_val)
+      
     
-
-    def function():
+    def plot(self, feature, image, axis=None, show_data=True, title='Importance', xlabel='Feature',
+             ylabel='Intensity', xticks=None, yticks=[], cmap='plasma', font_size=15, figsize=(14, 4)):
         """
-        Estimatesd the general local importance function.
-   
-        :type : 
-        :param :
-          
-        :returns:
-        :rtype:
-        """
-        None
-        
-    def normalize(self):
-        """
-        Normalizes the ouput vetor from 0 to 1. In other words, the lowest value
-            is reescaled to 0 and the highest to 1.
-          
-        :returns:
-        :rtype:
-        """
-        self.imp = spep.normtomax(self.imp, to=1, zeromin=True)
-        self.grad = spep.normtomax(self.grad, to=1, zeromin=True)
-        
-    def save(self):
-        None
-
-    def plot(self, feature, image, axis=None, title='Importance', xlabel='Feature',
-             ylabel='Intensity', yticks=[], cmap='Greens', font_size=15, figsize=(14, 4)):
-        """
+        Greens
         Easy plot function for `importance`, `speed`, or `synergy`. It shows the analyzed feature
             `feature` with a colormap overlay indicating the result along with a colorbar.
-            Works for both vectors and imagtes.
+            Works for both vectors and images.
     
         :type axis: list
         :param axis: X-axis for the plot. If `None`, it will show the pixel count.
-            
+        
+        :type show_data: bool
+        :param show_data: . Default is `True`.
+
         :type title: str
         :param title: Title for the plot. Default is `Importnace`.
             
@@ -429,10 +401,10 @@ class pudu:
         
         plt.rc('font', size=font_size)
         plt.figure(figsize=figsize)
-        if dims[1] > 1:
+        if dims[1] > 1 and show_data:
             plt.imshow(feature, cmap='binary', aspect="auto", 
                        interpolation='nearest', extent=ext, alpha=1)
-        elif dims[1] == 1:
+        elif dims[1] == 1 and show_data:
             plt.plot(axis, feature[0], 'k')
         plt.imshow(image, cmap=cmap, aspect="auto", 
                    interpolation='nearest', extent=ext, alpha=0.5)
@@ -440,17 +412,36 @@ class pudu:
         plt.xlabel(xlabel)
         plt.ylabel(ylabel)
         plt.yticks(yticks)
+
+        if xticks:
+            plt.xticks(axis, xticks, rotation='vertical')
+
         plt.colorbar()
         plt.show()  
 
-    # def plot_importance(self, *args, **kargs):
-    #     self.plot(self.x, self.imp, title='Importance', *args, **kargs)
 
-    # def plot_gradient(self, *args, **kargs):
-    #     self.plot(self.x, self.grad, title='Gradient', *args, **kargs)
+    def save(self, name='pudu_data.txt', transpose=False):
+        """
+        Saves all the vectors in a `.txt` file to make it easier to export the data to 
+            other software, scripts, or wererver the user needs. In other words, this only saves
+            the results as there is no model to save. This is particularly useful if other programs, 
+            such as `Origin Pro`, are used to generate figures or further analysis.
+        
+        :type name: string 
+        :param name: Name of the file to be saved. Default is `pudu_data.txt`.
 
-    # def plot_synergy(self, *args, **kargs):
-    #     self.plot(self.x, self.syn, title='Synergy', *args, **kargs)
+        :type transpose: boolean 
+        :param transpose: If `True`, data will be tranpose to columns. Deafult is `False`, each
+            vector will be saved in each row.
+        """
+
+        to_save = [self.imp, self.spe, self.syn, self.imp_norm, self.spe_norm, self.syn_norm]
+
+        if transpose:
+            to_save = np.transpose(to_save)
+
+        np.savetxt(name, to_save, fmt='%s')
+
 
     def calc_pad(self, t, comp):
         """
@@ -467,7 +458,7 @@ class pudu:
             if comp % 2 == 0:  # even number
                 pad = [int(comp / 2), int(comp / 2)]
             else:  # if odd number, left gets the +1
-                pad = [int(math.ceil(comp / 2)), int(math.floor(comp / 2))]
+                pad = [int(np.ceil(comp / 2)), int(np.floor(comp / 2))]
         elif t == 'left':
             pad = [comp, 0]
         elif t == 'right':

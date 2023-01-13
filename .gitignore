@@ -39,11 +39,11 @@ pip-delete-this-directory.txt
 # Unit test / coverage reports
 htmlcov/
 .tox/
-.coverage
-.coverage.*
+# .coverage
+# .coverage.*
 .cache
 nosetests.xml
-coverage.xml
+# coverage.xml
 *.cover
 .hypothesis/
 .pytest_cache/
@@ -109,5 +109,5 @@ ENV/
 .vscode//docs/_build
 
 # Files in tests
-tests/functions.py
+tests/pudu.py
 tests/datasets/

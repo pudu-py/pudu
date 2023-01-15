@@ -5,8 +5,8 @@
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.decomposition import PCA
 import spectrapepper as spep
-from pudu import pudu
-# import pudu as pudu
+# from pudu import pudu
+import pudu as pudu
 import numpy as np
 import unittest
 import pickle
@@ -47,14 +47,20 @@ class TestPudu(unittest.TestCase):
         imp.speed(delta=1, window=100, calc='absolute')
         imp.synergy(delta=1, inspect=3, window=100, calc='absolute')
         
-        print(imp.imp[0,0,:,0][100:110])
-        print(results[0][100:110])
+        self.assertEqual(sum(imp.imp[0,0,:,0]), sum(results[0]))
+        self.assertEqual(sum(imp.imp_norm[0,0,:,0]), sum(results[1]))
 
-        self.assertEqual((imp.imp[0,0,:,0][100:110] == results[0][100:110]).all(), True)
-        self.assertEqual((imp.imp_norm[0,0,:,0][100:110] == results[1][100:110]).all(), True)
+        self.assertEqual(sum(imp.spe[0,0,:,0]), sum(results[2]))
+        self.assertEqual(sum(imp.spe_norm[0,0,:,0]), sum(results[3]))
 
-        self.assertEqual((imp.spe[0,0,:,0][100:110] == results[2][100:110]).all(), True)
-        self.assertEqual((imp.spe_norm[0,0,:,0][100:110] == results[3][100:110]).all(), True)
+        self.assertEqual(sum(imp.syn[0,0,:,0]), sum(results[4]))
+        self.assertEqual(sum(imp.syn_norm[0,0,:,0]), sum(results[5]))
 
-        self.assertEqual((imp.syn[0,0,:,0][100:110] == results[4][100:110]).all(), True)
-        self.assertEqual((imp.syn_norm[0,0,:,0][100:110] == results[5][100:110]).all(), True)
+        # self.assertEqual((imp.imp[0,0,:,0][100:110] == results[0][100:110]).all(), True)
+        # self.assertEqual((imp.imp_norm[0,0,:,0][100:110] == results[1][100:110]).all(), True)
+
+        # self.assertEqual((imp.spe[0,0,:,0][100:110] == results[2][100:110]).all(), True)
+        # self.assertEqual((imp.spe_norm[0,0,:,0][100:110] == results[3][100:110]).all(), True)
+
+        # self.assertEqual((imp.syn[0,0,:,0][100:110] == results[4][100:110]).all(), True)
+        # self.assertEqual((imp.syn_norm[0,0,:,0][100:110] == results[5][100:110]).all(), True)

@@ -2,7 +2,6 @@
 
 """Tests for `pudu` package."""
 
-import matplotlib.pyplot as plt
 import spectrapepper as spep
 # from pudu import pudu
 import pudu as pudu
@@ -20,12 +19,14 @@ class TestPudu(unittest.TestCase):
         pass
 
     def test(self):
-        x = spep.load('../examples/data/features.txt')[0]
+        x = spep.load('features.txt')[0]
+        print(111111)
         x = x[np.newaxis, np.newaxis, :, np.newaxis]
-        y = spep.load('../examples/data/targets.txt', transpose=True)[2][0]
-
-        lda = pickle.load(open('../examples/data/lda_model.sav', 'rb'))
-        pca = pickle.load(open('../examples/data/pca_model.sav', 'rb'))
+        print(2222222)
+        y = spep.load('targets.txt')[0][2]
+        print(y)
+        lda = pickle.load(open('lda_model.sav', 'rb'))
+        pca = pickle.load(open('pca_model.sav', 'rb'))
 
         results = spep.load('pudu_test_results.txt')
 

@@ -2,9 +2,11 @@
 
 """Tests for `pudu` package."""
 
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+from sklearn.decomposition import PCA
 import spectrapepper as spep
-# from pudu import pudu
-import pudu as pudu
+from pudu import pudu
+# import pudu as pudu
 import numpy as np
 import unittest
 import pickle
@@ -25,11 +27,8 @@ class TestPudu(unittest.TestCase):
         pass
 
     def test(self):
-        # x = spep.load('features.txt')[0]
         x = spep.load(TESTDATA_FEATURES)[0]
-        print(len(x), np.shape(x))
         x = x[np.newaxis, np.newaxis, :, np.newaxis]
-        # y = spep.load('targets.txt')[0][2]
         y = spep.load(TESTDATA_TARGETS)[0][2]
 
         lda = pickle.load(open(TESTDATA_LDA, 'rb'))

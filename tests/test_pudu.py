@@ -3,8 +3,8 @@
 """Tests for `pudu` package."""
 
 import spectrapepper as spep
-from pudu import pudu
-# import pudu as pudu
+# from pudu import pudu
+import pudu as pudu
 import numpy as np
 import unittest
 import pickle
@@ -32,8 +32,8 @@ class TestPudu(unittest.TestCase):
         # y = spep.load('targets.txt')[0][2]
         y = spep.load(TESTDATA_TARGETS)[0][2]
 
-        lda = pickle.load(open('lda_model.sav', 'rb'))
-        pca = pickle.load(open('pca_model.sav', 'rb'))
+        lda = pickle.load(open(TESTDATA_LDA, 'rb'))
+        pca = pickle.load(open(TESTDATA_PCA, 'rb'))
 
         results = spep.load('pudu_test_results.txt')
 

@@ -16,6 +16,7 @@ TESTDATA_FEATURES = os.path.join(os.path.dirname(__file__), 'features.txt')
 TESTDATA_TARGETS = os.path.join(os.path.dirname(__file__), 'targets.txt')
 TESTDATA_LDA = os.path.join(os.path.dirname(__file__), 'lda_model.sav')
 TESTDATA_PCA = os.path.join(os.path.dirname(__file__), 'pca_model.sav')
+TESTDATA_RESULTS = os.path.join(os.path.dirname(__file__), 'pudu_test_results.txt')
 
 class TestPudu(unittest.TestCase):
     """Tests for `pudu` package."""
@@ -34,7 +35,7 @@ class TestPudu(unittest.TestCase):
         lda = pickle.load(open(TESTDATA_LDA, 'rb'))
         pca = pickle.load(open(TESTDATA_PCA, 'rb'))
 
-        results = spep.load('pudu_test_results.txt')
+        results = spep.load(TESTDATA_RESULTS)
 
         def pf(X):
             X = X[0,:,:,0]

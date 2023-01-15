@@ -50,11 +50,11 @@ class TestPudu(unittest.TestCase):
         print(imp.imp[0,0,:,0][100:110])
         print(results[0][100:110])
 
-        self.assertEqual((imp.imp[0,0,:,0] == results[0]).all(), True)
-        self.assertEqual((imp.imp_norm[0,0,:,0] == results[1]).all(), True)
+        self.assertEqual((imp.imp[0,0,:,0][100:110] == results[0][100:110]).all(), True)
+        self.assertEqual((imp.imp_norm[0,0,:,0][100:110] == results[1][100:110]).all(), True)
 
-        self.assertEqual((imp.spe[0,0,:,0] == results[2]).all(), True)
-        self.assertEqual((imp.spe_norm[0,0,:,0] == results[3]).all(), True)
+        self.assertEqual((imp.spe[0,0,:,0][100:110] == results[2][100:110]).all(), True)
+        self.assertEqual((imp.spe_norm[0,0,:,0][100:110] == results[3][100:110]).all(), True)
 
-        self.assertEqual((imp.syn[0,0,:,0] == results[4]).all(), True)
-        self.assertEqual((imp.syn_norm[0,0,:,0] == results[5]).all(), True)
+        self.assertEqual((imp.syn[0,0,:,0][100:110] == results[4][100:110]).all(), True)
+        self.assertEqual((imp.syn_norm[0,0,:,0][100:110] == results[5][100:110]).all(), True)

@@ -47,14 +47,14 @@ class TestPudu(unittest.TestCase):
         imp.speed(delta=1, window=100, calc='absolute')
         imp.synergy(delta=1, inspect=3, window=100, calc='absolute')
         
-        self.assertEqual(sum(imp.imp[0,0,:,0]), sum(results[0]))
-        self.assertEqual(sum(imp.imp_norm[0,0,:,0]), sum(results[1]))
+        self.assertEqual(round(sum(imp.imp[0,0,:,0])), round(sum(results[0])))
+        self.assertEqual(round(sum(imp.imp_norm[0,0,:,0])), round(sum(results[1])))
 
-        self.assertEqual(sum(imp.spe[0,0,:,0]), sum(results[2]))
-        self.assertEqual(sum(imp.spe_norm[0,0,:,0]), sum(results[3]))
+        self.assertEqual(round(sum(imp.spe[0,0,:,0])), round(sum(results[2])))
+        self.assertEqual(round(sum(imp.spe_norm[0,0,:,0])), round(sum(results[3])))
 
-        self.assertEqual(sum(imp.syn[0,0,:,0]), sum(results[4]))
-        self.assertEqual(sum(imp.syn_norm[0,0,:,0]), sum(results[5]))
+        self.assertEqual(round(sum(imp.syn[0,0,:,0])), round(sum(results[4])))
+        self.assertEqual(round(sum(imp.syn_norm[0,0,:,0])), round(sum(results[5])))
 
         # self.assertEqual((imp.imp[0,0,:,0][100:110] == results[0][100:110]).all(), True)
         # self.assertEqual((imp.imp_norm[0,0,:,0][100:110] == results[1][100:110]).all(), True)

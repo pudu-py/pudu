@@ -47,8 +47,8 @@ class TestPudu(unittest.TestCase):
         imp.speed(delta=1, window=100, calc='absolute')
         imp.synergy(delta=1, inspect=3, window=100, calc='absolute')
         
-        print(imp.imp[0,0,:,0][10])
-        print(imp.imp[0,0,:,0][10])
+        print(imp.imp[0,0,:,0][100:110])
+        print(results[0][100:110])
 
         self.assertEqual((imp.imp[0,0,:,0] == results[0]).all(), True)
         self.assertEqual((imp.imp_norm[0,0,:,0] == results[1]).all(), True)

@@ -3,11 +3,17 @@
 """Tests for `pudu` package."""
 
 import spectrapepper as spep
-# from pudu import pudu
-import pudu as pudu
+from pudu import pudu
+# import pudu as pudu
 import numpy as np
 import unittest
 import pickle
+import os
+
+TESTDATA_FEATURES = os.path.join(os.path.dirname(__file__), 'features.txt')
+TESTDATA_TARGETS = os.path.join(os.path.dirname(__file__), 'targets.txt')
+TESTDATA_LDA = os.path.join(os.path.dirname(__file__), 'lda_model.sav')
+TESTDATA_PCA = os.path.join(os.path.dirname(__file__), 'pca_model.sav')
 
 class TestPudu(unittest.TestCase):
     """Tests for `pudu` package."""
@@ -19,12 +25,13 @@ class TestPudu(unittest.TestCase):
         pass
 
     def test(self):
-        x = spep.load('features.txt')[0]
-        print(111111)
+        # x = spep.load('features.txt')[0]
+        x = spep.load(TESTDATA_FEATURES)[0]
+        print(len(x), np.shape(x))
         x = x[np.newaxis, np.newaxis, :, np.newaxis]
-        print(2222222)
-        y = spep.load('targets.txt')[0][2]
-        print(y)
+        # y = spep.load('targets.txt')[0][2]
+        y = spep.load(TESTDATA_TARGETS)[0][2]
+
         lda = pickle.load(open('lda_model.sav', 'rb'))
         pca = pickle.load(open('pca_model.sav', 'rb'))
 

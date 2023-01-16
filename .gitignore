@@ -110,4 +110,3 @@ ENV/
 
 # Files in tests
 tests/pudu.py
-tests/datasets/

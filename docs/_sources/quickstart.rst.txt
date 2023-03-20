@@ -47,21 +47,21 @@ The following is a list of the main procedures that **pudu** package enables.
 Quickstart
 ----------
 
-1. Install this library using ``pip``:
+1. Install this library using ``pip``::
 
         pip install pudu
 
-2. Install this library using ``conda-forge``:
+2. Install this library using ``conda-forge``::
 
         conda install -c conda-forge pudu
 
 3. Test it by running one of the examples in the ``docs``.
 
-4. If you find this library useful, please consider a reference or citation as:
+4. If you find this library useful, please consider a reference or citation as::
 
         ...
 
-5. Stay up-to-date by updating the library using:
+5. Stay up-to-date by updating the library using::
 
        conda update pudu
        pip install --update pudu

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Functions &mdash; pudu  documentation</title>
@@ -11,10 +11,9 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -29,11 +28,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> pudu
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pudu
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -42,7 +45,18 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">pudu</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Functions</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Functions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pudu.pudu"><code class="docutils literal notranslate"><span class="pre">pudu</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pudu.pudu.__init__"><code class="docutils literal notranslate"><span class="pre">pudu.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pudu.pudu.importance"><code class="docutils literal notranslate"><span class="pre">pudu.importance()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pudu.pudu.plot"><code class="docutils literal notranslate"><span class="pre">pudu.plot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pudu.pudu.save"><code class="docutils literal notranslate"><span class="pre">pudu.save()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pudu.pudu.speed"><code class="docutils literal notranslate"><span class="pre">pudu.speed()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pudu.pudu.synergy"><code class="docutils literal notranslate"><span class="pre">pudu.synergy()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributions.html">Contributing</a></li>
 </ul>
@@ -60,7 +74,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
       <li class="breadcrumb-item active">Functions</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/functions.rst.txt" rel="nofollow"> View page source</a>
@@ -73,6 +87,163 @@
              
   <section id="functions">
 <h1>Functions<a class="headerlink" href="#functions" title="Permalink to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="pudu.pudu">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pudu.</span></span><span class="sig-name descname"><span class="pre">pudu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pf</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pudu.html#pudu"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pudu.pudu" title="Permalink to this definition"></a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="pudu.pudu.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pf</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pudu.html#pudu.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pudu.pudu.__init__" title="Permalink to this definition"></a></dt>
+<dd><p><cite>pudu</cite> constructor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>list</em>) – Features (input) to be analyzed. Must have same format as 
+train and test descriptors.</p></li>
+<li><p><strong>y</strong> (<em>int</em><em>, </em><em>float</em>) – Targets (output) of <cite>x</cite>.</p></li>
+<li><p><strong>pf</strong> (<em>function</em>) – probability, or predict, function of the algorithm. The input 
+must be <cite>x</cite> and the ouput a list of probabilities for each class (in
+case of classification algorithm). If the default function does not
+work this way (i.e.: needs a batch as input), it must be wrapped to
+do so. Please refer to the documentation’s example about this.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pudu.pudu.importance">
+<span class="sig-name descname"><span class="pre">importance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">delta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scope</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">calc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'absolute'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evolution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'center'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pudu.html#pudu.importance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pudu.pudu.importance" title="Permalink to this definition"></a></dt>
+<dd><p>Calculates the importance vector for the input feature.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>delta</strong> (<em>float</em>) – maximum variation to apply to each features.</p></li>
+<li><p><strong>window</strong> (<em>int</em>) – feature width to be changeg each time.</p></li>
+<li><p><strong>scope</strong> (<em>tupple</em><em>(</em><em>int</em><em>, </em><em>int</em><em>)</em>) – Starting and ending point of the analysis for each feature.
+If <cite>None</cite>, the all the vector is analysed.</p></li>
+<li><p><strong>calc</strong> (<em>string</em>) – Can be <cite>absolute</cite> or <cite>relative</cite>. If <cite>absolute</cite> the importance
+is calculated using the average of the absolute vbalues. If <cite>relative</cite>
+the it uses the real value for the average.</p></li>
+<li><p><strong>evolution</strong> (<em>int</em>) – feature width to be changeg each time.</p></li>
+<li><p><strong>padding</strong> (<em>string</em>) – Type of padding. If the legnth of <cite>x</cite> is not divisible 
+by <cite>window</cite> then padding is applyed. If <cite>center</cite>, then equal padding 
+to each side is applyed. If <cite>right</cite>, then paading to the right is 
+added and <cite>window`starts from `0</cite>. If <cite>left</cite>, padding to the left
+is applyied and <cite>window</cite> ends at length <cite>x</cite>. If perfet <cite>center</cite> is
+not possible, then ipadding left is added <cite>1</cite>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pudu.pudu.plot">
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feature</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Importance'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Feature'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Intensity'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xticks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yticks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'plasma'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">15</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(14,</span> <span class="pre">4)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pudu.html#pudu.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pudu.pudu.plot" title="Permalink to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>Easy plot function for <cite>importance</cite>, <cite>speed</cite>, or <cite>synergy</cite>. It shows the analyzed</dt><dd><p>feature <cite>feature</cite> with a colormap overlay indicating the result along with
+a colorbar. Works for both vectors and images.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>feature</strong> (<em>list</em>) – feature analyzed or any that the user whant to plot against.
+Normally you want it to be <cite>self.x</cite>.</p></li>
+<li><p><strong>image</strong> (<em>list</em>) – Result you want to plot. Either <cite>self.imp</cite>, <cite>self.syn</cite>, etc…</p></li>
+<li><p><strong>axis</strong> (<em>list</em>) – X-axis for the plot. If <cite>None</cite>, it will show the pixel count.</p></li>
+<li><p><strong>show_data</strong> (<em>bool</em>) – . Default is <cite>True</cite>.</p></li>
+<li><p><strong>title</strong> (<em>str</em>) – Title for the plot. Default is <cite>Importnace</cite>.</p></li>
+<li><p><strong>xlabel</strong> (<em>str</em>) – X-axis title. Default is <cite>Feature</cite>.</p></li>
+<li><p><strong>ylabel</strong> (<em>str</em>) – Y-axis title. Default is <cite>Intensity</cite></p></li>
+<li><p><strong>xticks</strong> (<em>list</em>) – Ticks to display on the graph. Default is <cite>None</cite>.</p></li>
+<li><p><strong>yticks</strong> (<em>list</em>) – Ticks to display on the graph. Default is <cite>[]</cite>.</p></li>
+<li><p><strong>cmap</strong> (<em>string</em>) – colormap for <cite>image</cite> according to the availability in <cite>matplotlib</cite>.
+Default is <cite>plasma</cite>.</p></li>
+<li><p><strong>font_size</strong> (<em>int</em>) – Font size for all text in the plot. Default is <cite>15</cite>.</p></li>
+<li><p><strong>figsize</strong> (<em>tuple</em>) – Size of the figure. Default is <cite>(14, 4)</cite>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pudu.pudu.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pudu_data.txt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transpose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pudu.html#pudu.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pudu.pudu.save" title="Permalink to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>Saves all the vectors in a <cite>.txt</cite> file to make it easier to export the data to </dt><dd><p>other software, scripts, or wererver the user needs. In other words, this only saves
+the results as there is no model to save. This is particularly useful if other programs, 
+such as <cite>Origin Pro</cite>, are used to generate figures or further analysis.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>string</em>) – Name of the file to be saved. Default is <cite>pudu_data.txt</cite>.</p></li>
+<li><p><strong>transpose</strong> (<em>boolean</em>) – If <cite>True</cite>, data will be tranpose to columns. Deafult is <cite>False</cite>, each
+vector will be saved in each row.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pudu.pudu.speed">
+<span class="sig-name descname"><span class="pre">speed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">delta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scope</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">calc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'absolute'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evolution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'center'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pudu.html#pudu.speed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pudu.pudu.speed" title="Permalink to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>Calculates the gradient of the iomportance. In other owrds, the slope</dt><dd><p>of the importance at different values. This indicates how fast a
+feature can change the result.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>delta</strong> (<em>float</em>) – maximum variation to apply to each features.</p></li>
+<li><p><strong>window</strong> (<em>int</em>) – feature width to be changeg each time.</p></li>
+<li><p><strong>scope</strong> (<em>tupple</em><em>(</em><em>int</em><em>, </em><em>int</em><em>)</em>) – Starting and ending point of the analysis for each feature.
+If <cite>None</cite>, the all the vector is analysed.</p></li>
+<li><p><strong>calc</strong> (<em>string</em>) – Can be <cite>absolute</cite> or <cite>relative</cite>. If <cite>absolute</cite> the importance
+is calculated using the average of the absolute vbalues. If <cite>relative</cite>
+the it uses the real value for the average.</p></li>
+<li><p><strong>evolution</strong> (<em>int</em>) – feature width to be changeg each time.</p></li>
+<li><p><strong>padding</strong> (<em>string</em>) – Type of padding. If the legnth of <cite>x</cite> is not divisible 
+by <cite>window</cite> then padding is applyed. If <cite>center</cite>, then equal padding 
+to each side is applyed. If <cite>right</cite>, then paading to the right is 
+added and <cite>window`starts from `0</cite>. If <cite>left</cite>, padding to the left
+is applyied and <cite>window</cite> ends at length <cite>x</cite>. If perfet <cite>center</cite> is
+not possible, then ipadding left is added <cite>1</cite>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pudu.pudu.synergy">
+<span class="sig-name descname"><span class="pre">synergy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">delta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inspect</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scope</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">calc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'absolute'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evolution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'center'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pudu.html#pudu.synergy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pudu.pudu.synergy" title="Permalink to this definition"></a></dt>
+<dd><p>Calculates the synergy between features.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>delta</strong> (<em>float</em>) – maximum variation to apply to each feature.</p></li>
+<li><p><strong>window</strong> (<em>int</em>) – feature width to be changeg each time.</p></li>
+<li><p><strong>scope</strong> (<em>tupple</em><em>(</em><em>int</em><em>, </em><em>int</em><em>)</em>) – Starting and ending point of the analysis for each feature.
+If <cite>None</cite>, the all the vector is analysed.</p></li>
+<li><p><strong>calc</strong> (<em>string</em>) – Can be <cite>absolute</cite> or <cite>relative</cite>. If <cite>absolute</cite> the importance
+is calculated using the average of the absolute vbalues. If <cite>relative</cite>
+the it uses the real value for the average.</p></li>
+<li><p><strong>evolution</strong> (<em>int</em>) – feature width to be changeg each time.</p></li>
+<li><p><strong>padding</strong> (<em>string</em>) – Type of padding. If the legnth of <cite>x</cite> is not divisible 
+by <cite>window</cite> then padding is applyed. If <cite>center</cite>, then equal padding 
+to each side is applyed. If <cite>right</cite>, then paading to the right is 
+added and <cite>window`starts from `0</cite>. If <cite>left</cite>, padding to the left
+is applyied and <cite>window</cite> ends at length <cite>x</cite>. If perfet <cite>center</cite> is
+not possible, then ipadding left is added <cite>1</cite>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 
 

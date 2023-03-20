@@ -27,18 +27,18 @@ in probability according to the change in the features. This library works with 
 
 The following is a list of the main procedures that **pudu** package enables.
 
-- Importance: estimates the absolute or relative importance oif the features.
-- Speed: calculates how fast a preditci0on changes according to the changes in the features.
-- Synergy: tests teh synergy between features and the change in classification probability.
+- Importance: estimates the absolute or relative importance of the features.
+- Speed: calculates how fast a preditcion changes according to the changes in the features.
+- Synergy: tests the synergy between features and the change in classification probability.
 - Easy plotting of the results from the above.
 
 # Quickstart
 
-1. Install this library using ``pip``:
+1. Install this library using ``pip``::
 
         pip install pudu
 
-2. Install this library using ``conda-forge``:
+2. Install this library using ``conda-forge``::
 
         conda install -c conda-forge pudu
 
@@ -48,7 +48,7 @@ The following is a list of the main procedures that **pudu** package enables.
 
         ...
 
-5. Stay up-to-date by updating the library using:
+5. Stay up-to-date by updating the library using::
 
        conda update pudu
        pip install --update pudu

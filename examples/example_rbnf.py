@@ -2,7 +2,7 @@ from localreg import RBFnet, plot_corr
 from sklearn.metrics import r2_score
 import matplotlib.pyplot as plt
 import spectrapepper as spep
-import pudu7 as pudu
+from pudu import pudu
 import numpy as np
 
 # Load the file that contains the calculated areas from the spectras

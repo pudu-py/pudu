@@ -1,8 +1,7 @@
 import matplotlib.pyplot as plt
 from lime import lime_tabular
 import spectrapepper as spep
-# from pudu import pudu
-import pudu7 as pudu
+from pudu import pudu
 import numpy as np
 import pickle
 import lime

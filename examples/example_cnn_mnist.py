@@ -3,7 +3,7 @@ from tensorflow import keras
 from keras.models import load_model
 import matplotlib.pyplot as plt
 import sys
-import pudu7 as pudu
+from pudu import pudu
 
 # Model / data parameters
 num_classes = 10

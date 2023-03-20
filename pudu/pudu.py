@@ -457,8 +457,6 @@ class pudu:
         for variable in ('imp', 'imp_norm', 'spe', 'spe_norm', 'syn', 'syn_norm'):
             if getattr(self, variable) is not None:
                 data.append(getattr(self, variable)[0, :, :, 0])
-        
-        print(np.shape(data))
 
         if sh[1] == 1: 
             data = [item[0] for item in data]

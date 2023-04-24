@@ -130,7 +130,7 @@ class pudu:
                     val = (abs(p[0]-p[2]) + abs(p[0]-p[1]))/2
                 elif calc == 'relative':
                     val = ((p[2]-p[0]) + (p[1]-p[0]))/2
-                
+
                 if np.shape(val):
                     d_temp[0, row:row+window[0], col:col+window[1], 0] = val[evolution]
                 else:
@@ -300,7 +300,7 @@ class pudu:
         
         if evolution is None:
             evolution = int(self.y)
-         
+            
         # Padding
         for i in range(2):
             comp = int((scope[i][1]-scope[i][0])%window[i])
@@ -351,10 +351,168 @@ class pudu:
         max_val, min_val = d_temp.max(), d_temp.min()
         self.syn_norm = (d_temp - min_val) / (max_val - min_val)
       
-    
+
+    def preview(self, window=1, scope=None, padding='center', mask=None, 
+                axis=None, show_data=True, title='Preview', xlabel='Feature',
+                ylabel='Intensity', xticks=None, yticks=[], cmap='Greens',
+                font_size=15, figsize=(14, 4)):
+        """
+        Plots an approximate preview of the sections, areas, or mask to be analyzed over the data
+            before executing. It is particularly useful to check if the parameters are
+            correct, especially if the user expects long runtimes.
+        
+        :type feature: list
+        :param feature: feature analyzed or any that the user whant to plot against.
+            Normally you want it to be `self.x`.
+        
+        :type window: int
+        :param window: feature width to be analyzed.
+
+        :type scope: tuple
+        :param scope: feature width to be analyzed.
+
+        :type padding: str
+        :param padding: Type of padding. If the legnth of `x` is not divisible 
+            by `window` then padding is applyed. If `center`, then equal padding 
+            to each side is applyed. If `right`, then paading to the right is 
+            added and `window`starts from `0`. If `left`, padding to the left
+            is applyied and `window` ends at length `x`. If perfet `center` is
+            not possible, then ipadding left is added `1`.
+        
+        :type mask: list
+        :param mask: Mask to be applied to the data. If `None`, no mask will be
+            applied.
+
+        :type axis: list
+        :param axis: X-axis for the plot. If `None`, it will show the pixel count.
+
+        :type show_data: bool
+        :param show_data: If `True`, it will plot the data. If `False`, it will
+            plot the mask.
+
+        :type title: str
+        :param title: Title of the plot.
+
+        :type xlabel: str
+        :param xlabel: X-axis label.
+
+        :type ylabel: str
+        :param ylabel: Y-axis label.
+
+        :type xticks: list
+        :param xticks: X-axis ticks.
+
+        :type yticks: list
+        :param yticks: Y-axis ticks.
+
+        :type cmap: str
+        :param cmap: Colormap to be used.
+
+        :type font_size: int
+        :param font_size: Font size for the plot.
+
+        :type figsize: tuple
+        :param figsize: Figure size for the plot.
+        """
+
+        # Initial values
+        image = [] # this will be the preview image
+        sh = np.array(self.x).shape
+        d_temp = np.zeros((sh[0], sh[1], sh[2], sh[3]))
+        countour = np.zeros((sh[0], sh[1], sh[2], sh[3]))
+        padd = [[0, 0], [0, 0]]
+        
+        # Dim. std.
+        if scope is None:
+            scope = (0, sh[2])
+        
+        if len(np.array(window).shape) == 0:
+            if sh[1] == 1:
+                window = (1, window)
+            else:
+                window = (window, window)
+        
+        if len(np.array(scope).shape) == 1:
+            if sh[1] == 1:
+                scope = ((0, 1), scope)
+            else:
+                scope = (scope, scope)
+        
+        if len(np.array(padding).shape) == 0:
+            padding = (padding, padding)
+               
+        # Padding
+        for i in range(2):
+            comp = int((scope[i][1]-scope[i][0])%window[i])
+            if comp > 0:
+                padd[i] = self.calc_pad(padding[i], comp)
+
+        row = padd[0][0] + scope[0][0]
+        while row <= scope[0][1] - padd[0][1] - window[0]:
+            col = padd[1][0] + scope[1][0]
+            while col <= scope[1][1] - padd[1][1] - window[1]:
+                countour[0, row, col, 0] = 1 # indicates limit
+                d_temp[0, row:row+window[0], col:col+window[1], 0] = 1
+                col += window[1]
+            row += window[0]
+
+        dims = np.array(d_temp).shape
+        image = d_temp[0,:,:,0]
+        countour = countour[0,:,:,0]
+
+        feature = self.x
+        feature = np.array(feature)[0,:,:,0]
+
+        if dims[1] > 1:
+            rows, cols = dims[1], dims[2]
+            ext = [0, cols, 0, rows]
+        else:
+            rows, cols = 1, len(feature)
+        
+            if axis is None:
+                axis = [i for i in range(len(feature[0]))]
+                ext = [0, len(feature[0]), min(feature[0]), max(feature[0])]
+            else:
+                ext = [min(axis), max(axis), min(feature[0]), max(feature[0])]
+
+        plt.rc('font', size=font_size)
+        plt.figure(figsize=figsize)
+        if dims[1] > 1 and show_data:
+            plt.imshow(feature, cmap='binary', aspect="auto", 
+                       interpolation='nearest', extent=ext, alpha=1)
+        elif dims[1] == 1 and show_data:
+            plt.plot(axis, feature[0], 'k')
+
+        # just to make bolder lines
+        for i in range(len(countour)):
+            for j in range(len(countour[i])):
+                if countour[i][j] == 1 and countour[i][j+1] == 0 and countour[i][j-1] == 0:
+                    countour[i][j-1] = countour[i][j+1] = 1
+                if dims[1] > 1 and countour[i][j] == 1 and countour[i+1][j] == 0 and countour[i-1][j] == 0:
+                    countour[i-1][j] = countour[i+1][j] = 1
+                    
+        plt.imshow(countour, cmap='binary', aspect="auto", 
+                   interpolation='nearest', extent=ext, alpha=1)
+        
+        plt.imshow(image, cmap=cmap, aspect="auto", 
+                   interpolation='nearest', extent=ext, alpha=0.5)
+        # plt.colorbar()
+        
+        plt.title(title) 
+        plt.xlabel(xlabel)
+        plt.ylabel(ylabel)
+        plt.yticks(yticks)
+
+        if xticks:
+            plt.xticks(axis, xticks, rotation='vertical')
+
+        
+        plt.show()  
+
+
     def plot(self, feature, image, axis=None, show_data=True, title='Importance', 
-        xlabel='Feature', ylabel='Intensity', xticks=None, yticks=[], cmap='plasma',
-        font_size=15, figsize=(14, 4)):
+            xlabel='Feature', ylabel='Intensity', xticks=None, yticks=[], cmap='Greens',
+            font_size=15, figsize=(14, 4)):
         """
         Easy plot function for `importance`, `speed`, or `synergy`. It shows the analyzed
             feature `feature` with a colormap overlay indicating the result along with
@@ -457,7 +615,7 @@ class pudu:
         for variable in ('imp', 'imp_norm', 'spe', 'spe_norm', 'syn', 'syn_norm'):
             if getattr(self, variable) is not None:
                 data.append(getattr(self, variable)[0, :, :, 0])
-
+        
         if sh[1] == 1: 
             data = [item[0] for item in data]
         else:
@@ -498,3 +656,54 @@ class pudu:
             raise ValueError(f"Invalid padding type '{t}'. Valid types are 'center', 'left', and 'right'.")
         
         return pad
+
+
+    def create_mask(mok, masks):
+        """
+        Create a mask for the given mok and masks.
+
+        :type mok: list or numpy.ndarray
+        :param mok: Mok of the data.
+
+        :type masks: list
+        :param masks: List of masks to be applied to the data.
+
+        :rtype: numpy.ndarray
+        :returns: A mask for the given mok and masks.
+        """
+
+        if isinstance(mok, list):
+            mok = np.array(mok)
+
+        mask_list = np.zeros_like(mok)
+
+        for mask in masks:
+            if isinstance(mask[0], int) or isinstance(mask[0], float):
+                mask = [mask]
+
+            mask_slices = tuple(slice(mask_dim[0], mask_dim[1] + 1) for mask_dim in mask)
+            mask_list[mask_slices] = 1
+
+        return mask_list
+    
+    """
+    def over_mask(): # sections of the mask to distort
+        'all' evaluate all
+        'percentage' evaluate first N%, or last N%
+        'quantity' eval irst N, or last N
+        'everyother' eval every other window
+        'random' randomized
+        'specific' specified by user
+        return overmask
+
+    def dist_func(): # distortion function
+        'absolute' as currently
+        'relative' as currently
+        'positive' positive distortion
+        'negative' negative distrtion
+        'random' random distortion value 
+        'custom' defined by user
+        return val
+    """
+
+    

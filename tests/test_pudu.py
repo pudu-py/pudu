@@ -2,8 +2,8 @@
 
 """Tests for `pudu` package."""
 
-# from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
-# from sklearn.decomposition import PCA
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+from sklearn.decomposition import PCA
 import spectrapepper as spep
 from pudu import pudu
 import numpy as np
@@ -47,8 +47,8 @@ class TestPudu(unittest.TestCase):
         imp.synergy(delta=1, inspect=3, window=200)
         
         print(len(imp.imp[0,0,:,0]), len(results[0]))
-        print(imp.imp[0,0,:,0][10:30])
-        print(results[0][20:30])
+        print(imp.imp[0,0,:,0])
+        print(results[0])
 
         self.assertEqual(np.array_equal(imp.imp[0,0,:,0], results[0]), True)
         self.assertEqual(np.array_equal(imp.imp_norm[0,0,:,0], results[1]), True)

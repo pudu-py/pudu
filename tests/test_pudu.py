@@ -6,7 +6,9 @@ from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.decomposition import PCA
 import spectrapepper as spep
 from pudu import pudu
+# import pudu7 as pudu
 import numpy as np
+from numpy import testing
 import unittest
 import pickle
 import os
@@ -46,15 +48,32 @@ class TestPudu(unittest.TestCase):
         imp.speed(delta=1, window=200)
         imp.synergy(delta=1, inspect=3, window=200)
         
-        print(len(imp.imp[0,0,:,0]), len(results[0]))
-        print(imp.imp[0,0,:,0][1000:1010])
-        print(results[0][1000:1010])
+        tp = 4
 
-        self.assertEqual(np.array_equal(imp.imp[0,0,:,0][1000:1010], results[0][1000:1010]), True)
-        self.assertEqual(np.array_equal(imp.imp_norm[0,0,:,0][1000:1010], results[1][1000:1010]), True)
+        # self.assertEqual(np.testing.assert_almost_equal(imp.imp[0,0,:,0], results[0], decimal=tp, verbose=True), True)
+        # self.assertEqual(np.testing.assert_almost_equal(imp.imp_norm[0,0,:,0], results[1], decimal=tp), True)
 
-        self.assertEqual(np.array_equal(imp.spe[0,0,:,0][1000:1010], results[2][1000:1010]), True)
-        self.assertEqual(np.array_equal(imp.spe_norm[0,0,:,0][1000:1010], results[3][1000:1010]), True)
+        # self.assertEqual(np.testing.assert_almost_equal(imp.spe[0,0,:,0], results[2], decimal=tp), True)
+        # self.assertEqual(np.testing.assert_almost_equal(imp.spe_norm[0,0,:,0], results[3], decimal=tp), True)
 
-        self.assertEqual(np.array_equal(imp.syn[0,0,:,0][1000:1010], results[4][1000:1010]), True)
-        self.assertEqual(np.array_equal(imp.syn_norm[0,0,:,0][1000:1010], results[5][1000:1010]), True)
+        # self.assertEqual(np.testing.assert_almost_equal(imp.syn[0,0,:,0], results[4], decimal=tp), True)
+        # self.assertEqual(np.testing.assert_almost_equal(imp.syn_norm[0,0,:,0], results[5], decimal=tp), True)
+
+        # self.assertAlmostEqual(imp.imp[0,0,:,0], results[0], places=tp)
+        for a, b in zip(imp.imp[0,0,:,0], results[0]):
+            self.assertAlmostEqual(a, b, places=tp)
+
+        for a, b in zip(imp.imp_norm[0,0,:,0], results[1]):
+            self.assertAlmostEqual(a, b, places=tp)
+
+        for a, b in zip(imp.spe[0,0,:,0], results[2]):
+            self.assertAlmostEqual(a, b, places=tp)
+
+        for a, b in zip(imp.spe_norm[0,0,:,0], results[3]):
+            self.assertAlmostEqual(a, b, places=tp)
+
+        for a, b in zip(imp.syn[0,0,:,0], results[4]):
+            self.assertAlmostEqual(a, b, places=tp)
+        
+        for a, b in zip(imp.syn_norm[0,0,:,0], results[5]):
+            self.assertAlmostEqual(a, b, places=tp)

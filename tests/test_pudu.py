@@ -8,7 +8,6 @@ import spectrapepper as spep
 from pudu import pudu
 # import pudu7 as pudu
 import numpy as np
-from numpy import testing
 import unittest
 import pickle
 import os
@@ -48,18 +47,8 @@ class TestPudu(unittest.TestCase):
         imp.speed(delta=1, window=200)
         imp.synergy(delta=1, inspect=3, window=200)
         
-        tp = 4
+        tp = 6 #4
 
-        # self.assertEqual(np.testing.assert_almost_equal(imp.imp[0,0,:,0], results[0], decimal=tp, verbose=True), True)
-        # self.assertEqual(np.testing.assert_almost_equal(imp.imp_norm[0,0,:,0], results[1], decimal=tp), True)
-
-        # self.assertEqual(np.testing.assert_almost_equal(imp.spe[0,0,:,0], results[2], decimal=tp), True)
-        # self.assertEqual(np.testing.assert_almost_equal(imp.spe_norm[0,0,:,0], results[3], decimal=tp), True)
-
-        # self.assertEqual(np.testing.assert_almost_equal(imp.syn[0,0,:,0], results[4], decimal=tp), True)
-        # self.assertEqual(np.testing.assert_almost_equal(imp.syn_norm[0,0,:,0], results[5], decimal=tp), True)
-
-        # self.assertAlmostEqual(imp.imp[0,0,:,0], results[0], places=tp)
         for a, b in zip(imp.imp[0,0,:,0], results[0]):
             self.assertAlmostEqual(a, b, places=tp)
 

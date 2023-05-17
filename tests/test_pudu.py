@@ -13,8 +13,8 @@ import os
 
 TESTDATA_FEATURES = os.path.join(os.path.dirname(__file__), 'features.txt')
 TESTDATA_TARGETS = os.path.join(os.path.dirname(__file__), 'targets.txt')
-# TESTDATA_LDA = os.path.join(os.path.dirname(__file__), 'lda_model.sav')
-# TESTDATA_PCA = os.path.join(os.path.dirname(__file__), 'pca_model.sav')
+TESTDATA_LDA = os.path.join(os.path.dirname(__file__), 'lda_model.sav')
+TESTDATA_PCA = os.path.join(os.path.dirname(__file__), 'pca_model.sav')
 TESTDATA_RESULTS = os.path.join(os.path.dirname(__file__), 'pudu_test_results.txt')
 
 class TestPudu(unittest.TestCase):
@@ -31,8 +31,8 @@ class TestPudu(unittest.TestCase):
         x = x[np.newaxis, np.newaxis, :, np.newaxis]
         y = spep.load(TESTDATA_TARGETS)[0][2]
 
-        # lda = pickle.load(open(TESTDATA_LDA, 'rb'))
-        # pca = pickle.load(open(TESTDATA_PCA, 'rb'))
+        lda = pickle.load(open(TESTDATA_LDA, 'rb'))
+        pca = pickle.load(open(TESTDATA_PCA, 'rb'))
 
         results = spep.load(TESTDATA_RESULTS)
 

@@ -59,7 +59,15 @@ Quickstart
 
 4. If you find this library useful, please consider a reference or citation as:
 
-        ...
+        @misc{Grau-Luque2023Pudu,
+        author = {E. Grau-Luque, I. Becerril-Romero, A. Perez-Rodriguez, M. Guc, V. Izquierdo-Roca},
+        title = {pudu},
+        year = {2023},
+        publisher = {GitHub},
+        journal = {GitHub repository},
+        howpublished = {\url{https://github.com/pudu-py/pudu}},
+        }
+
 
 5. Stay up-to-date by updating the library using:
 

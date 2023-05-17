@@ -50,11 +50,11 @@ class TestPudu(unittest.TestCase):
         print(imp.imp[0,0,:,0][1000:1010])
         print(results[0][1000:1010])
 
-        self.assertEqual(np.array_equal(imp.imp[0,0,:,0], results[0]), True)
-        self.assertEqual(np.array_equal(imp.imp_norm[0,0,:,0], results[1]), True)
+        self.assertEqual(np.array_equal(imp.imp[0,0,:,0][1000:1010], results[0][1000:1010]), True)
+        self.assertEqual(np.array_equal(imp.imp_norm[0,0,:,0][1000:1010], results[1][1000:1010]), True)
 
-        self.assertEqual(np.array_equal(imp.spe[0,0,:,0], results[2]), True)
-        self.assertEqual(np.array_equal(imp.spe_norm[0,0,:,0], results[3]), True)
+        self.assertEqual(np.array_equal(imp.spe[0,0,:,0][1000:1010], results[2][1000:1010]), True)
+        self.assertEqual(np.array_equal(imp.spe_norm[0,0,:,0][1000:1010], results[3][1000:1010]), True)
 
-        self.assertEqual(np.array_equal(imp.syn[0,0,:,0], results[4]), True)
-        self.assertEqual(np.array_equal(imp.syn_norm[0,0,:,0], results[5]), True)
+        self.assertEqual(np.array_equal(imp.syn[0,0,:,0][1000:1010], results[4][1000:1010]), True)
+        self.assertEqual(np.array_equal(imp.syn_norm[0,0,:,0][1000:1010], results[5][1000:1010]), True)

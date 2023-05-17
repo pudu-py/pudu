@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import spectrapepper as spep
 import numpy as np
 import copy
-import perturbation
+from . import perturbation
 
 
 class pudu:

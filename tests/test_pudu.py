@@ -6,7 +6,6 @@ from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.decomposition import PCA
 import spectrapepper as spep
 from pudu import pudu
-# import pudu as pudu
 import numpy as np
 import unittest
 import pickle
@@ -43,24 +42,15 @@ class TestPudu(unittest.TestCase):
 
         imp = pudu.pudu(x, y, pf)
 
-        imp.importance(delta=1, window=100, calc='absolute')
-        imp.speed(delta=1, window=100, calc='absolute')
-        imp.synergy(delta=1, inspect=3, window=100, calc='absolute')
+        imp.importance(delta=1, window=200)
+        imp.speed(delta=1, window=200)
+        imp.synergy(delta=1, inspect=3, window=200)
         
-        self.assertEqual(round(sum(imp.imp[0,0,:,0])), round(sum(results[0])))
-        self.assertEqual(round(sum(imp.imp_norm[0,0,:,0])), round(sum(results[1])))
+        self.assertEqual(np.array_equal(imp.imp[0,0,:,0], results[0]), True)
+        self.assertEqual(np.array_equal(imp.imp_norm[0,0,:,0], results[1]), True)
 
-        self.assertEqual(round(sum(imp.spe[0,0,:,0])), round(sum(results[2])))
-        self.assertEqual(round(sum(imp.spe_norm[0,0,:,0])), round(sum(results[3])))
+        self.assertEqual(np.array_equal(imp.spe[0,0,:,0], results[2]), True)
+        self.assertEqual(np.array_equal(imp.spe_norm[0,0,:,0], results[3]), True)
 
-        self.assertEqual(round(sum(imp.syn[0,0,:,0])), round(sum(results[4])))
-        self.assertEqual(round(sum(imp.syn_norm[0,0,:,0])), round(sum(results[5])))
-
-        # self.assertEqual((imp.imp[0,0,:,0][100:110] == results[0][100:110]).all(), True)
-        # self.assertEqual((imp.imp_norm[0,0,:,0][100:110] == results[1][100:110]).all(), True)
-
-        # self.assertEqual((imp.spe[0,0,:,0][100:110] == results[2][100:110]).all(), True)
-        # self.assertEqual((imp.spe_norm[0,0,:,0][100:110] == results[3][100:110]).all(), True)
-
-        # self.assertEqual((imp.syn[0,0,:,0][100:110] == results[4][100:110]).all(), True)
-        # self.assertEqual((imp.syn_norm[0,0,:,0][100:110] == results[5][100:110]).all(), True)
+        self.assertEqual(np.array_equal(imp.syn[0,0,:,0], results[4]), True)
+        self.assertEqual(np.array_equal(imp.syn_norm[0,0,:,0], results[5]), True)

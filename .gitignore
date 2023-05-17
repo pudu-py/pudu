@@ -109,4 +109,5 @@ ENV/
 .vscode//docs/_build
 
 # Files in tests
-tests/pudu.py
+tests/pudu7.py
+tests/perturbation.py

@@ -10,9 +10,10 @@
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
@@ -25,15 +26,11 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-
-          
-          
-          <a href="../index.html" class="icon icon-home">
-            pudu
+            <a href="../index.html" class="icon icon-home"> pudu
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -60,7 +57,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li><a href="../index.html" class="icon icon-home"></a></li>
           <li class="breadcrumb-item"><a href="index.html">Module code</a></li>
       <li class="breadcrumb-item active">pudu</li>
       <li class="wy-breadcrumbs-aside">
@@ -76,6 +73,7 @@
 <span class="kn">import</span> <span class="nn">spectrapepper</span> <span class="k">as</span> <span class="nn">spep</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">perturbation</span>
 
 
 <div class="viewcode-block" id="pudu"><a class="viewcode-back" href="../functions.html#pudu.pudu">[docs]</a><span class="k">class</span> <span class="nc">pudu</span><span class="p">:</span>
@@ -101,7 +99,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pf</span> <span class="o">=</span> <span class="n">pf</span>
-        
+
         <span class="c1"># Main results</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">imp</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">spe</span> <span class="o">=</span> <span class="kc">None</span>
@@ -120,26 +118,18 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Expected integer. Got array with shape: %s&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span></div>
         
 
-<div class="viewcode-block" id="pudu.importance"><a class="viewcode-back" href="../functions.html#pudu.pudu.importance">[docs]</a>    <span class="k">def</span> <span class="nf">importance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">calc</span><span class="o">=</span><span class="s1">&#39;absolute&#39;</span><span class="p">,</span> 
-                       <span class="n">evolution</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="pudu.importance"><a class="viewcode-back" href="../functions.html#pudu.pudu.importance">[docs]</a>    <span class="k">def</span> <span class="nf">importance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">evolution</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> 
+                    <span class="n">absolute</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculates the importance vector for the input feature.</span>
 
-<span class="sd">        :type delta: float</span>
-<span class="sd">        :param delta: maximum variation to apply to each features.</span>
-<span class="sd">            </span>
 <span class="sd">        :type window: int</span>
 <span class="sd">        :param window: feature width to be changeg each time.</span>
 <span class="sd">            </span>
 <span class="sd">        :type scope: tupple(int, int)</span>
 <span class="sd">        :param scope: Starting and ending point of the analysis for each feature.</span>
 <span class="sd">            If `None`, the all the vector is analysed. </span>
-<span class="sd">        </span>
-<span class="sd">        :type calc: string</span>
-<span class="sd">        :param calc: Can be `absolute` or `relative`. If `absolute` the importance</span>
-<span class="sd">            is calculated using the average of the absolute vbalues. If `relative`</span>
-<span class="sd">            the it uses the real value for the average.</span>
-<span class="sd">        </span>
+
 <span class="sd">        :type evolution: int</span>
 <span class="sd">        :param evolution: feature width to be changeg each time.</span>
 <span class="sd">        </span>
@@ -157,28 +147,8 @@
         <span class="n">d_temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">sh</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">sh</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">sh</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">sh</span><span class="p">[</span><span class="mi">3</span><span class="p">]))</span>
         <span class="n">padd</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]</span>
         
-        <span class="c1"># Dim. std.</span>
-        <span class="k">if</span> <span class="n">scope</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">scope</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">sh</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
-        
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">window</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">sh</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="n">window</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">window</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">window</span> <span class="o">=</span> <span class="p">(</span><span class="n">window</span><span class="p">,</span> <span class="n">window</span><span class="p">)</span>
-        
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">scope</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">sh</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="n">scope</span> <span class="o">=</span> <span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">scope</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">scope</span> <span class="o">=</span> <span class="p">(</span><span class="n">scope</span><span class="p">,</span> <span class="n">scope</span><span class="p">)</span>
-        
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">padding</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">padding</span> <span class="o">=</span> <span class="p">(</span><span class="n">padding</span><span class="p">,</span> <span class="n">padding</span><span class="p">)</span>
-        
-        <span class="k">if</span> <span class="n">evolution</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">evolution</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
-        
+        <span class="n">scope</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="n">padding</span><span class="p">,</span> <span class="n">evolution</span> <span class="o">=</span> <span class="n">params_std</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">sh</span><span class="p">,</span> <span class="n">scope</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="n">padding</span><span class="p">,</span> <span class="n">evolution</span><span class="p">)</span>
+
         <span class="c1"># Padding</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">):</span>
             <span class="n">comp</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">scope</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">scope</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span><span class="o">%</span><span class="n">window</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
@@ -191,20 +161,19 @@
         <span class="k">while</span> <span class="n">row</span> <span class="o">&lt;=</span> <span class="n">scope</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">padd</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
             <span class="n">col</span> <span class="o">=</span> <span class="n">padd</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">scope</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
             <span class="k">while</span> <span class="n">col</span> <span class="o">&lt;=</span> <span class="n">scope</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">padd</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
-                <span class="n">p</span> <span class="o">=</span> <span class="p">[</span><span class="n">p0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
-                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">):</span>
-                    <span class="n">row_idx</span><span class="p">,</span> <span class="n">col_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">range</span><span class="p">(</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">indexing</span><span class="o">=</span><span class="s1">&#39;ij&#39;</span><span class="p">)</span>
-                    <span class="n">row_idx</span><span class="p">,</span> <span class="n">col_idx</span> <span class="o">=</span> <span class="n">row_idx</span> <span class="o">+</span> <span class="n">row</span><span class="p">,</span> <span class="n">col_idx</span> <span class="o">+</span> <span class="n">col</span>
+                <span class="n">row_idx</span><span class="p">,</span> <span class="n">col_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">range</span><span class="p">(</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">indexing</span><span class="o">=</span><span class="s1">&#39;ij&#39;</span><span class="p">)</span>
+                <span class="n">row_idx</span><span class="p">,</span> <span class="n">col_idx</span> <span class="o">=</span> <span class="n">row_idx</span> <span class="o">+</span> <span class="n">row</span><span class="p">,</span> <span class="n">col_idx</span> <span class="o">+</span> <span class="n">col</span>
+                
+                <span class="n">temp</span><span class="p">,</span> <span class="n">temp2</span> <span class="o">=</span> <span class="n">perturbation</span><span class="o">.</span><span class="n">function</span><span class="p">(</span><span class="n">pf</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pf</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x_copy</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="n">row_idx</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="n">col_idx</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-                    <span class="n">temp</span> <span class="o">=</span> <span class="n">x_copy</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-                    <span class="n">temp</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row_idx</span><span class="p">,</span> <span class="n">col_idx</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row_idx</span><span class="p">,</span> <span class="n">col_idx</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">delta</span> <span class="o">*</span> <span class="n">p</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="o">+</span> <span class="n">bias</span>
-                    <span class="n">p</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pf</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span>
-                
-                <span class="k">if</span> <span class="n">calc</span> <span class="o">==</span> <span class="s1">&#39;absolute&#39;</span><span class="p">:</span>
-                    <span class="n">val</span> <span class="o">=</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">p</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">+</span> <span class="nb">abs</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span><span class="o">/</span><span class="mi">2</span>
-                <span class="k">elif</span> <span class="n">calc</span> <span class="o">==</span> <span class="s1">&#39;relative&#39;</span><span class="p">:</span>
-                    <span class="n">val</span> <span class="o">=</span> <span class="p">((</span><span class="n">p</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">-</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span><span class="o">/</span><span class="mi">2</span>
-                
+                <span class="k">if</span> <span class="n">temp2</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+                    <span class="n">val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pf</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span> <span class="o">-</span> <span class="n">p0</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">val</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pf</span><span class="p">(</span><span class="n">temp2</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">pf</span><span class="p">(</span><span class="n">temp</span><span class="p">))</span> <span class="o">/</span> <span class="mi">2</span>
+
+                <span class="k">if</span> <span class="n">absolute</span><span class="p">:</span>
+                    <span class="n">val</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+
                 <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
                     <span class="n">d_temp</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">row</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">:</span><span class="n">col</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span><span class="p">[</span><span class="n">evolution</span><span class="p">]</span>
                 <span class="k">else</span><span class="p">:</span>
@@ -219,15 +188,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">imp_norm</span> <span class="o">=</span> <span class="p">(</span><span class="n">d_temp</span> <span class="o">-</span> <span class="n">min_val</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">max_val</span> <span class="o">-</span> <span class="n">min_val</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="pudu.speed"><a class="viewcode-back" href="../functions.html#pudu.pudu.speed">[docs]</a>    <span class="k">def</span> <span class="nf">speed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">calc</span><span class="o">=</span><span class="s1">&#39;absolute&#39;</span><span class="p">,</span> 
-                       <span class="n">evolution</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="pudu.speed"><a class="viewcode-back" href="../functions.html#pudu.pudu.speed">[docs]</a>    <span class="k">def</span> <span class="nf">speed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">evolution</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> 
+                <span class="n">steps</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.2</span><span class="p">],</span> <span class="n">absolute</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculates the gradient of the iomportance. In other owrds, the slope</span>
 <span class="sd">            of the importance at different values. This indicates how fast a</span>
 <span class="sd">            feature can change the result.</span>
-
-<span class="sd">        :type delta: float</span>
-<span class="sd">        :param delta: maximum variation to apply to each features.</span>
 <span class="sd">            </span>
 <span class="sd">        :type window: int</span>
 <span class="sd">        :param window: feature width to be changeg each time.</span>
@@ -235,11 +201,6 @@
 <span class="sd">        :type scope: tupple(int, int)</span>
 <span class="sd">        :param scope: Starting and ending point of the analysis for each feature.</span>
 <span class="sd">            If `None`, the all the vector is analysed. </span>
-<span class="sd">        </span>
-<span class="sd">        :type calc: string</span>
-<span class="sd">        :param calc: Can be `absolute` or `relative`. If `absolute` the importance</span>
-<span class="sd">            is calculated using the average of the absolute vbalues. If `relative`</span>
-<span class="sd">            the it uses the real value for the average.</span>
 <span class="sd">        </span>
 <span class="sd">        :type evolution: int</span>
 <span class="sd">        :param evolution: feature width to be changeg each time.</span>
@@ -251,6 +212,9 @@
 <span class="sd">            added and `window`starts from `0`. If `left`, padding to the left</span>
 <span class="sd">            is applyied and `window` ends at length `x`. If perfet `center` is</span>
 <span class="sd">            not possible, then ipadding left is added `1`.</span>
+<span class="sd">        </span>
+<span class="sd">        :type steps: int</span>
+<span class="sd">        :param steps: .</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Initial values</span>
         <span class="n">sh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span>
@@ -258,27 +222,7 @@
         <span class="n">d_temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">sh</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">sh</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">sh</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">sh</span><span class="p">[</span><span class="mi">3</span><span class="p">]))</span>
         <span class="n">padd</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]</span>
         
-        <span class="c1"># Dim. std.</span>
-        <span class="k">if</span> <span class="n">scope</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">scope</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">sh</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
-        
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">window</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">sh</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="n">window</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">window</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">window</span> <span class="o">=</span> <span class="p">(</span><span class="n">window</span><span class="p">,</span> <span class="n">window</span><span class="p">)</span>
-        
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">scope</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">sh</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="n">scope</span> <span class="o">=</span> <span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">scope</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">scope</span> <span class="o">=</span> <span class="p">(</span><span class="n">scope</span><span class="p">,</span> <span class="n">scope</span><span class="p">)</span>
-        
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">padding</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">padding</span> <span class="o">=</span> <span class="p">(</span><span class="n">padding</span><span class="p">,</span> <span class="n">padding</span><span class="p">)</span>
-        
-        <span class="k">if</span> <span class="n">evolution</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">evolution</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+        <span class="n">scope</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="n">padding</span><span class="p">,</span> <span class="n">evolution</span> <span class="o">=</span> <span class="n">params_std</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">sh</span><span class="p">,</span> <span class="n">scope</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="n">padding</span><span class="p">,</span> <span class="n">evolution</span><span class="p">)</span>
             
         <span class="n">p0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pf</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span> 
         
@@ -292,20 +236,34 @@
         <span class="k">while</span> <span class="n">row</span> <span class="o">&lt;=</span> <span class="n">scope</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">padd</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
             <span class="n">col</span> <span class="o">=</span> <span class="n">padd</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">scope</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
             <span class="k">while</span> <span class="n">col</span> <span class="o">&lt;=</span> <span class="n">scope</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">padd</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
-                <span class="n">p</span> <span class="o">=</span> <span class="p">[</span><span class="n">p0</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">steps</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span>
+                <span class="n">p</span> <span class="o">=</span> <span class="p">[]</span>
 
-                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">steps</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
-                    <span class="n">temp</span> <span class="o">=</span> <span class="n">x_copy</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-                    <span class="n">temp</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">row</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">:</span><span class="n">col</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">row</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">:</span><span class="n">col</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">delta</span> <span class="o">*</span> <span class="n">p</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="o">+</span> <span class="n">bias</span>
-                    <span class="n">p</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pf</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span>
-                
-                <span class="n">var_x</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">steps</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span>
-                <span class="n">var_y</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="n">evolution</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">p</span><span class="p">]</span>
-                
-                <span class="n">slope</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyfit</span><span class="p">(</span><span class="n">var_x</span><span class="p">,</span> <span class="n">var_y</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">row_idx</span><span class="p">,</span> <span class="n">col_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">range</span><span class="p">(</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">indexing</span><span class="o">=</span><span class="s1">&#39;ij&#39;</span><span class="p">)</span>
+                <span class="n">row_idx</span><span class="p">,</span> <span class="n">col_idx</span> <span class="o">=</span> <span class="n">row_idx</span> <span class="o">+</span> <span class="n">row</span><span class="p">,</span> <span class="n">col_idx</span> <span class="o">+</span> <span class="n">col</span>
 
-                <span class="n">d_temp</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">row</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">:</span><span class="n">col</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">slope</span>
-            
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">steps</span><span class="p">:</span>
+                    <span class="n">temp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                    <span class="n">temp</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">x_copy</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="n">j</span>
+                    <span class="n">temp</span><span class="p">,</span> <span class="n">temp2</span> <span class="o">=</span> <span class="n">perturbation</span><span class="o">.</span><span class="n">function</span><span class="p">(</span><span class="n">pf</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pf</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">temp</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="n">row_idx</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="n">col_idx</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                    
+                    <span class="k">if</span> <span class="n">temp2</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+                        <span class="n">val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pf</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span> <span class="o">-</span> <span class="n">p0</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">val</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pf</span><span class="p">(</span><span class="n">temp2</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">pf</span><span class="p">(</span><span class="n">temp</span><span class="p">))</span> <span class="o">/</span> <span class="mi">2</span>
+
+                    <span class="k">if</span> <span class="n">absolute</span><span class="p">:</span>
+                        <span class="n">val</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+                    
+                    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
+                        <span class="n">val</span> <span class="o">=</span> <span class="n">val</span><span class="p">[</span><span class="n">evolution</span><span class="p">]</span>
+
+                    <span class="n">p</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+
+                <span class="n">var_x</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="p">))]</span>
+                <span class="n">var_y</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">p</span><span class="p">]</span>
+                        
+                <span class="n">d_temp</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">row</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">:</span><span class="n">col</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyfit</span><span class="p">(</span><span class="n">var_x</span><span class="p">,</span> <span class="n">var_y</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
                 <span class="n">col</span> <span class="o">+=</span> <span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
             <span class="n">row</span> <span class="o">+=</span> <span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
@@ -315,8 +273,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">spe_norm</span> <span class="o">=</span> <span class="p">(</span><span class="n">d_temp</span> <span class="o">-</span> <span class="n">min_val</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">max_val</span> <span class="o">-</span> <span class="n">min_val</span><span class="p">)</span></div>
 
     
-<div class="viewcode-block" id="pudu.synergy"><a class="viewcode-back" href="../functions.html#pudu.pudu.synergy">[docs]</a>    <span class="k">def</span> <span class="nf">synergy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">inspect</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">calc</span><span class="o">=</span><span class="s1">&#39;absolute&#39;</span><span class="p">,</span> 
-                    <span class="n">evolution</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="pudu.synergy"><a class="viewcode-back" href="../functions.html#pudu.pudu.synergy">[docs]</a>    <span class="k">def</span> <span class="nf">synergy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">inspect</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">absolute</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                    <span class="n">evolution</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculates the synergy between features.</span>
 <span class="sd">        </span>
@@ -350,31 +308,10 @@
         <span class="n">sh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span>
         <span class="n">x_copy</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
         <span class="n">d_temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">sh</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">sh</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">sh</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">sh</span><span class="p">[</span><span class="mi">3</span><span class="p">]))</span>
-        
         <span class="n">padd</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]</span>
         
-        <span class="c1"># Dim. std.</span>
-        <span class="k">if</span> <span class="n">scope</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">scope</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">sh</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
-        
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">window</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">sh</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="n">window</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">window</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">window</span> <span class="o">=</span> <span class="p">(</span><span class="n">window</span><span class="p">,</span> <span class="n">window</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">scope</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">sh</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="n">scope</span> <span class="o">=</span> <span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">scope</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">scope</span> <span class="o">=</span> <span class="p">(</span><span class="n">scope</span><span class="p">,</span> <span class="n">scope</span><span class="p">)</span>
-        
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">padding</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">padding</span> <span class="o">=</span> <span class="p">(</span><span class="n">padding</span><span class="p">,</span> <span class="n">padding</span><span class="p">)</span>
-        
-        <span class="k">if</span> <span class="n">evolution</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">evolution</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
-         
+        <span class="n">scope</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="n">padding</span><span class="p">,</span> <span class="n">evolution</span> <span class="o">=</span> <span class="n">params_std</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">sh</span><span class="p">,</span> <span class="n">scope</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="n">padding</span><span class="p">,</span> <span class="n">evolution</span><span class="p">)</span>
+            
         <span class="c1"># Padding</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">):</span>
             <span class="n">comp</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">scope</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">scope</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span><span class="o">%</span><span class="n">window</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
@@ -394,7 +331,7 @@
             <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">inspect</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">inspect</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
                 <span class="n">base</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">x_copy</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">delta</span><span class="p">)</span>
         
-        <span class="n">b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pf</span><span class="p">(</span><span class="n">base</span><span class="p">)</span> <span class="c1"># this value is baseline, set to 0</span>
+        <span class="c1"># b = self.pf(base) # this value is baseline, set to 0</span>
         <span class="n">p0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pf</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
 
         <span class="n">row</span> <span class="o">=</span> <span class="n">padd</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">scope</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
@@ -404,18 +341,29 @@
                 <span class="k">if</span> <span class="n">inspect</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">row</span> <span class="ow">and</span> <span class="n">inspect</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">col</span><span class="p">:</span>
                     <span class="k">pass</span>  <span class="c1"># Skip the current iteration</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">p</span> <span class="o">=</span> <span class="p">[</span><span class="n">p0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>  <span class="c1"># -1 and 1 for sign mult., replaced after</span>
-                    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">):</span>
-                        <span class="n">temp</span> <span class="o">=</span> <span class="n">x_copy</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-                        <span class="n">temp</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">row</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">:</span><span class="n">col</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">row</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">:</span><span class="n">col</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">delta</span> <span class="o">*</span> <span class="n">p</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="o">+</span> <span class="n">bias</span>
-                        <span class="n">p</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pf</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span> <span class="o">-</span> <span class="n">p0</span>  <span class="c1"># p0 is baseline</span>
-                        
-                    <span class="k">if</span> <span class="n">calc</span> <span class="o">==</span> <span class="s1">&#39;absolute&#39;</span><span class="p">:</span>
-                        <span class="n">val</span> <span class="o">=</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">p</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">+</span> <span class="nb">abs</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span> <span class="o">/</span> <span class="mi">2</span>
-                    <span class="k">elif</span> <span class="n">calc</span> <span class="o">==</span> <span class="s1">&#39;relative&#39;</span><span class="p">:</span>
-                        <span class="n">val</span> <span class="o">=</span> <span class="p">((</span><span class="n">p</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span> <span class="o">/</span> <span class="mi">2</span>
-                    
-                    <span class="n">d_temp</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">row</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">:</span><span class="n">col</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span><span class="p">[</span><span class="n">evolution</span><span class="p">]</span>
+                    <span class="n">row_idx</span><span class="p">,</span> <span class="n">col_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">range</span><span class="p">(</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">indexing</span><span class="o">=</span><span class="s1">&#39;ij&#39;</span><span class="p">)</span>
+                    <span class="n">row_idx</span><span class="p">,</span> <span class="n">col_idx</span> <span class="o">=</span> <span class="n">row_idx</span> <span class="o">+</span> <span class="n">row</span><span class="p">,</span> <span class="n">col_idx</span> <span class="o">+</span> <span class="n">col</span>
+                    <span class="c1"># val = perturbation.function(pf=self.pf, x=x_copy, row=row_idx, col=col_idx, **kwargs)</span>
+
+
+
+                    <span class="n">temp</span><span class="p">,</span> <span class="n">temp2</span> <span class="o">=</span> <span class="n">perturbation</span><span class="o">.</span><span class="n">function</span><span class="p">(</span><span class="n">pf</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pf</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x_copy</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="n">row_idx</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="n">col_idx</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+                    <span class="k">if</span> <span class="n">temp2</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+                        <span class="n">val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pf</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span> <span class="o">-</span> <span class="n">p0</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">val</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pf</span><span class="p">(</span><span class="n">temp2</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">pf</span><span class="p">(</span><span class="n">temp</span><span class="p">))</span> <span class="o">/</span> <span class="mi">2</span>
+
+                    <span class="k">if</span> <span class="n">absolute</span><span class="p">:</span>
+                        <span class="n">val</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+
+
+
+                    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
+                        <span class="n">d_temp</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">row</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">:</span><span class="n">col</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span><span class="p">[</span><span class="n">evolution</span><span class="p">]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">d_temp</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">row</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">:</span><span class="n">col</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+
 
                 <span class="n">col</span> <span class="o">+=</span> <span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
             <span class="n">row</span> <span class="o">+=</span> <span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -425,10 +373,166 @@
         <span class="n">max_val</span><span class="p">,</span> <span class="n">min_val</span> <span class="o">=</span> <span class="n">d_temp</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">d_temp</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">syn_norm</span> <span class="o">=</span> <span class="p">(</span><span class="n">d_temp</span> <span class="o">-</span> <span class="n">min_val</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">max_val</span> <span class="o">-</span> <span class="n">min_val</span><span class="p">)</span></div>
       
-    
+
+    <span class="k">def</span> <span class="nf">preview</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+                <span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show_data</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Preview&#39;</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;Feature&#39;</span><span class="p">,</span>
+                <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;Intensity&#39;</span><span class="p">,</span> <span class="n">xticks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">yticks</span><span class="o">=</span><span class="p">[],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Greens&#39;</span><span class="p">,</span>
+                <span class="n">font_size</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">bold</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Plots an approximate preview of the sections, areas, or mask to be analyzed over the data</span>
+<span class="sd">            before executing. It is particularly useful to check if the parameters are</span>
+<span class="sd">            correct, especially if the user expects long runtimes.</span>
+<span class="sd">        </span>
+<span class="sd">        :type feature: list</span>
+<span class="sd">        :param feature: feature analyzed or any that the user whant to plot against.</span>
+<span class="sd">            Normally you want it to be `self.x`.</span>
+<span class="sd">        </span>
+<span class="sd">        :type window: int</span>
+<span class="sd">        :param window: feature width to be analyzed.</span>
+
+<span class="sd">        :type scope: tuple</span>
+<span class="sd">        :param scope: feature width to be analyzed.</span>
+
+<span class="sd">        :type padding: str</span>
+<span class="sd">        :param padding: Type of padding. If the legnth of `x` is not divisible </span>
+<span class="sd">            by `window` then padding is applyed. If `center`, then equal padding </span>
+<span class="sd">            to each side is applyed. If `right`, then paading to the right is </span>
+<span class="sd">            added and `window`starts from `0`. If `left`, padding to the left</span>
+<span class="sd">            is applyied and `window` ends at length `x`. If perfet `center` is</span>
+<span class="sd">            not possible, then ipadding left is added `1`.</span>
+<span class="sd">        </span>
+<span class="sd">        :type mask: list</span>
+<span class="sd">        :param mask: Mask to be applied to the data. If `None`, no mask will be</span>
+<span class="sd">            applied.</span>
+
+<span class="sd">        :type axis: list</span>
+<span class="sd">        :param axis: X-axis for the plot. If `None`, it will show the pixel count.</span>
+
+<span class="sd">        :type show_data: bool</span>
+<span class="sd">        :param show_data: If `True`, it will plot the data. If `False`, it will</span>
+<span class="sd">            plot the mask.</span>
+
+<span class="sd">        :type title: str</span>
+<span class="sd">        :param title: Title of the plot.</span>
+
+<span class="sd">        :type xlabel: str</span>
+<span class="sd">        :param xlabel: X-axis label.</span>
+
+<span class="sd">        :type ylabel: str</span>
+<span class="sd">        :param ylabel: Y-axis label.</span>
+
+<span class="sd">        :type xticks: list</span>
+<span class="sd">        :param xticks: X-axis ticks.</span>
+
+<span class="sd">        :type yticks: list</span>
+<span class="sd">        :param yticks: Y-axis ticks.</span>
+
+<span class="sd">        :type cmap: str</span>
+<span class="sd">        :param cmap: Colormap to be used.</span>
+
+<span class="sd">        :type font_size: int</span>
+<span class="sd">        :param font_size: Font size for the plot.</span>
+
+<span class="sd">        :type figsize: tuple</span>
+<span class="sd">        :param figsize: Figure size for the plot.</span>
+
+<span class="sd">        :type bold: Boolean</span>
+<span class="sd">        :param bold: To make the limit lines bolder. Default is &#39;False&#39;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Initial values</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># this will be the preview image</span>
+        <span class="n">sh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">d_temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">sh</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">sh</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">sh</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">sh</span><span class="p">[</span><span class="mi">3</span><span class="p">]))</span>
+        <span class="n">countour</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">sh</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">sh</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">sh</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">sh</span><span class="p">[</span><span class="mi">3</span><span class="p">]))</span>
+        <span class="n">padd</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]</span>
+                
+        <span class="n">scope</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="n">padding</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">params_std</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">sh</span><span class="p">,</span> <span class="n">scope</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="n">padding</span><span class="p">,</span> <span class="n">evolution</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+        <span class="c1"># Padding</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">):</span>
+            <span class="n">comp</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">scope</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">scope</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span><span class="o">%</span><span class="n">window</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">comp</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">padd</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calc_pad</span><span class="p">(</span><span class="n">padding</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">comp</span><span class="p">)</span>
+
+        <span class="n">row</span> <span class="o">=</span> <span class="n">padd</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">scope</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">while</span> <span class="n">row</span> <span class="o">&lt;=</span> <span class="n">scope</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">padd</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="n">col</span> <span class="o">=</span> <span class="n">padd</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">scope</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">while</span> <span class="n">col</span> <span class="o">&lt;=</span> <span class="n">scope</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">padd</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="n">countour</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1"># indicates limit</span>
+                <span class="n">d_temp</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">row</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">:</span><span class="n">col</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+                <span class="k">if</span> <span class="n">sh</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">sh</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+                        <span class="n">countour</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">sh</span><span class="p">[</span><span class="mi">2</span><span class="p">]):</span>
+                        <span class="n">countour</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+
+                <span class="n">col</span> <span class="o">+=</span> <span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">row</span> <span class="o">+=</span> <span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">dims</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">d_temp</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">d_temp</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,:,</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">countour</span> <span class="o">=</span> <span class="n">countour</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,:,</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">feature</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span>
+        <span class="n">feature</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">feature</span><span class="p">)[</span><span class="mi">0</span><span class="p">,:,:,</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">rows</span><span class="p">,</span> <span class="n">cols</span> <span class="o">=</span> <span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">dims</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="n">ext</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">cols</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">rows</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">rows</span><span class="p">,</span> <span class="n">cols</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">feature</span><span class="p">)</span>
+        
+            <span class="k">if</span> <span class="n">axis</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">axis</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">feature</span><span class="p">[</span><span class="mi">0</span><span class="p">]))]</span>
+                <span class="n">ext</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">feature</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">min</span><span class="p">(</span><span class="n">feature</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">max</span><span class="p">(</span><span class="n">feature</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ext</span> <span class="o">=</span> <span class="p">[</span><span class="nb">min</span><span class="p">(</span><span class="n">axis</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">axis</span><span class="p">),</span> <span class="nb">min</span><span class="p">(</span><span class="n">feature</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">max</span><span class="p">(</span><span class="n">feature</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;font&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">font_size</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">show_data</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">feature</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;binary&#39;</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span> 
+                       <span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;nearest&#39;</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">ext</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">show_data</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span> <span class="n">feature</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;k&#39;</span><span class="p">)</span>
+
+        <span class="c1"># just to make bolder lines</span>
+        <span class="k">if</span> <span class="n">bold</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">countour</span><span class="p">)):</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">countour</span><span class="p">[</span><span class="n">i</span><span class="p">])):</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">countour</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">countour</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">countour</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                                <span class="n">countour</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">countour</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+                        <span class="k">if</span> <span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">countour</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">countour</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">countour</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                                <span class="n">countour</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">countour</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+                    <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Index out of bounds. Proceed normally.&#39;</span><span class="p">)</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">countour</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;binary&#39;</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span> 
+                   <span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;nearest&#39;</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">ext</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        
+        <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span> 
+                   <span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;nearest&#39;</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">ext</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+        <span class="c1"># plt.colorbar()</span>
+        
+        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span> 
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="n">xlabel</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="n">ylabel</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">(</span><span class="n">yticks</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">xticks</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span> <span class="n">xticks</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="s1">&#39;vertical&#39;</span><span class="p">)</span>
+        
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>  
+
+
 <div class="viewcode-block" id="pudu.plot"><a class="viewcode-back" href="../functions.html#pudu.pudu.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">feature</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show_data</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Importance&#39;</span><span class="p">,</span> 
-        <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;Feature&#39;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;Intensity&#39;</span><span class="p">,</span> <span class="n">xticks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">yticks</span><span class="o">=</span><span class="p">[],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;plasma&#39;</span><span class="p">,</span>
-        <span class="n">font_size</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">4</span><span class="p">)):</span>
+            <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;Feature&#39;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;Intensity&#39;</span><span class="p">,</span> <span class="n">xticks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">yticks</span><span class="o">=</span><span class="p">[],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Greens&#39;</span><span class="p">,</span>
+            <span class="n">font_size</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">4</span><span class="p">)):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Easy plot function for `importance`, `speed`, or `synergy`. It shows the analyzed</span>
 <span class="sd">            feature `feature` with a colormap overlay indicating the result along with</span>
@@ -532,8 +636,6 @@
             <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variable</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variable</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">])</span>
         
-        <span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
-
         <span class="k">if</span> <span class="n">sh</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span> 
             <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
@@ -573,7 +675,72 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid padding type &#39;</span><span class="si">{</span><span class="n">t</span><span class="si">}</span><span class="s2">&#39;. Valid types are &#39;center&#39;, &#39;left&#39;, and &#39;right&#39;.&quot;</span><span class="p">)</span>
         
-        <span class="k">return</span> <span class="n">pad</span></div>
+        <span class="k">return</span> <span class="n">pad</span>
+
+
+<span class="c1"># def create_mask(mok, masks):</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     Create a mask for the given `mok` and `masks`.</span>
+
+<span class="c1">#     :type mok: list or numpy.ndarray</span>
+<span class="c1">#     :param mok: Mok of the data.</span>
+
+<span class="c1">#     :type masks: list</span>
+<span class="c1">#     :param masks: List of masks to be applied to the data.</span>
+
+<span class="c1">#     :rtype: numpy.ndarray</span>
+<span class="c1">#     :returns: A mask for the given mok and masks.</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+
+<span class="c1">#     if isinstance(mok, list):</span>
+<span class="c1">#         mok = np.array(mok)</span>
+
+<span class="c1">#     mask_list = np.zeros_like(mok)</span>
+
+<span class="c1">#     for mask in masks:</span>
+<span class="c1">#         if isinstance(mask[0], int) or isinstance(mask[0], float):</span>
+<span class="c1">#             mask = [mask]</span>
+
+<span class="c1">#         mask_slices = tuple(slice(mask_dim[0], mask_dim[1] + 1) for mask_dim in mask)</span>
+<span class="c1">#         mask_list[mask_slices] = 1</span>
+
+<span class="c1">#     return mask_list</span>
+
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        def over_mask(): # sections of the mask to distort</span>
+<span class="sd">            &#39;all&#39; evaluate all</span>
+<span class="sd">            &#39;percentage&#39; evaluate first N%, or last N%</span>
+<span class="sd">            &#39;quantity&#39; eval irst N, or last N</span>
+<span class="sd">            &#39;everyother&#39; eval every other window</span>
+<span class="sd">            &#39;random&#39; randomized</span>
+<span class="sd">            &#39;specific&#39; specified by user</span>
+<span class="sd">            return overmask</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+
+<span class="k">def</span> <span class="nf">params_std</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">sh</span><span class="p">,</span> <span class="n">scope</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="n">padding</span><span class="p">,</span> <span class="n">evolution</span><span class="p">):</span>
+    <span class="c1"># Dim. std.</span>
+    <span class="k">if</span> <span class="n">scope</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">scope</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">sh</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">window</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">sh</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">window</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">window</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">window</span> <span class="o">=</span> <span class="p">(</span><span class="n">window</span><span class="p">,</span> <span class="n">window</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">scope</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">sh</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">scope</span> <span class="o">=</span> <span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">scope</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">scope</span> <span class="o">=</span> <span class="p">(</span><span class="n">scope</span><span class="p">,</span> <span class="n">scope</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">padding</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">padding</span> <span class="o">=</span> <span class="p">(</span><span class="n">padding</span><span class="p">,</span> <span class="n">padding</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">evolution</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">evolution</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">scope</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="n">padding</span><span class="p">,</span> <span class="n">evolution</span>
 </pre></div>
 
            </div>

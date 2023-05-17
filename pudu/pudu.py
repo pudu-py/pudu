@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import spectrapepper as spep
 import numpy as np
 import copy
+import perturbation
 
 
 class pudu:
@@ -27,7 +28,7 @@ class pudu:
         self.x = x
         self.y = y
         self.pf = pf
-        
+
         # Main results
         self.imp = None
         self.spe = None
@@ -46,26 +47,18 @@ class pudu:
             raise ValueError(f"Expected integer. Got array with shape: %s" % str(np.array(y).shape))
         
 
-    def importance(self, delta=0.1, window=1, scope=None, calc='absolute', 
-                       evolution=None, padding='center', bias=0):
+    def importance(self, window=1, scope=None, evolution=None, padding='center', 
+                    absolute=False, **kwargs):
         """
         Calculates the importance vector for the input feature.
 
-        :type delta: float
-        :param delta: maximum variation to apply to each features.
-            
         :type window: int
         :param window: feature width to be changeg each time.
             
         :type scope: tupple(int, int)
         :param scope: Starting and ending point of the analysis for each feature.
             If `None`, the all the vector is analysed. 
-        
-        :type calc: string
-        :param calc: Can be `absolute` or `relative`. If `absolute` the importance
-            is calculated using the average of the absolute vbalues. If `relative`
-            the it uses the real value for the average.
-        
+
         :type evolution: int
         :param evolution: feature width to be changeg each time.
         
@@ -83,28 +76,8 @@ class pudu:
         d_temp = np.zeros((sh[0], sh[1], sh[2], sh[3]))
         padd = [[0, 0], [0, 0]]
         
-        # Dim. std.
-        if scope is None:
-            scope = (0, sh[2])
-        
-        if len(np.array(window).shape) == 0:
-            if sh[1] == 1:
-                window = (1, window)
-            else:
-                window = (window, window)
-        
-        if len(np.array(scope).shape) == 1:
-            if sh[1] == 1:
-                scope = ((0, 1), scope)
-            else:
-                scope = (scope, scope)
-        
-        if len(np.array(padding).shape) == 0:
-            padding = (padding, padding)
-        
-        if evolution is None:
-            evolution = int(self.y)
-        
+        scope, window, padding, evolution = params_std(self.y, sh, scope, window, padding, evolution)
+
         # Padding
         for i in range(2):
             comp = int((scope[i][1]-scope[i][0])%window[i])
@@ -117,19 +90,18 @@ class pudu:
         while row <= scope[0][1] - padd[0][1] - window[0]:
             col = padd[1][0] + scope[1][0]
             while col <= scope[1][1] - padd[1][1] - window[1]:
-                p = [p0, -1, 1]
-                for j in range(1, 3):
-                    row_idx, col_idx = np.meshgrid(range(window[0]), range(window[1]), indexing='ij')
-                    row_idx, col_idx = row_idx + row, col_idx + col
-
-                    temp = x_copy.copy()
-                    temp[0, row_idx, col_idx, 0] = temp[0, row_idx, col_idx, 0] * (1 - delta * p[j]) + bias
-                    p[j] = self.pf(temp)
+                row_idx, col_idx = np.meshgrid(range(window[0]), range(window[1]), indexing='ij')
+                row_idx, col_idx = row_idx + row, col_idx + col
                 
-                if calc == 'absolute':
-                    val = (abs(p[0]-p[2]) + abs(p[0]-p[1]))/2
-                elif calc == 'relative':
-                    val = ((p[2]-p[0]) + (p[1]-p[0]))/2
+                temp, temp2 = perturbation.function(pf=self.pf, x=x_copy, row=row_idx, col=col_idx, **kwargs)
+
+                if temp2 is False:
+                    val = self.pf(temp) - p0
+                else:
+                    val = (self.pf(temp2) + self.pf(temp)) / 2
+
+                if absolute:
+                    val = abs(val)
 
                 if np.shape(val):
                     d_temp[0, row:row+window[0], col:col+window[1], 0] = val[evolution]
@@ -145,15 +117,12 @@ class pudu:
         self.imp_norm = (d_temp - min_val) / (max_val - min_val)
 
 
-    def speed(self, delta=0.1, window=1, scope=None, calc='absolute', 
-                       evolution=None, padding='center', steps=3, bias=0):
+    def speed(self, window=1, scope=None, evolution=None, padding='center', 
+                steps=[0,0.1,0.2], absolute=False, **kwargs):
         """
         Calculates the gradient of the iomportance. In other owrds, the slope
             of the importance at different values. This indicates how fast a
             feature can change the result.
-
-        :type delta: float
-        :param delta: maximum variation to apply to each features.
             
         :type window: int
         :param window: feature width to be changeg each time.
@@ -161,11 +130,6 @@ class pudu:
         :type scope: tupple(int, int)
         :param scope: Starting and ending point of the analysis for each feature.
             If `None`, the all the vector is analysed. 
-        
-        :type calc: string
-        :param calc: Can be `absolute` or `relative`. If `absolute` the importance
-            is calculated using the average of the absolute vbalues. If `relative`
-            the it uses the real value for the average.
         
         :type evolution: int
         :param evolution: feature width to be changeg each time.
@@ -177,6 +141,9 @@ class pudu:
             added and `window`starts from `0`. If `left`, padding to the left
             is applyied and `window` ends at length `x`. If perfet `center` is
             not possible, then ipadding left is added `1`.
+        
+        :type steps: int
+        :param steps: .
         """
         # Initial values
         sh = np.array(self.x).shape
@@ -184,27 +151,7 @@ class pudu:
         d_temp = np.zeros((sh[0], sh[1], sh[2], sh[3]))
         padd = [[0, 0], [0, 0]]
         
-        # Dim. std.
-        if scope is None:
-            scope = (0, sh[2])
-        
-        if len(np.array(window).shape) == 0:
-            if sh[1] == 1:
-                window = (1, window)
-            else:
-                window = (window, window)
-        
-        if len(np.array(scope).shape) == 1:
-            if sh[1] == 1:
-                scope = ((0, 1), scope)
-            else:
-                scope = (scope, scope)
-        
-        if len(np.array(padding).shape) == 0:
-            padding = (padding, padding)
-        
-        if evolution is None:
-            evolution = int(self.y)
+        scope, window, padding, evolution = params_std(self.y, sh, scope, window, padding, evolution)
             
         p0 = self.pf(self.x) 
         
@@ -218,20 +165,34 @@ class pudu:
         while row <= scope[0][1] - padd[0][1] - window[0]:
             col = padd[1][0] + scope[1][0]
             while col <= scope[1][1] - padd[1][1] - window[1]:
-                p = [p0] + [i for i in range(1, steps + 1)]
+                p = []
 
-                for j in range(1, steps + 1):
-                    temp = x_copy.copy()
-                    temp[0, row:row+window[0], col:col+window[1], 0] = temp[0, row:row+window[0], col:col+window[1], 0] * (1 - delta * p[j]) + bias
-                    p[j] = self.pf(temp)
-                
-                var_x = [i for i in range(steps + 1)]
-                var_y = [i[evolution] for i in p]
-                
-                slope = np.polyfit(var_x, var_y, 1)[0]
+                row_idx, col_idx = np.meshgrid(range(window[0]), range(window[1]), indexing='ij')
+                row_idx, col_idx = row_idx + row, col_idx + col
 
-                d_temp[0, row:row+window[0], col:col+window[1], 0] = slope
-            
+                for j in steps:
+                    temp = self.x.copy()
+                    temp[0, row, col, 0] = (x_copy[0, row, col, 0]) * j
+                    temp, temp2 = perturbation.function(pf=self.pf, x=temp, row=row_idx, col=col_idx, **kwargs)
+                    
+                    if temp2 is False:
+                        val = self.pf(temp) - p0
+                    else:
+                        val = (self.pf(temp2) + self.pf(temp)) / 2
+
+                    if absolute:
+                        val = abs(val)
+                    
+                    if np.shape(val):
+                        val = val[evolution]
+
+                    p.append(val)
+
+                var_x = [i for i in range(len(p))]
+                var_y = [i for i in p]
+                        
+                d_temp[0, row:row+window[0], col:col+window[1], 0] = np.polyfit(var_x, var_y, 1)[0]
+
                 col += window[1]
             row += window[0]
 
@@ -241,8 +202,8 @@ class pudu:
         self.spe_norm = (d_temp - min_val) / (max_val - min_val)
 
     
-    def synergy(self, delta=0.1, window=1, inspect=0, scope=None, calc='absolute', 
-                    evolution=None, padding='center', bias=0, mask=None):
+    def synergy(self, delta=0.1, window=1, inspect=0, scope=None, absolute=False,
+                    evolution=None, padding='center', mask=None, **kwargs):
         """
         Calculates the synergy between features.
         
@@ -276,30 +237,9 @@ class pudu:
         sh = np.array(self.x).shape
         x_copy = copy.deepcopy(self.x)
         d_temp = np.zeros((sh[0], sh[1], sh[2], sh[3]))
-        
         padd = [[0, 0], [0, 0]]
         
-        # Dim. std.
-        if scope is None:
-            scope = (0, sh[2])
-        
-        if len(np.array(window).shape) == 0:
-            if sh[1] == 1:
-                window = (1, window)
-            else:
-                window = (window, window)
-
-        if len(np.array(scope).shape) == 1:
-            if sh[1] == 1:
-                scope = ((0, 1), scope)
-            else:
-                scope = (scope, scope)
-        
-        if len(np.array(padding).shape) == 0:
-            padding = (padding, padding)
-        
-        if evolution is None:
-            evolution = int(self.y)
+        scope, window, padding, evolution = params_std(self.y, sh, scope, window, padding, evolution)
             
         # Padding
         for i in range(2):
@@ -320,7 +260,7 @@ class pudu:
             for j in range(inspect[1], inspect[1]+window[1]):
                 base[0][i][j][0] = x_copy[0][i][j][0]*(1+delta)
         
-        b = self.pf(base) # this value is baseline, set to 0
+        # b = self.pf(base) # this value is baseline, set to 0
         p0 = self.pf(self.x)
 
         row = padd[0][0] + scope[0][0]
@@ -330,18 +270,29 @@ class pudu:
                 if inspect[0] == row and inspect[1] == col:
                     pass  # Skip the current iteration
                 else:
-                    p = [p0, -1, 1]  # -1 and 1 for sign mult., replaced after
-                    for j in range(1, 3):
-                        temp = x_copy.copy()
-                        temp[0, row:row+window[0], col:col+window[1], 0] = temp[0, row:row+window[0], col:col+window[1], 0] * (1 - delta * p[j]) + bias
-                        p[j] = self.pf(temp) - p0  # p0 is baseline
-                        
-                    if calc == 'absolute':
-                        val = (abs(p[0] - p[2]) + abs(p[0] - p[1])) / 2
-                    elif calc == 'relative':
-                        val = ((p[2] - p[0]) + (p[1] - p[0])) / 2
-                    
-                    d_temp[0, row:row+window[0], col:col+window[1], 0] = val[evolution]
+                    row_idx, col_idx = np.meshgrid(range(window[0]), range(window[1]), indexing='ij')
+                    row_idx, col_idx = row_idx + row, col_idx + col
+                    # val = perturbation.function(pf=self.pf, x=x_copy, row=row_idx, col=col_idx, **kwargs)
+
+
+
+                    temp, temp2 = perturbation.function(pf=self.pf, x=x_copy, row=row_idx, col=col_idx, **kwargs)
+
+                    if temp2 is False:
+                        val = self.pf(temp) - p0
+                    else:
+                        val = (self.pf(temp2) + self.pf(temp)) / 2
+
+                    if absolute:
+                        val = abs(val)
+
+
+
+                    if np.shape(val):
+                        d_temp[0, row:row+window[0], col:col+window[1], 0] = val[evolution]
+                    else:
+                        d_temp[0, row:row+window[0], col:col+window[1], 0] = val
+
 
                 col += window[1]
             row += window[0]
@@ -355,7 +306,7 @@ class pudu:
     def preview(self, window=1, scope=None, padding='center', mask=None, 
                 axis=None, show_data=True, title='Preview', xlabel='Feature',
                 ylabel='Intensity', xticks=None, yticks=[], cmap='Greens',
-                font_size=15, figsize=(14, 4)):
+                font_size=15, figsize=(14, 4), bold=False):
         """
         Plots an approximate preview of the sections, areas, or mask to be analyzed over the data
             before executing. It is particularly useful to check if the parameters are
@@ -413,6 +364,9 @@ class pudu:
 
         :type figsize: tuple
         :param figsize: Figure size for the plot.
+
+        :type bold: Boolean
+        :param bold: To make the limit lines bolder. Default is 'False'.
         """
 
         # Initial values
@@ -421,26 +375,9 @@ class pudu:
         d_temp = np.zeros((sh[0], sh[1], sh[2], sh[3]))
         countour = np.zeros((sh[0], sh[1], sh[2], sh[3]))
         padd = [[0, 0], [0, 0]]
-        
-        # Dim. std.
-        if scope is None:
-            scope = (0, sh[2])
-        
-        if len(np.array(window).shape) == 0:
-            if sh[1] == 1:
-                window = (1, window)
-            else:
-                window = (window, window)
-        
-        if len(np.array(scope).shape) == 1:
-            if sh[1] == 1:
-                scope = ((0, 1), scope)
-            else:
-                scope = (scope, scope)
-        
-        if len(np.array(padding).shape) == 0:
-            padding = (padding, padding)
-               
+                
+        scope, window, padding, _ = params_std(self.y, sh, scope, window, padding, evolution=None)
+
         # Padding
         for i in range(2):
             comp = int((scope[i][1]-scope[i][0])%window[i])
@@ -453,6 +390,14 @@ class pudu:
             while col <= scope[1][1] - padd[1][1] - window[1]:
                 countour[0, row, col, 0] = 1 # indicates limit
                 d_temp[0, row:row+window[0], col:col+window[1], 0] = 1
+
+                if sh[1] > 1:
+                    for i in range(sh[1]):
+                        countour[0, i, col, 0] = 1
+                    for i in range(sh[2]):
+                        countour[0, row, i, 0] = 1
+
+
                 col += window[1]
             row += window[0]
 
@@ -484,13 +429,18 @@ class pudu:
             plt.plot(axis, feature[0], 'k')
 
         # just to make bolder lines
-        for i in range(len(countour)):
-            for j in range(len(countour[i])):
-                if countour[i][j] == 1 and countour[i][j+1] == 0 and countour[i][j-1] == 0:
-                    countour[i][j-1] = countour[i][j+1] = 1
-                if dims[1] > 1 and countour[i][j] == 1 and countour[i+1][j] == 0 and countour[i-1][j] == 0:
-                    countour[i-1][j] = countour[i+1][j] = 1
-                    
+        if bold == True:
+            for i in range(len(countour)):
+                for j in range(len(countour[i])):
+                    try:
+                        if countour[i][j] == 1 and countour[i][j+1] == 0 and countour[i][j-1] == 0:
+                                countour[i][j-1] = countour[i][j+1] = 1
+
+                        if dims[1] > 1 and countour[i][j] == 1 and countour[i+1][j] == 0 and countour[i-1][j] == 0:
+                                countour[i-1][j] = countour[i+1][j] = 1
+                    except IndexError:
+                        print('Index out of bounds. Proceed normally.')
+
         plt.imshow(countour, cmap='binary', aspect="auto", 
                    interpolation='nearest', extent=ext, alpha=1)
         
@@ -505,7 +455,6 @@ class pudu:
 
         if xticks:
             plt.xticks(axis, xticks, rotation='vertical')
-
         
         plt.show()  
 
@@ -658,52 +607,66 @@ class pudu:
         return pad
 
 
-    def create_mask(mok, masks):
+# def create_mask(mok, masks):
+#     """
+#     Create a mask for the given `mok` and `masks`.
+
+#     :type mok: list or numpy.ndarray
+#     :param mok: Mok of the data.
+
+#     :type masks: list
+#     :param masks: List of masks to be applied to the data.
+
+#     :rtype: numpy.ndarray
+#     :returns: A mask for the given mok and masks.
+#     """
+
+#     if isinstance(mok, list):
+#         mok = np.array(mok)
+
+#     mask_list = np.zeros_like(mok)
+
+#     for mask in masks:
+#         if isinstance(mask[0], int) or isinstance(mask[0], float):
+#             mask = [mask]
+
+#         mask_slices = tuple(slice(mask_dim[0], mask_dim[1] + 1) for mask_dim in mask)
+#         mask_list[mask_slices] = 1
+
+#     return mask_list
+
         """
-        Create a mask for the given mok and masks.
-
-        :type mok: list or numpy.ndarray
-        :param mok: Mok of the data.
-
-        :type masks: list
-        :param masks: List of masks to be applied to the data.
-
-        :rtype: numpy.ndarray
-        :returns: A mask for the given mok and masks.
+        def over_mask(): # sections of the mask to distort
+            'all' evaluate all
+            'percentage' evaluate first N%, or last N%
+            'quantity' eval irst N, or last N
+            'everyother' eval every other window
+            'random' randomized
+            'specific' specified by user
+            return overmask
         """
 
-        if isinstance(mok, list):
-            mok = np.array(mok)
+def params_std(y, sh, scope, window, padding, evolution):
+    # Dim. std.
+    if scope is None:
+        scope = (0, sh[2])
 
-        mask_list = np.zeros_like(mok)
+    if len(np.array(window).shape) == 0:
+        if sh[1] == 1:
+            window = (1, window)
+        else:
+            window = (window, window)
 
-        for mask in masks:
-            if isinstance(mask[0], int) or isinstance(mask[0], float):
-                mask = [mask]
+    if len(np.array(scope).shape) == 1:
+        if sh[1] == 1:
+            scope = ((0, 1), scope)
+        else:
+            scope = (scope, scope)
 
-            mask_slices = tuple(slice(mask_dim[0], mask_dim[1] + 1) for mask_dim in mask)
-            mask_list[mask_slices] = 1
+    if len(np.array(padding).shape) == 0:
+        padding = (padding, padding)
 
-        return mask_list
+    if evolution is None:
+        evolution = int(y)
     
-    """
-    def over_mask(): # sections of the mask to distort
-        'all' evaluate all
-        'percentage' evaluate first N%, or last N%
-        'quantity' eval irst N, or last N
-        'everyother' eval every other window
-        'random' randomized
-        'specific' specified by user
-        return overmask
-
-    def dist_func(): # distortion function
-        'absolute' as currently
-        'relative' as currently
-        'positive' positive distortion
-        'negative' negative distrtion
-        'random' random distortion value 
-        'custom' defined by user
-        return val
-    """
-
-    
+    return scope, window, padding, evolution

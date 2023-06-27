@@ -67,21 +67,21 @@ def pf(X):
 imp = pudu.pudu(x, y, pf)
 
 # Evaluate `importance` for all features
-imp.importance(delta=0.1, calc='absolute', evolution=None)
+imp.importance(delta=0.1, method='bidirectional')
 imp.plot(imp.x, imp.imp, title="Importance", yticks=[], font_size=15)
 
 # Single pixels might be irrelevant for spectroscopy. We can group features
 # to evaluate together.
-imp.importance(delta=0.1, window=50, calc='absolute', evolution=None)
+imp.importance(delta=0.1, window=50, method='bidirectional')
 imp.plot(imp.x, imp.imp, title="Importance", yticks=[], font_size=15)
 
 # We can see how fast would the classification change according to
 # the change in the features.
-imp.speed(delta=0.1, window=50, calc='absolute', evolution=None)
+imp.speed(delta=0.1, window=50, method='bidirectional')
 imp.plot(imp.x, imp.grad, title="Speed", yticks=[], font_size=15)
 
 # Finally we evaluate how different changes complement each other.
 # We want ot evaluate the main Raman peak (aprox. 3rd position) and see
 # its synergy with the rest of the data
-imp.synergy(delta=0.1, inspect=3, window=50, calc='absolute', evolution=None)
+imp.synergy(delta=0.1, inspect=3, window=50, method='bidirectional')
 imp.plot(imp.x, imp.syn, title="Synergy", yticks=[], font_size=15)

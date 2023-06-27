@@ -42,7 +42,7 @@ y = z[0]
 
 # Build pudu and evaluate importance
 imp = pudu.pudu(x, y, rbf_pred)
-imp.importance(delta=0.1, window=1, scope=(0, 4), calc='absolute')
+imp.importance(delta=0.1, window=1, scope=(0, 4), method='bidirectional')
 imp.plot(imp.x, imp.imp, title="Importance", font_size=25, show_data=False)
 
 # Plot the ouput

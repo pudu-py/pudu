@@ -42,7 +42,7 @@ x = np.expand_dims(x_train[0], 0)
 
 # Build `pudu`, evaluate importance, and plot
 imp = pudu.pudu(x, y, cnn2d_prob)
-imp.importance(delta=0.1, window=(4, 5), scope=None, calc='absolute', 
+imp.importance(delta=0.1, window=(4, 5), scope=None, method='bidirectional', 
                     padding='center', evolution=None, bias=0)
 imp.plot(imp.x, imp.imp, axis=None, figsize=(10, 10), cmap='cool')
 

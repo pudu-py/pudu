@@ -2,8 +2,9 @@ import matplotlib.pyplot as plt
 import spectrapepper as spep
 import numpy as np
 import copy
-from . import perturbation
-
+import random
+import perturbation
+import masks
 
 class pudu:
     def __init__(self, x, y, pf):
@@ -41,7 +42,8 @@ class pudu:
         
         # Some dimension error handling
         if len(np.array(x).shape) != 4:
-            raise ValueError(f"Expected array to have rank 4 (batch, rows, columns, depth). Got array with shape: %s" % str(np.array(x).shape))
+            raise ValueError(f"Expected array to have rank 4 (batch, rows, columns, depth). \
+                             Got array with shape: %s" % str(np.array(x).shape))
         
         if len(np.array(y).shape) != 0:
             raise ValueError(f"Expected integer. Got array with shape: %s" % str(np.array(y).shape))
@@ -69,7 +71,12 @@ class pudu:
             added and `window`starts from `0`. If `left`, padding to the left
             is applyied and `window` ends at length `x`. If perfet `center` is
             not possible, then ipadding left is added `1`.
+        
+        :type absolute: bool
+        :param absolute: Weather or not the result is in absolute value or not. Default is `False`.
         """
+        error_handling(window, scope, padding, absolute, 0, [1, 2, 3])
+
         # Initial values
         sh = np.array(self.x).shape
         x_copy = copy.deepcopy(self.x)
@@ -83,6 +90,9 @@ class pudu:
             comp = int((scope[i][1]-scope[i][0])%window[i])
             if comp > 0:
                 padd[i] = self.calc_pad(padding[i], comp)
+        
+
+        mask_array = masks.function(sh=sh, padd=padd, scope=scope, window=window, **kwargs)
 
         p0 = self.pf(self.x)
 
@@ -90,23 +100,29 @@ class pudu:
         while row <= scope[0][1] - padd[0][1] - window[0]:
             col = padd[1][0] + scope[1][0]
             while col <= scope[1][1] - padd[1][1] - window[1]:
-                row_idx, col_idx = np.meshgrid(range(window[0]), range(window[1]), indexing='ij')
-                row_idx, col_idx = row_idx + row, col_idx + col
+
+                if mask_array[0][row][col][0] == 1: ##########
+
+                    row_idx, col_idx = np.meshgrid(range(window[0]), range(window[1]), indexing='ij')
+                    row_idx, col_idx = row_idx + row, col_idx + col
+                    
+                    temp, temp2 = perturbation.function(x=x_copy, row=row_idx, col=col_idx, **kwargs)
+
+                    if temp2 is False:
+                        val = self.pf(temp) - p0
+                    else:
+                        val = (self.pf(temp2) + self.pf(temp) - 2*p0) / 2
+
+                    if absolute:
+                        val = abs(val)
+
+                    if np.shape(val):
+                        d_temp[0, row:row+window[0], col:col+window[1], 0] = val[evolution]
+                    else:
+                        d_temp[0, row:row+window[0], col:col+window[1], 0] = val
                 
-                temp, temp2 = perturbation.function(pf=self.pf, x=x_copy, row=row_idx, col=col_idx, **kwargs)
-
-                if temp2 is False:
-                    val = self.pf(temp) - p0
                 else:
-                    val = (self.pf(temp2) + self.pf(temp)) / 2
-
-                if absolute:
-                    val = abs(val)
-
-                if np.shape(val):
-                    d_temp[0, row:row+window[0], col:col+window[1], 0] = val[evolution]
-                else:
-                    d_temp[0, row:row+window[0], col:col+window[1], 0] = val
+                    pass
 
                 col += window[1]
             row += window[0]
@@ -141,10 +157,16 @@ class pudu:
             added and `window`starts from `0`. If `left`, padding to the left
             is applyied and `window` ends at length `x`. If perfet `center` is
             not possible, then ipadding left is added `1`.
-        
+
+        :type absolute: bool
+        :param absolute: Weather or not the result is in absolute value or not. Default is `False`.
+
         :type steps: int
         :param steps: .
         """
+
+        error_handling(window, scope, padding, absolute, 0, steps)
+
         # Initial values
         sh = np.array(self.x).shape
         x_copy = copy.deepcopy(self.x)
@@ -161,37 +183,45 @@ class pudu:
             if comp > 0:
                 padd[i] = self.calc_pad(padding[i], comp)
         
+        mask_array = masks.function(sh=sh, padd=padd, scope=scope, window=window, **kwargs)
+
         row = padd[0][0] + scope[0][0]
         while row <= scope[0][1] - padd[0][1] - window[0]:
             col = padd[1][0] + scope[1][0]
             while col <= scope[1][1] - padd[1][1] - window[1]:
-                p = []
 
-                row_idx, col_idx = np.meshgrid(range(window[0]), range(window[1]), indexing='ij')
-                row_idx, col_idx = row_idx + row, col_idx + col
+                if mask_array[0][row][col][0] == 1: ##########
 
-                for j in steps:
-                    temp = self.x.copy()
-                    temp[0, row, col, 0] = (x_copy[0, row, col, 0]) * j
-                    temp, temp2 = perturbation.function(pf=self.pf, x=temp, row=row_idx, col=col_idx, **kwargs)
-                    
-                    if temp2 is False:
-                        val = self.pf(temp) - p0
-                    else:
-                        val = (self.pf(temp2) + self.pf(temp)) / 2
+                    p = []
 
-                    if absolute:
-                        val = abs(val)
-                    
-                    if np.shape(val):
-                        val = val[evolution]
+                    row_idx, col_idx = np.meshgrid(range(window[0]), range(window[1]), indexing='ij')
+                    row_idx, col_idx = row_idx + row, col_idx + col
 
-                    p.append(val)
-
-                var_x = [i for i in range(len(p))]
-                var_y = [i for i in p]
+                    for j in steps:
+                        temp = self.x.copy()
+                        temp[0, row, col, 0] = (x_copy[0, row, col, 0]) * j
+                        temp, temp2 = perturbation.function(x=temp, row=row_idx, col=col_idx, **kwargs)
                         
-                d_temp[0, row:row+window[0], col:col+window[1], 0] = np.polyfit(var_x, var_y, 1)[0]
+                        if temp2 is False:
+                            val = self.pf(temp) - p0
+                        else:
+                            val = (self.pf(temp2) + self.pf(temp)) / 2
+
+                        if absolute:
+                            val = abs(val)
+                        
+                        if np.shape(val):
+                            val = val[evolution]
+
+                        p.append(val)
+
+                    var_x = [i for i in range(len(p))]
+                    var_y = [i for i in p]
+                            
+                    d_temp[0, row:row+window[0], col:col+window[1], 0] = np.polyfit(var_x, var_y, 1)[0]
+
+                else:
+                    pass    
 
                 col += window[1]
             row += window[0]
@@ -217,11 +247,6 @@ class pudu:
         :param scope: Starting and ending point of the analysis for each feature.
             If `None`, the all the vector is analysed. 
         
-        :type calc: string
-        :param calc: Can be `absolute` or `relative`. If `absolute` the importance
-            is calculated using the average of the absolute vbalues. If `relative`
-            the it uses the real value for the average.
-        
         :type evolution: int
         :param evolution: feature width to be changeg each time.
         
@@ -232,7 +257,12 @@ class pudu:
             added and `window`starts from `0`. If `left`, padding to the left
             is applyied and `window` ends at length `x`. If perfet `center` is
             not possible, then ipadding left is added `1`.
+        
+        :type absolute: bool
+        :param absolute: Weather or not the result is in absolute value or not. Default is `False`.
         """
+        error_handling(window, scope, padding, absolute, inspect, [1, 2, 3])
+
         # Initial values
         sh = np.array(self.x).shape
         x_copy = copy.deepcopy(self.x)
@@ -247,6 +277,8 @@ class pudu:
             if comp > 0:
                 padd[i] = self.calc_pad(padding[i], comp)
         
+        mask_array = masks.function(sh=sh, padd=padd, scope=scope, window=window, **kwargs)
+
         # Position to range of the desired area to calculate synergy from
         if len(np.array(inspect).shape) == 0:
             if sh[1] == 1:
@@ -267,32 +299,31 @@ class pudu:
         while row <= scope[0][1] - padd[0][1] - window[0]:
             col = padd[1][0] + scope[1][0]
             while col <= scope[1][1] - padd[1][1] - window[1]:
-                if inspect[0] == row and inspect[1] == col:
-                    pass  # Skip the current iteration
+                if mask_array[0][row][col][0] == 1: ##########
+
+                    if inspect[0] == row and inspect[1] == col:
+                        pass  # Skip the current iteration
+                    else:
+                        row_idx, col_idx = np.meshgrid(range(window[0]), range(window[1]), indexing='ij')
+                        row_idx, col_idx = row_idx + row, col_idx + col
+
+                        temp, temp2 = perturbation.function(x=x_copy, row=row_idx, col=col_idx, **kwargs)
+
+                        if temp2 is False:
+                            val = self.pf(temp) - p0
+                        else:
+                            val = (self.pf(temp2) + self.pf(temp)) / 2
+
+                        if absolute:
+                            val = abs(val)
+
+                        if np.shape(val):
+                            d_temp[0, row:row+window[0], col:col+window[1], 0] = val[evolution]
+                        else:
+                            d_temp[0, row:row+window[0], col:col+window[1], 0] = val
+
                 else:
-                    row_idx, col_idx = np.meshgrid(range(window[0]), range(window[1]), indexing='ij')
-                    row_idx, col_idx = row_idx + row, col_idx + col
-                    # val = perturbation.function(pf=self.pf, x=x_copy, row=row_idx, col=col_idx, **kwargs)
-
-
-
-                    temp, temp2 = perturbation.function(pf=self.pf, x=x_copy, row=row_idx, col=col_idx, **kwargs)
-
-                    if temp2 is False:
-                        val = self.pf(temp) - p0
-                    else:
-                        val = (self.pf(temp2) + self.pf(temp)) / 2
-
-                    if absolute:
-                        val = abs(val)
-
-
-
-                    if np.shape(val):
-                        d_temp[0, row:row+window[0], col:col+window[1], 0] = val[evolution]
-                    else:
-                        d_temp[0, row:row+window[0], col:col+window[1], 0] = val
-
+                    pass
 
                 col += window[1]
             row += window[0]
@@ -301,7 +332,11 @@ class pudu:
         
         max_val, min_val = d_temp.max(), d_temp.min()
         self.syn_norm = (d_temp - min_val) / (max_val - min_val)
-      
+
+
+    # def layer_activation()
+    # def unit_activaiton()
+
 
     def preview(self, window=1, scope=None, padding='center', mask=None, 
                 axis=None, show_data=True, title='Preview', xlabel='Feature',
@@ -396,7 +431,6 @@ class pudu:
                         countour[0, i, col, 0] = 1
                     for i in range(sh[2]):
                         countour[0, row, i, 0] = 1
-
 
                 col += window[1]
             row += window[0]
@@ -607,45 +641,6 @@ class pudu:
         return pad
 
 
-# def create_mask(mok, masks):
-#     """
-#     Create a mask for the given `mok` and `masks`.
-
-#     :type mok: list or numpy.ndarray
-#     :param mok: Mok of the data.
-
-#     :type masks: list
-#     :param masks: List of masks to be applied to the data.
-
-#     :rtype: numpy.ndarray
-#     :returns: A mask for the given mok and masks.
-#     """
-
-#     if isinstance(mok, list):
-#         mok = np.array(mok)
-
-#     mask_list = np.zeros_like(mok)
-
-#     for mask in masks:
-#         if isinstance(mask[0], int) or isinstance(mask[0], float):
-#             mask = [mask]
-
-#         mask_slices = tuple(slice(mask_dim[0], mask_dim[1] + 1) for mask_dim in mask)
-#         mask_list[mask_slices] = 1
-
-#     return mask_list
-
-        """
-        def over_mask(): # sections of the mask to distort
-            'all' evaluate all
-            'percentage' evaluate first N%, or last N%
-            'quantity' eval irst N, or last N
-            'everyother' eval every other window
-            'random' randomized
-            'specific' specified by user
-            return overmask
-        """
-
 def params_std(y, sh, scope, window, padding, evolution):
     # Dim. std.
     if scope is None:
@@ -670,3 +665,36 @@ def params_std(y, sh, scope, window, padding, evolution):
         evolution = int(y)
     
     return scope, window, padding, evolution
+
+
+def error_handling(window, scope, padding, absolute, inspect, steps):
+    if len(np.array(window).shape) > 0:
+        if window[0] or window[1] <= 0:
+            raise ValueError(f"Value for window, or its components, must be greater \
+                            than 0. Got instead: %s" % str(window))
+    elif window <= 0:
+        raise ValueError(f"Value for window, or its components, must be greater than 0.\
+                        Got instead: %s" % str(window))
+    
+    if scope is None:
+        pass
+    elif len(np.array(scope).shape) == 1:
+        if scope[0][0] <= 0 or scope[0][1] <= 0 or scope[1][0] <= 0 or scope[1][1] <= 0:
+            raise ValueError(f"Expected value for the components of scope must be greater than 0.\
+                            Got instead: %s" % str(scope))
+    elif scope[0] <= 0 or scope[1] <= 0:
+        raise ValueError(f"Expected value for the components of scope must be greater than 0.\
+                            Got instead: %s" % str(scope))
+
+    if padding not in ['center' or 'left' or 'right']:
+        raise ValueError(f"Expected value for padding to be either center, left, or right. \
+                        Got instead: %s" % str(padding))
+
+    if not isinstance(absolute, bool):
+        raise ValueError(f"Expected value for absolute is boolean: True or False. Got instead: %s" % str(absolute))
+    
+    if not isinstance(inspect, int):
+        raise ValueError(f"Expected value for inspect is an integer. Got instead: %s" % str(inspect))
+
+    if not isinstance(steps, list):
+        raise ValueError(f"Expected value for inspect is a list. Got instead: %s" % str(steps))

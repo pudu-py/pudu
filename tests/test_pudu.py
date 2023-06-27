@@ -6,7 +6,7 @@ from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.decomposition import PCA
 import spectrapepper as spep
 from pudu import pudu
-# import pudu7 as pudu
+#import pudu7 as pudu
 import numpy as np
 import unittest
 import pickle

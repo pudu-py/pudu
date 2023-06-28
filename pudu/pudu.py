@@ -1,49 +1,77 @@
 import matplotlib.pyplot as plt
+from keras.models import Model
 import spectrapepper as spep
-import numpy as np
-import copy
-import random
 import perturbation
+import numpy as np
 import masks
+import copy
+
 
 class pudu:
-    def __init__(self, x, y, pf):
+    def __init__(self, x, y, pf, model=None):
         """
         `pudu` constructor.
 
         :type x: list
         :param x: Features (input) to be analyzed. Must have same format as 
-            train and test descriptors.
+            train and test descriptors with dientionality as 
+            (batch, rows, columns, depth).
             
         :type y: int, float
-        :param y: Targets (output) of `x`. 
+        :param y: Targets (output) for `x`. It is a sclaar and not categorical
+            for easier inclusion of regression problems. 
         
         :type pf: function
-        :param pf: probability, or predict, function of the algorithm. The input 
+        :param pf: probability, or prediction, function of the algorithm. The input 
             must be `x` and the ouput a list of probabilities for each class (in
             case of classification algorithm). If the default function does not
             work this way (i.e.: needs a batch as input), it must be wrapped to
-            do so. Please refer to the documentation's example about this.
+            do so. Please refer to the documentation's examples to see specific
+            cases.
+        
+        :type model: Keras model
+        :param model: Optional Keras model, only for `layer_activations` and 
+            `unit_activation`.      
         """
         # Store the main parameters
         self.x = x
         self.y = y
         self.pf = pf
 
+        # Optional parameters
+        self.model = model
+
         # Main results
         self.imp = None
         self.spe = None
         self.syn = None
 
+        # Optional results
+        self.lac = None # layer activation
+        self.uac = None # unit activation
+
         # Normalized results are calculated automatically so if the user needs them
         self.imp_norm = None
         self.spe_norm = None
         self.syn_norm = None
+        self.lac_norm = None
+        self.uac_norm = None
+        
         
         # Some dimension error handling
+        if np.array(x).shape[0] > 1 and (not isinstance(y, list)):
+            raise ValueError(f"Expected `x` and `y` to have the same length. \
+                                Got `x` with length (batch size): %s" % str(np.array(x).shape[0]) % " \
+                                and `y` is the scalar: %s " % str(y))
+        
+        if isinstance(y, list) and np.array(x).shape[0] != len(y):
+            raise ValueError(f"Expected `x` and `y` to have the same length. \
+                                Got `x` with length (batch size): %s" % str(np.array(x).shape[0]) % " \
+                                and `y` with length: %s " % str(len(y)))
+
         if len(np.array(x).shape) != 4:
             raise ValueError(f"Expected array to have rank 4 (batch, rows, columns, depth). \
-                             Got array with shape: %s" % str(np.array(x).shape))
+                                Got array with shape: %s" % str(np.array(x).shape))
         
         if len(np.array(y).shape) != 0:
             raise ValueError(f"Expected integer. Got array with shape: %s" % str(np.array(y).shape))
@@ -75,33 +103,24 @@ class pudu:
         :type absolute: bool
         :param absolute: Weather or not the result is in absolute value or not. Default is `False`.
         """
-        error_handling(window, scope, padding, absolute, 0, [1, 2, 3])
+        error_handling(window, scope, padding, absolute, 0, [1, 2, 3], None, None)
 
         # Initial values
         sh = np.array(self.x).shape
         x_copy = copy.deepcopy(self.x)
         d_temp = np.zeros((sh[0], sh[1], sh[2], sh[3]))
-        padd = [[0, 0], [0, 0]]
         
         scope, window, padding, evolution = params_std(self.y, sh, scope, window, padding, evolution)
-
-        # Padding
-        for i in range(2):
-            comp = int((scope[i][1]-scope[i][0])%window[i])
-            if comp > 0:
-                padd[i] = self.calc_pad(padding[i], comp)
-        
-
+        padd = calc_pad(padding, scope, window)
         mask_array = masks.function(sh=sh, padd=padd, scope=scope, window=window, **kwargs)
 
         p0 = self.pf(self.x)
-
         row = padd[0][0] + scope[0][0]
         while row <= scope[0][1] - padd[0][1] - window[0]:
             col = padd[1][0] + scope[1][0]
             while col <= scope[1][1] - padd[1][1] - window[1]:
 
-                if mask_array[0][row][col][0] == 1: ##########
+                if mask_array[0][row][col][0] == 1:
 
                     row_idx, col_idx = np.meshgrid(range(window[0]), range(window[1]), indexing='ij')
                     row_idx, col_idx = row_idx + row, col_idx + col
@@ -136,9 +155,9 @@ class pudu:
     def speed(self, window=1, scope=None, evolution=None, padding='center', 
                 steps=[0,0.1,0.2], absolute=False, **kwargs):
         """
-        Calculates the gradient of the iomportance. In other owrds, the slope
-            of the importance at different values. This indicates how fast a
-            feature can change the result.
+        Calculates the gradient of the importance. In other words, the slope
+            of the curve formed by the importance at different values. This 
+            indicates how fast a feature can change the result.
             
         :type window: int
         :param window: feature width to be changeg each time.
@@ -161,36 +180,30 @@ class pudu:
         :type absolute: bool
         :param absolute: Weather or not the result is in absolute value or not. Default is `False`.
 
-        :type steps: int
-        :param steps: .
+        :type steps: list
+        :param steps: Contains the different values at which the importance will be measured.
+            In other words, the values at which the feature will be changed (feature*steps)
+            before applyin the perturbation function (perturbation(feature*steps)). This means
+            it orks somewhat differently than `importnace` and `synergy`.
         """
-
-        error_handling(window, scope, padding, absolute, 0, steps)
+        error_handling(window, scope, padding, absolute, 0, steps, None, None)
 
         # Initial values
         sh = np.array(self.x).shape
         x_copy = copy.deepcopy(self.x)
         d_temp = np.zeros((sh[0], sh[1], sh[2], sh[3]))
-        padd = [[0, 0], [0, 0]]
         
         scope, window, padding, evolution = params_std(self.y, sh, scope, window, padding, evolution)
-            
-        p0 = self.pf(self.x) 
-        
-        # Padding
-        for i in range(2):
-            comp = int((scope[i][1]-scope[i][0])%window[i])
-            if comp > 0:
-                padd[i] = self.calc_pad(padding[i], comp)
-        
+        padd = calc_pad(padding, scope, window)
         mask_array = masks.function(sh=sh, padd=padd, scope=scope, window=window, **kwargs)
 
+        p0 = self.pf(self.x) 
         row = padd[0][0] + scope[0][0]
         while row <= scope[0][1] - padd[0][1] - window[0]:
             col = padd[1][0] + scope[1][0]
             while col <= scope[1][1] - padd[1][1] - window[1]:
 
-                if mask_array[0][row][col][0] == 1: ##########
+                if mask_array[0][row][col][0] == 1:
 
                     p = []
 
@@ -233,7 +246,7 @@ class pudu:
 
     
     def synergy(self, delta=0.1, window=1, inspect=0, scope=None, absolute=False,
-                    evolution=None, padding='center', mask=None, **kwargs):
+                    evolution=None, padding='center', **kwargs):
         """
         Calculates the synergy between features.
         
@@ -261,22 +274,15 @@ class pudu:
         :type absolute: bool
         :param absolute: Weather or not the result is in absolute value or not. Default is `False`.
         """
-        error_handling(window, scope, padding, absolute, inspect, [1, 2, 3])
+        error_handling(window, scope, padding, absolute, inspect, [1, 2, 3], None, None)
 
         # Initial values
         sh = np.array(self.x).shape
         x_copy = copy.deepcopy(self.x)
         d_temp = np.zeros((sh[0], sh[1], sh[2], sh[3]))
-        padd = [[0, 0], [0, 0]]
         
         scope, window, padding, evolution = params_std(self.y, sh, scope, window, padding, evolution)
-            
-        # Padding
-        for i in range(2):
-            comp = int((scope[i][1]-scope[i][0])%window[i])
-            if comp > 0:
-                padd[i] = self.calc_pad(padding[i], comp)
-        
+        padd = calc_pad(padding, scope, window)
         mask_array = masks.function(sh=sh, padd=padd, scope=scope, window=window, **kwargs)
 
         # Position to range of the desired area to calculate synergy from
@@ -292,17 +298,15 @@ class pudu:
             for j in range(inspect[1], inspect[1]+window[1]):
                 base[0][i][j][0] = x_copy[0][i][j][0]*(1+delta)
         
-        # b = self.pf(base) # this value is baseline, set to 0
         p0 = self.pf(self.x)
-
         row = padd[0][0] + scope[0][0]
         while row <= scope[0][1] - padd[0][1] - window[0]:
             col = padd[1][0] + scope[1][0]
             while col <= scope[1][1] - padd[1][1] - window[1]:
-                if mask_array[0][row][col][0] == 1: ##########
+                if mask_array[0][row][col][0] == 1:
 
                     if inspect[0] == row and inspect[1] == col:
-                        pass  # Skip the current iteration
+                        pass
                     else:
                         row_idx, col_idx = np.meshgrid(range(window[0]), range(window[1]), indexing='ij')
                         row_idx, col_idx = row_idx + row, col_idx + col
@@ -321,7 +325,6 @@ class pudu:
                             d_temp[0, row:row+window[0], col:col+window[1], 0] = val[evolution]
                         else:
                             d_temp[0, row:row+window[0], col:col+window[1], 0] = val
-
                 else:
                     pass
 
@@ -334,14 +337,184 @@ class pudu:
         self.syn_norm = (d_temp - min_val) / (max_val - min_val)
 
 
-    # def layer_activation()
-    # def unit_activaiton()
+    def layer_activation(self, layer=0, act_val= 0, p=0.005, window=1, scope=None, padding='center', **kwargs):
+        """
+        Counts the unit activations in the selected `layer` of a `Keras` model according 
+            to change in the feature.
+        
+        :type layer: int
+        :param layer: Position number within the keras model to be analyzed. Use `model.summary()`
+            to see exactly the position of the desired layer.
+
+        :type act_val: float
+        :param act_val: lower limit from which a unit is considered active, 
+            not included (`activation > act_val`). Default is 0 (`relu`).
+
+        :type window: int
+        :param window: feature width to be changeg each time.
+            
+        :type scope: tupple(int, int)
+        :param scope: Starting and ending point of the analysis for each feature.
+            If `None`, the all the vector is analysed. 
+        
+        :type padding: string 
+        :param padding: Type of padding. If the legnth of `x` is not divisible 
+            by `window` then padding is applyed. If `center`, then equal padding 
+            to each side is applyed. If `right`, then paading to the right is 
+            added and `window`starts from `0`. If `left`, padding to the left
+            is applyied and `window` ends at length `x`. If perfet `center` is
+            not possible, then ipadding left is added `1`.
+        """
+        error_handling(window, scope, padding, False, 0, [1, 2, 3], layer, p)
+
+        # Initial values
+        sh = np.array(self.x).shape
+        x_copy = copy.deepcopy(self.x)
+        d_temp = np.zeros((sh[0], sh[1], sh[2], sh[3]))
+
+        scope, window, padding, _ = params_std(self.y, sh, scope, window, padding, None)
+        padd = calc_pad(padding, scope, window)
+        mask_array = masks.function(sh=sh, padd=padd, scope=scope, window=window, **kwargs)
+
+        # Keras
+        layer_outputs = [layer.output for layer in self.model.layers]
+        activation_model = Model(inputs=self.model.input, outputs=layer_outputs)
+
+        p0 = 0
+        activations = activation_model.predict(self.x, verbose=0)
+        p0 += np.sum(np.maximum(act_val, activations[layer]) > act_val)
+
+        row = padd[0][0] + scope[0][0]
+        while row <= scope[0][1] - padd[0][1] - window[0]:
+            col = padd[1][0] + scope[1][0]
+            while col <= scope[1][1] - padd[1][1] - window[1]:
+
+                if mask_array[0][row][col][0] == 1:
+
+                    row_idx, col_idx = np.meshgrid(range(window[0]), range(window[1]), indexing='ij')
+                    row_idx, col_idx = row_idx + row, col_idx + col
+                    
+                    temp, temp2 = perturbation.function(x=x_copy, row=row_idx, col=col_idx, **kwargs)
+
+                    p1, p2 = 0, 0
+                    if temp2 is False:
+                        activations = activation_model.predict(temp, verbose=0)
+                        p1 += np.sum(np.maximum(act_val, activations[layer]) > act_val)
+                        val = p1 - p0
+                    else:
+                        activations = activation_model.predict(temp, verbose=0)
+                        p1 += np.sum(np.maximum(act_val, activations[layer]) > act_val)
+                        activations = activation_model.predict(temp2, verbose=0)
+                        p2 += np.sum(np.maximum(act_val, activations[layer]) > act_val)
+
+                        val = (p1 + p2 - 2*p0) / 2
+                    
+                    d_temp[0, row:row+window[0], col:col+window[1], 0] = val
+
+                else:
+                    pass
+
+                col += window[1]
+            row += window[0]
+
+        self.lac = d_temp
+        
+        max_val, min_val = d_temp.max(), d_temp.min()
+        self.lac_norm = (d_temp - min_val) / (max_val - min_val)
+    
+
+    def unit_activation(self, layer=0, act_val=0, p=1, window=1, scope=None, padding='center', **kwargs):
+        """
+        Associates a unit with features within a `layer`.
+        
+        :type layer: int
+        :param layer: Position number within the keras model to be analyzed. Use `model.summary()`
+            to see exactly the position of the desired layer.
+
+        :type act_val: float
+        :param act_val: lower limit from which a unit is considered active, 
+            not included (`activation > act_val`). Default is 0 (`relu`).
+
+        :type p: float
+        :param p: quantile value for activations. Depending on the value of `act_val` it will
+            override it or not. If you prefer using `p` value, set `act_val = 0` and viceversa.
+
+        :type window: int
+        :param window: feature width to be changeg each time.
+            
+        :type scope: tupple(int, int)
+        :param scope: Starting and ending point of the analysis for each feature.
+            If `None`, the all the vector is analysed. 
+        
+        :type padding: string 
+        :param padding: Type of padding. If the legnth of `x` is not divisible 
+            by `window` then padding is applyed. If `center`, then equal padding 
+            to each side is applyed. If `right`, then paading to the right is 
+            added and `window`starts from `0`. If `left`, padding to the left
+            is applyied and `window` ends at length `x`. If perfet `center` is
+            not possible, then ipadding left is added `1`.
+        """
+        error_handling(window, scope, padding, False, 0, [1, 2, 3], layer, p)
+
+        # Initial values
+        sh = np.array(self.x).shape
+        x_copy = copy.deepcopy(self.x)
+        d_temp = np.zeros((sh[0], sh[1], sh[2], sh[3]))
+
+        scope, window, padding, _ = params_std(self.y, sh, scope, window, padding, None)
+        padd = calc_pad(padding, scope, window)
+        mask_array = masks.function(sh=sh, padd=padd, scope=scope, window=window, **kwargs)
+
+        # Keras
+        layer_outputs = [layer.output for layer in self.model.layers]
+        activation_model = Model(inputs=self.model.input, outputs=layer_outputs)
+
+        p0 = 0
+        activations = activation_model.predict(self.x, verbose=0)
+        p0 += np.sum(np.maximum(act_val, activations[layer]) > act_val)
+
+        row = padd[0][0] + scope[0][0]
+        while row <= scope[0][1] - padd[0][1] - window[0]:
+            col = padd[1][0] + scope[1][0]
+            while col <= scope[1][1] - padd[1][1] - window[1]:
+
+                if mask_array[0][row][col][0] == 1:
+
+                    row_idx, col_idx = np.meshgrid(range(window[0]), range(window[1]), indexing='ij')
+                    row_idx, col_idx = row_idx + row, col_idx + col
+                    
+                    temp, temp2 = perturbation.function(x=x_copy, row=row_idx, col=col_idx, **kwargs)
+
+                    p1, p2 = 0, 0
+                    if temp2 is False:
+                        activations = activation_model.predict(temp, verbose=0)
+                        p1 += np.sum(np.maximum(act_val, activations[layer]) > act_val)
+                        val = p1 - p0
+                    else:
+                        activations = activation_model.predict(temp, verbose=0)
+                        p1 += np.sum(np.maximum(act_val, activations[layer]) > act_val)
+                        activations = activation_model.predict(temp2, verbose=0)
+                        p2 += np.sum(np.maximum(act_val, activations[layer]) > act_val)
+
+                        val = (p1 + p2 - 2*p0) / 2
+                    
+                    d_temp[0, row:row+window[0], col:col+window[1], 0] = val
+
+                else:
+                    pass
+
+                col += window[1]
+            row += window[0]
+
+        self.lac = d_temp
+        
+        max_val, min_val = d_temp.max(), d_temp.min()
+        self.lac_norm = (d_temp - min_val) / (max_val - min_val)
 
 
-    def preview(self, window=1, scope=None, padding='center', mask=None, 
-                axis=None, show_data=True, title='Preview', xlabel='Feature',
-                ylabel='Intensity', xticks=None, yticks=[], cmap='Greens',
-                font_size=15, figsize=(14, 4), bold=False):
+    def preview(self, window=1, scope=None, padding='center', axis=None, show_data=True, 
+                title='Preview', xlabel='Feature', ylabel='Intensity', xticks=None, 
+                yticks=[], cmap='Greens', font_size=15, figsize=(14, 4), bold=False, **kwargs):
         """
         Plots an approximate preview of the sections, areas, or mask to be analyzed over the data
             before executing. It is particularly useful to check if the parameters are
@@ -403,34 +576,34 @@ class pudu:
         :type bold: Boolean
         :param bold: To make the limit lines bolder. Default is 'False'.
         """
+        error_handling(window, scope, padding, False, 0, [1, 2, 3], 0, 1)
 
         # Initial values
         image = [] # this will be the preview image
         sh = np.array(self.x).shape
         d_temp = np.zeros((sh[0], sh[1], sh[2], sh[3]))
         countour = np.zeros((sh[0], sh[1], sh[2], sh[3]))
-        padd = [[0, 0], [0, 0]]
                 
         scope, window, padding, _ = params_std(self.y, sh, scope, window, padding, evolution=None)
-
-        # Padding
-        for i in range(2):
-            comp = int((scope[i][1]-scope[i][0])%window[i])
-            if comp > 0:
-                padd[i] = self.calc_pad(padding[i], comp)
+        padd = calc_pad(padding, scope, window)
+        mask_array = masks.function(sh=sh, padd=padd, scope=scope, window=window, **kwargs)
 
         row = padd[0][0] + scope[0][0]
         while row <= scope[0][1] - padd[0][1] - window[0]:
             col = padd[1][0] + scope[1][0]
             while col <= scope[1][1] - padd[1][1] - window[1]:
-                countour[0, row, col, 0] = 1 # indicates limit
-                d_temp[0, row:row+window[0], col:col+window[1], 0] = 1
 
-                if sh[1] > 1:
-                    for i in range(sh[1]):
-                        countour[0, i, col, 0] = 1
-                    for i in range(sh[2]):
-                        countour[0, row, i, 0] = 1
+                if mask_array[0][row][col][0] == 1:
+                    countour[0, row, col, 0] = 1
+                    d_temp[0, row:row+window[0], col:col+window[1], 0] = 1
+
+                    if sh[1] > 1:
+                        for i in range(sh[1]):
+                            countour[0, i, col, 0] = 1
+                        for i in range(sh[2]):
+                            countour[0, row, i, 0] = 1
+                else:
+                    pass
 
                 col += window[1]
             row += window[0]
@@ -492,92 +665,6 @@ class pudu:
         
         plt.show()  
 
-
-    def plot(self, feature, image, axis=None, show_data=True, title='Importance', 
-            xlabel='Feature', ylabel='Intensity', xticks=None, yticks=[], cmap='Greens',
-            font_size=15, figsize=(14, 4)):
-        """
-        Easy plot function for `importance`, `speed`, or `synergy`. It shows the analyzed
-            feature `feature` with a colormap overlay indicating the result along with
-            a colorbar. Works for both vectors and images.
-    
-        :type feature: list
-        :param feature: feature analyzed or any that the user whant to plot against.
-            Normally you want it to be `self.x`.
-
-        :type image: list
-        :param image: Result you want to plot. Either `self.imp`, `self.syn`, etc...
-
-        :type axis: list
-        :param axis: X-axis for the plot. If `None`, it will show the pixel count.
-        
-        :type show_data: bool
-        :param show_data: . Default is `True`.
-
-        :type title: str
-        :param title: Title for the plot. Default is `Importnace`.
-            
-        :type xlabel: str
-        :param xlabel: X-axis title. Default is `Feature`.
-            
-        :type ylabel: str
-        :param ylabel: Y-axis title. Default is `Intensity`
-        
-        :type xticks: list
-        :param xticks: Ticks to display on the graph. Default is `None`.
-
-        :type yticks: list
-        :param yticks: Ticks to display on the graph. Default is `[]`.
-
-        :type cmap: string
-        :param cmap: colormap for `image` according to the availability in `matplotlib`.
-            Default is `plasma`.
-
-        :type font_size: int
-        :param font_size: Font size for all text in the plot. Default is `15`.
-            
-        :type figsize: tuple
-        :param figsize: Size of the figure. Default is `(14, 4)`.
-        """
-
-        dims = np.array(image).shape
-
-        image = np.array(image)[0,:,:,0]
-        feature = np.array(feature)[0,:,:,0]
-        
-        if dims[1] > 1:
-            rows, cols = dims[1], dims[2]
-            ext = [0, cols, 0, rows]
-        else:
-            rows, cols = 1, len(image)
-                    
-            if axis is None:
-                axis = [i for i in range(len(feature[0]))]
-                ext = [0, len(feature[0]), min(feature[0]), max(feature[0])]
-            else:
-                ext = [min(axis), max(axis), min(feature[0]), max(feature[0])]
-        
-        plt.rc('font', size=font_size)
-        plt.figure(figsize=figsize)
-        if dims[1] > 1 and show_data:
-            plt.imshow(feature, cmap='binary', aspect="auto", 
-                       interpolation='nearest', extent=ext, alpha=1)
-        elif dims[1] == 1 and show_data:
-            plt.plot(axis, feature[0], 'k')
-        plt.imshow(image, cmap=cmap, aspect="auto", 
-                   interpolation='nearest', extent=ext, alpha=0.5)
-        plt.title(title) 
-        plt.xlabel(xlabel)
-        plt.ylabel(ylabel)
-        plt.yticks(yticks)
-
-        if xticks:
-            plt.xticks(axis, xticks, rotation='vertical')
-
-        plt.colorbar()
-        plt.show()  
-
-
     def save(self, name='pudu_data.txt', transpose=False):
         """
         Saves all the vectors in a `.txt` file to make it easier to export the data to 
@@ -615,30 +702,121 @@ class pudu:
         np.savetxt(name, data, fmt='%s')
 
 
-    def calc_pad(self, t, comp):
-        """
-        Calculate padding for the given type.
+def plot(feature, image, axis=None, show_data=True, title='Importance', 
+        xlabel='Feature', ylabel='Intensity', xticks=None, yticks=[], cmap='Greens',
+        font_size=15, figsize=(14, 4)): # move this outside, unses no self
+    """
+    Easy plot function for `importance`, `speed`, or `synergy`. It shows the analyzed
+        feature `feature` with a colormap overlay indicating the result along with
+        a colorbar. Works for both vectors and images.
 
-        :type t: str
-        :param t: Type of padding. Can be 'center', 'left', or 'right'.
+    :type feature: list
+    :param feature: feature analyzed or any that the user whant to plot against.
+        Normally you want it to be `self.x`.
 
-        :rtype: list
-        :returns: A list of two integers representing the padding for 
-            the left and right sides.
-        """
-        if t == 'center':
-            if comp % 2 == 0:  # even number
-                pad = [int(comp / 2), int(comp / 2)]
-            else:  # if odd number, left gets the +1
-                pad = [int(np.ceil(comp / 2)), int(np.floor(comp / 2))]
-        elif t == 'left':
-            pad = [comp, 0]
-        elif t == 'right':
-            pad = [0, comp]
-        else:
-            raise ValueError(f"Invalid padding type '{t}'. Valid types are 'center', 'left', and 'right'.")
+    :type image: list
+    :param image: Result you want to plot. Either `self.imp`, `self.syn`, etc...
+
+    :type axis: list
+    :param axis: X-axis for the plot. If `None`, it will show the pixel count.
+    
+    :type show_data: bool
+    :param show_data: . Default is `True`.
+
+    :type title: str
+    :param title: Title for the plot. Default is `Importnace`.
         
-        return pad
+    :type xlabel: str
+    :param xlabel: X-axis title. Default is `Feature`.
+        
+    :type ylabel: str
+    :param ylabel: Y-axis title. Default is `Intensity`
+    
+    :type xticks: list
+    :param xticks: Ticks to display on the graph. Default is `None`.
+
+    :type yticks: list
+    :param yticks: Ticks to display on the graph. Default is `[]`.
+
+    :type cmap: string
+    :param cmap: colormap for `image` according to the availability in `matplotlib`.
+        Default is `plasma`.
+
+    :type font_size: int
+    :param font_size: Font size for all text in the plot. Default is `15`.
+        
+    :type figsize: tuple
+    :param figsize: Size of the figure. Default is `(14, 4)`.
+    """
+
+    dims = np.array(image).shape
+
+    image = np.array(image)[0,:,:,0]
+    feature = np.array(feature)[0,:,:,0]
+    
+    if dims[1] > 1:
+        rows, cols = dims[1], dims[2]
+        ext = [0, cols, 0, rows]
+    else:
+        rows, cols = 1, len(image)
+                
+        if axis is None:
+            axis = [i for i in range(len(feature[0]))]
+            ext = [0, len(feature[0]), min(feature[0]), max(feature[0])]
+        else:
+            ext = [min(axis), max(axis), min(feature[0]), max(feature[0])]
+    
+    plt.rc('font', size=font_size)
+    plt.figure(figsize=figsize)
+    if dims[1] > 1 and show_data:
+        plt.imshow(feature, cmap='binary', aspect="auto", 
+                    interpolation='nearest', extent=ext, alpha=1)
+    elif dims[1] == 1 and show_data:
+        plt.plot(axis, feature[0], 'k')
+    plt.imshow(image, cmap=cmap, aspect="auto", 
+                interpolation='nearest', extent=ext, alpha=0.5)
+    plt.title(title) 
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+    plt.yticks(yticks)
+
+    if xticks:
+        plt.xticks(axis, xticks, rotation='vertical')
+
+    plt.colorbar()
+    plt.show()  
+
+
+# Padding
+def calc_pad(padding, scope, window): # mover afuera, nos usea self
+    """
+    Calculate padding for the given type.
+
+    :type padding: str
+    :param padding: Type of padding. Can be 'center', 'left', or 'right'.
+
+    :rtype: list
+    :returns: the padding as a list of two integers representing the padding for 
+        the left and right sides.
+    """
+    pad = [[0, 0], [0, 0]]
+
+    for i in range(2):
+        comp = int((scope[i][1]-scope[i][0])%window[i])
+        if comp > 0:
+            if padding[i] == 'center':
+                if comp % 2 == 0:  # even number
+                    pad[i] = [int(comp / 2), int(comp / 2)]
+                else:  # if odd number, left gets the +1
+                    pad[i] = [int(np.ceil(comp / 2)), int(np.floor(comp / 2))]
+            elif padding[i] == 'left':
+                pad[i] = [comp, 0]
+            elif padding[i] == 'right':
+                pad[i] = [0, comp]
+            else:
+                raise ValueError(f"Invalid padding type '{padding}'. Valid types are 'center', 'left', and 'right'.")
+    
+    return pad
 
 
 def params_std(y, sh, scope, window, padding, evolution):
@@ -667,9 +845,23 @@ def params_std(y, sh, scope, window, padding, evolution):
     return scope, window, padding, evolution
 
 
-def error_handling(window, scope, padding, absolute, inspect, steps):
+def error_handling(window, scope, padding, absolute, inspect, steps, layer, p):
+    """
+    Handles erros for the main parameters of the different functions.
+    """
+
+    if p is None:
+        pass
+    if not (0 <= p <= 1):
+        raise ValueError(f"Expected value for `p` is `0 <= p <= 1`. Got instead: %s" % str(p))
+
+    if layer is None:
+        pass
+    if (not isinstance(layer, int)) or layer < 0:
+        raise ValueError(f"Expected value for `layer` is an integer greater than 0. Got instead: %s" % str(layer))
+
     if len(np.array(window).shape) > 0:
-        if window[0] or window[1] <= 0:
+        if window[0] <= 0 or window[1] <= 0:
             raise ValueError(f"Value for window, or its components, must be greater \
                             than 0. Got instead: %s" % str(window))
     elif window <= 0:
@@ -686,15 +878,20 @@ def error_handling(window, scope, padding, absolute, inspect, steps):
         raise ValueError(f"Expected value for the components of scope must be greater than 0.\
                             Got instead: %s" % str(scope))
 
-    if padding not in ['center' or 'left' or 'right']:
+    if padding not in ['center', 'left', 'right']:
         raise ValueError(f"Expected value for padding to be either center, left, or right. \
                         Got instead: %s" % str(padding))
 
     if not isinstance(absolute, bool):
         raise ValueError(f"Expected value for absolute is boolean: True or False. Got instead: %s" % str(absolute))
     
-    if not isinstance(inspect, int):
-        raise ValueError(f"Expected value for inspect is an integer. Got instead: %s" % str(inspect))
+    if len(np.array(inspect).shape) > 0:
+        if inspect[0] <= 0 or inspect[1] <= 0:
+            raise ValueError(f"Value for inspect, or its components, must be greater \
+                            than 0. Got instead: %s" % str(inspect))
+        
+    elif (not isinstance(inspect, int)) or inspect < 0:
+        raise ValueError(f"Expected value for inspect is an integer greater than 0. Got instead: %s" % str(inspect))
 
     if not isinstance(steps, list):
         raise ValueError(f"Expected value for inspect is a list. Got instead: %s" % str(steps))

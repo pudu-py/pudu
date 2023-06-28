@@ -1,9 +1,7 @@
 from keras.models import Sequential, Model
 import matplotlib.pyplot as plt
 import spectrapepper as spep
-import perturbation
 import numpy as np
-import masks
 import copy
 from . import perturbation, masks
 
@@ -618,17 +616,28 @@ def unit_to_feature(self, layer=0, act_val=0, p=1, count='count', window=1,
                         val = (p1 + p2 - 2*p0) / 2
                         val_count = np.where(val > act_val, 1, 0)
                     
-                    match count:
-                        case 'count':
-                            d_temp += val_count
-                        case 'average':
-                            val_count[val_count <= 0] = 1
-                            d_temp += val/val_count
-                        case 'accumulate':
-                            d_temp += val
-                        case _:
-                            raise ValueError("Expected string value for `count` to be either `count`,"
-                                              "`average`, or `accumulate`. Got instead: %s" % str(count))
+                    """only in Py 3.10 and above :("""
+                    # match count:
+                    #     case 'count':
+                    #         d_temp += val_count
+                    #     case 'average':
+                    #         val_count[val_count <= 0] = 1
+                    #         d_temp += val/val_count
+                    #     case 'accumulate':
+                    #         d_temp += val
+                    #     case _:
+                    #         raise ValueError("Expected string value for `count` to be either `count`,"
+                    #                           "`average`, or `accumulate`. Got instead: %s" % str(count))
+                    if count == 'count':
+                        d_temp += val_count
+                    elif count == 'average':
+                        val_count[val_count <= 0] = 1
+                        d_temp += val/val_count
+                    elif count == 'accumulate':
+                        d_temp += val
+                    else:
+                        raise ValueError("Expected string value for `count` to be either `count`,"
+                                        "`average`, or `accumulate`. Got instead: %s" % str(count))
                 else:
                     pass
 

@@ -1,10 +1,10 @@
 ---
-title: "pudu: A generalized and agnostic Python library for explainability of Machine Learning classification and regression problems."
+title: "pudu: A generalized and agnostic Python library for feature selection and explainability of Machine Learning classification and regression problems."
 tags:
     - Python
     - Machine Learning
     - Explainability and intepretability
-    - Combinatorial analysis
+    - Sensitivity Analysis
     - Classification and regression
 authors:
     - name: Enric Grau-Luque
@@ -27,7 +27,7 @@ affiliations:
       index: 1
     - name: Departament d'Enginyeria Electrònica i Biomèdica, IN2UB, Universitat de Barcelona, C/ Martí i Franqués 1, 08028 Barcelona, Spain
       index: 2
-date: 09 January 2023
+date: 30 June 2023
 bibliography: paper.bib
 ---
 
@@ -42,24 +42,27 @@ One of the approaches to improve the interpretability of machine learning algori
 
 Even though there are products and libraries available for explaining different types of algorithms such as SHAP [@Lundberg2017], LIME [@Ribeiro2016], or GradCAM [@Selvaraju2017], they can be difficult to implement, interpret, or understand for technical scientists with little or no data scientific background. As such, a tool with an easy and understandable approach that can help the different stakeholders to better understand the AI algorithms that they are employing in their data analyses can considerably increase the transparency, comprehensibility, and scientific impact of machine learning results in natural sciences and in other applications [@Bhatt2020, @Belle2021].
 
-
 # Overview
 
-The **pudu** library is a Python tool that aims to address the challenge of interpretability of machine learning results by providing a deterministic and agnostic post-hoc approach by conducting sensitivity analysis on classification and regression tasks. This toolbox uses the same basic principles as RELIEF, and gives ample liberty to the user on its parameters and use cases. **pudu** quantifies the relevance of features according to changes in the target instance by changing the input in a user-defined way. To perform this, **pudu** assumes that the algorithm in question has a classification probability function or a prediction function for classification and regression problems, respectively. With the latter, the space of features is changed in a deterministic and sequential way, and the relevance of each specific feature is quantified according to the change in the target. As mentioned, both classification and regression problems can be analyzed, and 2-d (vectors) and 3-d (non-RGB images) data types are accepted as input. **pudu** develops visual explanations in an easy way by showing the relevance of a feature on each decision, being also useful for performing local explanations by selecting specific areas of interest.
+The **pudu** library is a Python toolkit created to help make sense of machine learning results. It does this by taking a clear and deterministic (or stochastic if the user desires) approach, performing sensitivity analysis on classification and regression tasks. This toolbox uses the same basic principles as RELIEF, but offers the user plenty of flexibility with parameters and use cases. Additionally, it offers activation analysis for Neural Networks, adapting some of the guidelines defined in [Bau2018] to measure the impact of feature changes through sensitivity analysis. **pudu** measures the importance of features based on how changes in the input affect the target instance. To do this, **pudu** works under the assumption that the algorithm in use has a classification probability function or a prediction function for classification and regression problems, respectively. Using this, it changes the feature space in a predictable (or random) way and evaluates the importance of the defined features based on the changes to the target. **pudu** is versatile: it can analyze both classification and regression problems for both 1-dimensional (vectors) and 2-dimensional (non-RGB images) data types as input. **pudu** creates visual explanations in an easy-to-understand way by highlighting the importance of a feature on each decision, and also offers the ability to provide localized explanations by selecting specific areas of interest.
 
 To illustrate this functionality, examples using scikit-learn [@Pedregosa2011], keras [@chollet2018keras], and localreg [@Marholm2022] are included in the documentation, along with the use of LIME and GradCAM to show how **pudu** can complement the understanding of AI decisions in different types of problems.
 
-**pudu** is built in Python 3 [@VanRossumGuidoDrake2009], and also uses third-party packages including numpy [@Harris2020] and matplotlib [@Hunter2007]. It is available in both pipy and conda, and comes with complete documentation, including quick start, examples, and contribution guidelines. Source code and documentation can be downloaded from https://github.com/pudu-py/pudu.
+**pudu** is built in Python 3 [@VanRossumGuidoDrake2009], and also uses third-party packages including numpy [@Harris2020], matplotlib [@Hunter2007], and keras. It is available in both pipy and conda, and comes with complete documentation, including quick start, examples, and contribution guidelines. Source code and documentation can be downloaded from https://github.com/pudu-py/pudu.
 
 # Features
 
 A brief list of features includes:
 
 - A one-fits-all class for every accepted problem and algorithm.
-- Importance: estimates the absolute or relative importance oif the features.
+- Importance: estimates the importance of the features  with sensitivity analysis.
 - Speed: calculates how fast a prediction changes according to the changes in the features.
-- Synergy: tests teh synergy between features and the change in classification probability.
-- Easy plotting of the results from the above.
+- Synergy: explores the interaction between features and how they influence the classification probability.
+- Layer Activation: identifies how changes in features affect the activation of units within a layer.
+- Unit Activation: tracks how often each unit within a layer activates in response to input changes.
+- Unit to Feature: links features and units by identifying the most activated unit based on specific feature changes.
+- Wide selection of feature perturbation and masking functions is available, including fully customizable options to ensure complete tailoring capability.
+- Easy plotting of the results.
 
 # Acknowledgements
 

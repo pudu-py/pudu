@@ -1,11 +1,11 @@
+from keras.models import Sequential, Model
 import matplotlib.pyplot as plt
-from keras.models import Model
 import spectrapepper as spep
 import perturbation
 import numpy as np
 import masks
 import copy
-
+from . import perturbation, masks
 
 class pudu:
     def __init__(self, x, y, pf, model=None):
@@ -49,6 +49,7 @@ class pudu:
         # Optional results
         self.lac = None # layer activation
         self.uac = None # unit activation
+        self.aso = None # unit associacation with feature
 
         # Normalized results are calculated automatically so if the user needs them
         self.imp_norm = None
@@ -57,24 +58,28 @@ class pudu:
         self.lac_norm = None
         self.uac_norm = None
         
-        
-        # Some dimension error handling
+        # Some error handling
+        if model is None:
+            pass
+        if not isinstance(model, (Sequential, Model)):
+            raise ValueError("Expected `model` to be a keras model")
+
         if np.array(x).shape[0] > 1 and (not isinstance(y, list)):
-            raise ValueError(f"Expected `x` and `y` to have the same length. \
-                                Got `x` with length (batch size): %s" % str(np.array(x).shape[0]) % " \
-                                and `y` is the scalar: %s " % str(y))
+            raise ValueError("Expected `x` and `y` to have the same length."
+                                "Got `x` with length (batch size): %s" % str(np.array(x).shape[0]) %
+                                "and `y` is the scalar: %s " % str(y))
         
         if isinstance(y, list) and np.array(x).shape[0] != len(y):
-            raise ValueError(f"Expected `x` and `y` to have the same length. \
-                                Got `x` with length (batch size): %s" % str(np.array(x).shape[0]) % " \
-                                and `y` with length: %s " % str(len(y)))
+            raise ValueError("Expected `x` and `y` to have the same length."
+                                "Got `x` with length (batch size): %s" % str(np.array(x).shape[0]) %
+                                "and `y` with length: %s " % str(len(y)))
 
         if len(np.array(x).shape) != 4:
-            raise ValueError(f"Expected array to have rank 4 (batch, rows, columns, depth). \
-                                Got array with shape: %s" % str(np.array(x).shape))
+            raise ValueError("Expected array to have rank 4 (batch, rows, columns, depth)."
+                                "Got array with shape: %s" % str(np.array(x).shape))
         
         if len(np.array(y).shape) != 0:
-            raise ValueError(f"Expected integer. Got array with shape: %s" % str(np.array(y).shape))
+            raise ValueError("Expected integer. Got array with shape: %s" % str(np.array(y).shape))
         
 
     def importance(self, window=1, scope=None, evolution=None, padding='center', 
@@ -404,6 +409,7 @@ class pudu:
                     else:
                         activations = activation_model.predict(temp, verbose=0)
                         p1 += np.sum(np.maximum(act_val, activations[layer]) > act_val)
+
                         activations = activation_model.predict(temp2, verbose=0)
                         p2 += np.sum(np.maximum(act_val, activations[layer]) > act_val)
 
@@ -423,9 +429,11 @@ class pudu:
         self.lac_norm = (d_temp - min_val) / (max_val - min_val)
     
 
-    def unit_activation(self, layer=0, act_val=0, p=1, window=1, scope=None, padding='center', **kwargs):
+    def unit_activation(self, layer=0, act_val=0, p=1, count='count', window=1,
+                            scope=None, padding='center', **kwargs):
         """
-        Associates a unit with features within a `layer`.
+        Counts the number of activations for each of the units according to the change in the features.
+        Alternatevly, it can calulate the `average` or `accumulated` values using the parameter `count`.
         
         :type layer: int
         :param layer: Position number within the keras model to be analyzed. Use `model.summary()`
@@ -433,13 +441,21 @@ class pudu:
 
         :type act_val: float
         :param act_val: lower limit from which a unit is considered active, 
-            not included (`activation > act_val`). Default is 0 (`relu`).
+            not included (`activation > act_val`). The maximum value between `act_val` and
+            the quantile value for `p` is used as threshold as `max(act_val, quantile)`. 
+            Default is 0 (`relu`).
 
         :type p: float
-        :param p: quantile value for activations. Depending on the value of `act_val` it will
-            override it or not. If you prefer using `p` value, set `act_val = 0` and viceversa.
+        :param p: quantile value for activations, that is, the `p` percentage highest values. 
+            A good first approach is to it it to 0.005 (0.5%). The maximum value between `act_val`
+            and the quantile value for `p` is used as threshold as `max(act_val, quantile)`. 
+            Default is 1.
 
-        :type window: int
+        :type count: string
+        :param count: Method of calculation. Normally you would't whant to change this as other
+            options lack interpretability, but they are there if you want. Default is `count`.
+
+        :type window: int, tupple
         :param window: feature width to be changeg each time.
             
         :type scope: tupple(int, int)
@@ -459,7 +475,6 @@ class pudu:
         # Initial values
         sh = np.array(self.x).shape
         x_copy = copy.deepcopy(self.x)
-        d_temp = np.zeros((sh[0], sh[1], sh[2], sh[3]))
 
         scope, window, padding, _ = params_std(self.y, sh, scope, window, padding, None)
         padd = calc_pad(padding, scope, window)
@@ -469,9 +484,9 @@ class pudu:
         layer_outputs = [layer.output for layer in self.model.layers]
         activation_model = Model(inputs=self.model.input, outputs=layer_outputs)
 
-        p0 = 0
-        activations = activation_model.predict(self.x, verbose=0)
-        p0 += np.sum(np.maximum(act_val, activations[layer]) > act_val)
+        p0 = calc_p_uac(layer, activation_model, self.x, act_val, p)
+        # ids = [i for i in range(len(p0))] # name of the units as index value
+        d_temp = [0 for _ in range(len(p0))]
 
         row = padd[0][0] + scope[0][0]
         while row <= scope[0][1] - padd[0][1] - window[0]:
@@ -487,29 +502,144 @@ class pudu:
 
                     p1, p2 = 0, 0
                     if temp2 is False:
-                        activations = activation_model.predict(temp, verbose=0)
-                        p1 += np.sum(np.maximum(act_val, activations[layer]) > act_val)
+                        p1 = calc_p_uac(layer, activation_model, temp, act_val, p)
                         val = p1 - p0
+                        val_count = np.where(val > act_val, 1, 0)
+
                     else:
-                        activations = activation_model.predict(temp, verbose=0)
-                        p1 += np.sum(np.maximum(act_val, activations[layer]) > act_val)
-                        activations = activation_model.predict(temp2, verbose=0)
-                        p2 += np.sum(np.maximum(act_val, activations[layer]) > act_val)
-
+                        p1 = calc_p_uac(layer, activation_model, temp, act_val, p)
+                        p2 = calc_p_uac(layer, activation_model, temp2, act_val, p)
                         val = (p1 + p2 - 2*p0) / 2
+                        val_count = np.where(val > act_val, 1, 0)
                     
-                    d_temp[0, row:row+window[0], col:col+window[1], 0] = val
-
+                    match count:
+                        case 'count':
+                            d_temp += val_count
+                        case 'average':
+                            val_count[val_count <= 0] = 1
+                            d_temp += val/val_count
+                        case 'accumulate':
+                            d_temp += val
+                        case _:
+                            raise ValueError("Expected string value for `count` to be either `count`,"
+                                              "`average`, or `accumulate`. Got instead: %s" % str(count))
                 else:
                     pass
 
                 col += window[1]
             row += window[0]
 
-        self.lac = d_temp
+        self.uac = d_temp
         
         max_val, min_val = d_temp.max(), d_temp.min()
-        self.lac_norm = (d_temp - min_val) / (max_val - min_val)
+        self.uac_norm = (d_temp - min_val) / (max_val - min_val)
+
+
+###
+def unit_to_feature(self, layer=0, act_val=0, p=1, count='count', window=1,
+                            scope=None, padding='center', **kwargs):
+        """
+        ...
+        
+        :type layer: int
+        :param layer: Position number within the keras model to be analyzed. Use `model.summary()`
+            to see exactly the position of the desired layer.
+
+        :type act_val: float
+        :param act_val: lower limit from which a unit is considered active, 
+            not included (`activation > act_val`). The maximum value between `act_val` and
+            the quantile value for `p` is used as threshold as `max(act_val, quantile)`. 
+            Default is 0 (`relu`).
+
+        :type p: float
+        :param p: quantile value for activations, that is, the `p` percentage highest values. 
+            A good first approach is to it it to 0.005 (0.5%). The maximum value between `act_val`
+            and the quantile value for `p` is used as threshold as `max(act_val, quantile)`. 
+            Default is 1.
+
+        :type count: string
+        :param count: Method of calculation. Normally you would't whant to change this as other
+            options lack interpretability, but they are there if you want. Default is `count`.
+
+        :type window: int, tupple
+        :param window: feature width to be changeg each time.
+            
+        :type scope: tupple(int, int)
+        :param scope: Starting and ending point of the analysis for each feature.
+            If `None`, the all the vector is analysed. 
+        
+        :type padding: string 
+        :param padding: Type of padding. If the legnth of `x` is not divisible 
+            by `window` then padding is applyed. If `center`, then equal padding 
+            to each side is applyed. If `right`, then paading to the right is 
+            added and `window`starts from `0`. If `left`, padding to the left
+            is applyied and `window` ends at length `x`. If perfet `center` is
+            not possible, then ipadding left is added `1`.
+        """
+        error_handling(window, scope, padding, False, 0, [1, 2, 3], layer, p)
+
+        # Initial values
+        sh = np.array(self.x).shape
+        x_copy = copy.deepcopy(self.x)
+
+        scope, window, padding, _ = params_std(self.y, sh, scope, window, padding, None)
+        padd = calc_pad(padding, scope, window)
+        mask_array = masks.function(sh=sh, padd=padd, scope=scope, window=window, **kwargs)
+
+        # Keras
+        layer_outputs = [layer.output for layer in self.model.layers]
+        activation_model = Model(inputs=self.model.input, outputs=layer_outputs)
+
+        p0 = calc_p_uac(layer, activation_model, self.x, act_val, p)
+        # ids = [i for i in range(len(p0))] # name of the units as index value
+        d_temp = [0 for _ in range(len(p0))]
+
+        row = padd[0][0] + scope[0][0]
+        while row <= scope[0][1] - padd[0][1] - window[0]:
+            col = padd[1][0] + scope[1][0]
+            while col <= scope[1][1] - padd[1][1] - window[1]:
+
+                if mask_array[0][row][col][0] == 1:
+
+                    row_idx, col_idx = np.meshgrid(range(window[0]), range(window[1]), indexing='ij')
+                    row_idx, col_idx = row_idx + row, col_idx + col
+                    
+                    temp, temp2 = perturbation.function(x=x_copy, row=row_idx, col=col_idx, **kwargs)
+
+                    p1, p2 = 0, 0
+                    if temp2 is False:
+                        p1 = calc_p_uac(layer, activation_model, temp, act_val, p)
+                        val = p1 - p0
+                        val_count = np.where(val > act_val, 1, 0)
+
+                    else:
+                        p1 = calc_p_uac(layer, activation_model, temp, act_val, p)
+                        p2 = calc_p_uac(layer, activation_model, temp2, act_val, p)
+                        val = (p1 + p2 - 2*p0) / 2
+                        val_count = np.where(val > act_val, 1, 0)
+                    
+                    match count:
+                        case 'count':
+                            d_temp += val_count
+                        case 'average':
+                            val_count[val_count <= 0] = 1
+                            d_temp += val/val_count
+                        case 'accumulate':
+                            d_temp += val
+                        case _:
+                            raise ValueError("Expected string value for `count` to be either `count`,"
+                                              "`average`, or `accumulate`. Got instead: %s" % str(count))
+                else:
+                    pass
+
+                col += window[1]
+            row += window[0]
+
+        self.uac = d_temp
+        
+        max_val, min_val = d_temp.max(), d_temp.min()
+        self.uac_norm = (d_temp - min_val) / (max_val - min_val)
+###
 
 
     def preview(self, window=1, scope=None, padding='center', axis=None, show_data=True, 
@@ -576,7 +706,7 @@ class pudu:
         :type bold: Boolean
         :param bold: To make the limit lines bolder. Default is 'False'.
         """
-        error_handling(window, scope, padding, False, 0, [1, 2, 3], 0, 1)
+        error_handling(window, scope, padding, False, 0, [1, 2, 3], None, None)
 
         # Initial values
         image = [] # this will be the preview image
@@ -704,7 +834,7 @@ class pudu:
 
 def plot(feature, image, axis=None, show_data=True, title='Importance', 
         xlabel='Feature', ylabel='Intensity', xticks=None, yticks=[], cmap='Greens',
-        font_size=15, figsize=(14, 4)): # move this outside, unses no self
+        font_size=15, figsize=(14, 4)):
     """
     Easy plot function for `importance`, `speed`, or `synergy`. It shows the analyzed
         feature `feature` with a colormap overlay indicating the result along with
@@ -787,10 +917,9 @@ def plot(feature, image, axis=None, show_data=True, title='Importance',
     plt.show()  
 
 
-# Padding
-def calc_pad(padding, scope, window): # mover afuera, nos usea self
+def calc_pad(padding, scope, window):
     """
-    Calculate padding for the given type.
+    Calculates padding for the given type.
 
     :type padding: str
     :param padding: Type of padding. Can be 'center', 'left', or 'right'.
@@ -872,26 +1001,42 @@ def error_handling(window, scope, padding, absolute, inspect, steps, layer, p):
         pass
     elif len(np.array(scope).shape) == 1:
         if scope[0][0] <= 0 or scope[0][1] <= 0 or scope[1][0] <= 0 or scope[1][1] <= 0:
-            raise ValueError(f"Expected value for the components of scope must be greater than 0.\
-                            Got instead: %s" % str(scope))
+            raise ValueError("Expected value for the components of scope must be greater than 0."
+                                "Got instead: %s" % str(scope))
     elif scope[0] <= 0 or scope[1] <= 0:
-        raise ValueError(f"Expected value for the components of scope must be greater than 0.\
-                            Got instead: %s" % str(scope))
+        raise ValueError("Expected value for the components of scope must be greater than 0."
+                            "Got instead: %s" % str(scope))
 
     if padding not in ['center', 'left', 'right']:
-        raise ValueError(f"Expected value for padding to be either center, left, or right. \
-                        Got instead: %s" % str(padding))
+        raise ValueError("Expected value for padding to be either center, left, or right."
+                            "Got instead: %s" % str(padding))
 
     if not isinstance(absolute, bool):
-        raise ValueError(f"Expected value for absolute is boolean: True or False. Got instead: %s" % str(absolute))
+        raise ValueError("Expected value for absolute is boolean: True or False."
+                            "Got instead: %s" % str(absolute))
     
     if len(np.array(inspect).shape) > 0:
         if inspect[0] <= 0 or inspect[1] <= 0:
-            raise ValueError(f"Value for inspect, or its components, must be greater \
-                            than 0. Got instead: %s" % str(inspect))
+            raise ValueError("Value for inspect, or its components, must be greater"
+                                "than 0. Got instead: %s" % str(inspect))
         
     elif (not isinstance(inspect, int)) or inspect < 0:
-        raise ValueError(f"Expected value for inspect is an integer greater than 0. Got instead: %s" % str(inspect))
+        raise ValueError("Expected value for inspect is an integer greater than 0." 
+                            "Got instead: %s" % str(inspect))
 
     if not isinstance(steps, list):
-        raise ValueError(f"Expected value for inspect is a list. Got instead: %s" % str(steps))
+        raise ValueError("Expected value for inspect is a list. Got instead: %s" % str(steps))
+
+
+def calc_p_uac(layer, activation_model, temp, act_val, p):
+    activations = activation_model.predict(temp, verbose=0)
+    activations = activations[layer][0]
+    activations = np.array(activations).flatten()
+    quantile = np.quantile(activations, 1-p)
+    activations[activations <= max(quantile, act_val)] = 0
+
+    # val = np.array([np.maximum(max(quantile, act_val), i) for i in activations])
+
+    # val = np.array([np.maximum(max(quantile, act_val), i) for i in activations])
+
+    return activations

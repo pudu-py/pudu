@@ -5,14 +5,8 @@ Example 1: PC-LDA with Scikit-learn for classification of spectroscopic data
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. literalinclude:: ../examples/example_pclda.py
-    :encoding: latin-1
-    :start-after: ## Explanation Start ##
-    :end-before: ## Explanation End ##
+    :linenos: 
 
-.. code-block:: python
-   :linenos:
-   .. literalinclude:: example.py
-      :start-after: ## Explanation End ##
 
 Examples 2: Regression for predicition of open circuit voltage of solar cells with RBFN
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

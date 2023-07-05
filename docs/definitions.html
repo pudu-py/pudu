@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Definitions &mdash; pudu  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Functions" href="functions.html" />
+    <link rel="prev" title="pudu" href="introduction.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> pudu
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">pudu</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Definitions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#importance">Importance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#speed">Speed</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#synergy">Synergy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#activations-and-re-activaiton">Activations and re-activaiton</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="functions.html">Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributions.html">Contributing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pudu</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">Definitions</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/definitions.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="definitions">
+<h1>Definitions<a class="headerlink" href="#definitions" title="Permalink to this heading"></a></h1>
+<section id="importance">
+<h2>Importance<a class="headerlink" href="#importance" title="Permalink to this heading"></a></h2>
+<p>Let <span class="math notranslate nohighlight">\(x \in X\)</span> be a 2-d array of dimensions <span class="math notranslate nohighlight">\(h \times w\)</span>. Let <span class="math notranslate nohighlight">\(P_M\)</span> be
+the probability function of the model <span class="math notranslate nohighlight">\(M\)</span>. Then, <span class="math notranslate nohighlight">\(P_M(x)\)</span> is the probability of <span class="math notranslate nohighlight">\(x\)</span>
+to belong to a classification class according to the problem solved by <span class="math notranslate nohighlight">\(M\)</span>. Considering
+<span class="math notranslate nohighlight">\(j \in J\)</span> the feature in position <span class="math notranslate nohighlight">\((h_j, w_j)\)</span> of <span class="math notranslate nohighlight">\(x\)</span>, the local importance
+(<span class="math notranslate nohighlight">\(LI\)</span>) for said feature <span class="math notranslate nohighlight">\(j\)</span> is defined as:</p>
+<div class="math notranslate nohighlight">
+\[LI_j = P_M \left( x \right) -P_M \left( R_j \left( x \right) \right)\]</div>
+<p>Where <span class="math notranslate nohighlight">\(R\)</span> is a function of local perturbation of feature <span class="math notranslate nohighlight">\(j\)</span>. Then, the relative
+importance (<span class="math notranslate nohighlight">\(RI\)</span>) can be denoted as:</p>
+<div class="math notranslate nohighlight">
+\[RI_j = \frac{ LI_j - min \left( LI \right) }{max \left( LI \right)-min \left( LI \right)}\]</div>
+<p>Then, importance is the difference in a model’s classification probability according to change
+in the features.</p>
+</section>
+<section id="speed">
+<h2>Speed<a class="headerlink" href="#speed" title="Permalink to this heading"></a></h2>
+<p>Consider states of <span class="math notranslate nohighlight">\(R\)</span> with different set parameters <span class="math notranslate nohighlight">\(R_1, R_2,  ...\)</span>. As for
+importance for <span class="math notranslate nohighlight">\(x\)</span>, the local importance of feature <span class="math notranslate nohighlight">\(j\)</span> using the different
+perturbaions would be <span class="math notranslate nohighlight">\(LI_{j,1}, LI_{j,2}, ...\)</span>. Then, speed is the slope calculated
+according to the linear fit of the local importance points as
+<span class="math notranslate nohighlight">\(\left( 1, LI_{j,1} \right), \left( 2, LI_{j,2} \right), ...\)</span></p>
+</section>
+<section id="synergy">
+<h2>Synergy<a class="headerlink" href="#synergy" title="Permalink to this heading"></a></h2>
+<p>Consider a feature <span class="math notranslate nohighlight">\(j* \in J_{h \times w}\)</span> and a distinct feature <span class="math notranslate nohighlight">\(j \in J_{h \times w}\)</span> from <span class="math notranslate nohighlight">\(x_i\)</span>. Both are
+perturbated under <span class="math notranslate nohighlight">\(R\)</span> obtaining <span class="math notranslate nohighlight">\(x_{j*,j}\)</span>. Then, the local importance obtained
+is <span class="math notranslate nohighlight">\(LI_{j*,j}\)</span>. Then,</p>
+<div class="math notranslate nohighlight">
+\[LI_{j*} = \left( LI_{j*,1}, LI_{j*,2}, ... \forall j \neq j* \in J \right)\]</div>
+</section>
+<section id="activations-and-re-activaiton">
+<h2>Activations and re-activaiton<a class="headerlink" href="#activations-and-re-activaiton" title="Permalink to this heading"></a></h2>
+<p>As defined by Bau and Zhou et al. (2017), for <span class="math notranslate nohighlight">\(x\)</span>, take the activation map <span class="math notranslate nohighlight">\(A_k(x)\)</span>
+for each of the units <span class="math notranslate nohighlight">\(k\)</span>. Then <span class="math notranslate nohighlight">\(a_k\)</span> is the activation distribution for each
+individual unit. Then, all the activations belonging to the <span class="math notranslate nohighlight">\(p\)</span> quantile as
+<span class="math notranslate nohighlight">\(P(a_k&gt;T_k)=p\)</span> were <span class="math notranslate nohighlight">\(T_k\)</span> is the value above which the quantile exists.</p>
+<p>The above can be evaluated based in feature perturbations considering <span class="math notranslate nohighlight">\(x\)</span>, the original data,
+and <span class="math notranslate nohighlight">\(x_j\)</span>, the perturbated input in feature <span class="math notranslate nohighlight">\(j\)</span>, and evaluate the difference as
+<span class="math notranslate nohighlight">\(A_k(x_j)-A_k(x)=\Delta A_{k,j}\)</span>. From here we can extract the distribution
+<span class="math notranslate nohighlight">\(\Delta a_{k,j}\)</span> and select the quantile as <span class="math notranslate nohighlight">\(P(\Delta a_{k,j}&gt;T_k)=p\)</span>.</p>
+<p>The latter accounts then for difference in unit activations after perturbation that would account
+for a re-activation. For example, if unit <span class="math notranslate nohighlight">\(k\)</span> has and activation value of <span class="math notranslate nohighlight">\(u\)</span>, and
+after perturbation the same unit <span class="math notranslate nohighlight">\(k\)</span> obtains a value of <span class="math notranslate nohighlight">\(u* = u \rightarrow \Delta u = 0\)</span>,
+then it is not re-activated considering an activation function of <span class="math notranslate nohighlight">\(ReLU\)</span> or <span class="math notranslate nohighlight">\(LeakyReLU\)</span>.
+In other words, this looks for significant changes in the activation map accoring to change,
+meaning significant a value that would be considered an activation in <span class="math notranslate nohighlight">\(A_k(x)\)</span>.</p>
+<p>With this, it is possible to obtain the following information:</p>
+<ol class="arabic simple">
+<li><p>How many units are re-activated, in units of change</p></li>
+<li><p>What feature produces more unit re-activations, per unit of change</p></li>
+<li><p>What unit is re-activated the most, per unit of change</p></li>
+<li><p>Which feature re-activates what unit the most times <span class="math notranslate nohighlight">\(^1\)</span></p></li>
+</ol>
+<p><span class="math notranslate nohighlight">\(^1\)</span> For point <strong>4</strong>, though can be obtained for a single sample <span class="math notranslate nohighlight">\(x\)</span>, it is better to use
+a significant number of them.</p>
+<section id="references">
+<h3>References<a class="headerlink" href="#references" title="Permalink to this heading"></a></h3>
+<ol class="arabic simple">
+<li><p>Bau, D., Zhou, B., Khosla, A., Aude, O. &amp; Torralba, A. Network Dissection: Quantifying Interpretability of Deep Visual Representation. (2017).</p></li>
+</ol>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="introduction.html" class="btn btn-neutral float-left" title="pudu" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="functions.html" class="btn btn-neutral float-right" title="Functions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Institut de Recerca en Energia de Catalunya.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

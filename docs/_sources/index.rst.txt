@@ -7,7 +7,8 @@
    :maxdepth: 2
    :caption: Contents:
 
-   quickstart
+   introduction
+   definitions
    functions
    examples
    contributions

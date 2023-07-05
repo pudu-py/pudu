@@ -1,0 +1,80 @@
+===========
+Definitions
+===========
+
+Importance
+==========
+Let :math:`x \in X` be a 2-d array of dimensions :math:`h \times w`. Let :math:`P_M` be
+the probability function of the model :math:`M`. Then, :math:`P_M(x)` is the probability of :math:`x`
+to belong to a classification class according to the problem solved by :math:`M`. Considering 
+:math:`j \in J` the feature in position :math:`(h_j, w_j)` of :math:`x`, the local importance 
+(:math:`LI`) for said feature :math:`j` is defined as:
+
+.. math::
+        LI_j = P_M \left( x \right) -P_M \left( R_j \left( x \right) \right)
+
+Where :math:`R` is a function of local perturbation of feature :math:`j`. Then, the relative 
+importance (:math:`RI`) can be denoted as:
+
+.. math::
+        RI_j = \frac{ LI_j - min \left( LI \right) }{max \left( LI \right)-min \left( LI \right)} 
+
+Then, importance is the difference in a model's classification probability according to change
+in the features.
+
+Speed
+=====
+Consider states of :math:`R` with different set parameters :math:`R_1, R_2,  ...`. As for
+importance for :math:`x`, the local importance of feature :math:`j` using the different 
+perturbaions would be :math:`LI_{j,1}, LI_{j,2}, ...`. Then, speed is the slope calculated
+according to the linear fit of the local importance points as
+:math:`\left( 1, LI_{j,1} \right), \left( 2, LI_{j,2} \right), ...`
+
+
+Synergy
+=======
+Consider a feature :math:`j* \in J_{h \times w}` and a distinct feature :math:`j \in J_{h \times w}` from :math:`x_i`. Both are
+perturbated under :math:`R` obtaining :math:`x_{j*,j}`. Then, the local importance obtained
+is :math:`LI_{j*,j}`. Then, 
+
+.. math::
+        LI_{j*} = \left( LI_{j*,1}, LI_{j*,2}, ... \forall j \neq j* \in J \right) 
+
+
+Activations and re-activaiton
+=============================
+As defined by Bau and Zhou et al. (2017), for :math:`x`, take the activation map :math:`A_k(x)` 
+for each of the units :math:`k`. Then :math:`a_k` is the activation distribution for each
+individual unit. Then, all the activations belonging to the :math:`p` quantile as
+:math:`P(a_k>T_k)=p` were :math:`T_k` is the value above which the quantile exists.
+
+The above can be evaluated based in feature perturbations considering :math:`x`, the original data,
+and :math:`x_j`, the perturbated input in feature :math:`j`, and evaluate the difference as 
+:math:`A_k(x_j)-A_k(x)=\Delta A_{k,j}`. From here we can extract the distribution
+:math:`\Delta a_{k,j}` and select the quantile as :math:`P(\Delta a_{k,j}>T_k)=p`.
+
+The latter accounts then for difference in unit activations after perturbation that would account
+for a re-activation. For example, if unit :math:`k` has and activation value of :math:`u`, and
+after perturbation the same unit :math:`k` obtains a value of :math:`u* = u \rightarrow \Delta u = 0`,
+then it is not re-activated considering an activation function of :math:`ReLU` or :math:`LeakyReLU`.
+In other words, this looks for significant changes in the activation map accoring to change,
+meaning significant a value that would be considered an activation in :math:`A_k(x)`.
+
+With this, it is possible to obtain the following information:
+
+1. How many units are re-activated, in units of change 
+
+2. What feature produces more unit re-activations, per unit of change
+
+3. What unit is re-activated the most, per unit of change
+
+4. Which feature re-activates what unit the most times :math:`^1`
+
+
+:math:`^1` For point **4**, though can be obtained for a single sample :math:`x`, it is better to use
+a significant number of them.
+
+References
+----------
+
+1. Bau, D., Zhou, B., Khosla, A., Aude, O. & Torralba, A. Network Dissection: Quantifying Interpretability of Deep Visual Representation. (2017).

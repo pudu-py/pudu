@@ -5,7 +5,7 @@ def function(mask_type='all', sh=None, padd=None, scope=None, window=None, perce
             qty=None, vector=None,
             mode=None, delta=None, power=None, bias=None, base=None, rr=None, exp=None, 
             th=None, upper=None, lower=None, scale_factor=None, frequency=None, amplitude=None, 
-            mean=None, stddev=None, offset=None, constant=None, custom=None): # sections of the mask to distort
+            mean=None, stddev=None, offset=None, constant=None, custom=None):
     
     sec_row = (scope[0][1] - scope[0][0] - padd[0][0] - padd[0][1] - window[0]) // window[0] + 1
     sec_col = (scope[1][1] - scope[1][0] - padd[1][0] - padd[1][1] - window[1]) // window[1] + 1

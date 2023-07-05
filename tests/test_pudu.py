@@ -4,19 +4,23 @@
 
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.decomposition import PCA
+from tensorflow import keras
+from keras.models import load_model
 import spectrapepper as spep
 from pudu import pudu
-#import pudu7 as pudu
+# import pudu7 as pudu
 import numpy as np
 import unittest
 import pickle
 import os
 
-TESTDATA_FEATURES = os.path.join(os.path.dirname(__file__), 'features.txt')
-TESTDATA_TARGETS = os.path.join(os.path.dirname(__file__), 'targets.txt')
-TESTDATA_LDA = os.path.join(os.path.dirname(__file__), 'lda_model.sav')
-TESTDATA_PCA = os.path.join(os.path.dirname(__file__), 'pca_model.sav')
-TESTDATA_RESULTS = os.path.join(os.path.dirname(__file__), 'pudu_test_results.txt')
+TESTDATA_FEATURES = os.path.join(os.path.dirname(__file__), 'data/features.txt')
+TESTDATA_TARGETS = os.path.join(os.path.dirname(__file__), 'data/targets.txt')
+TESTDATA_LDA = os.path.join(os.path.dirname(__file__), 'data/lda_model.sav')
+TESTDATA_PCA = os.path.join(os.path.dirname(__file__), 'data/pca_model.sav')
+TESTDATA_RESULTS = os.path.join(os.path.dirname(__file__), 'data/pudu_test_results.txt')
+MNIST_MODEL = os.path.join(os.path.dirname(__file__), 'data/mnist_class.h5')
+MNIST_RESULTS = os.path.join(os.path.dirname(__file__), 'data/act_results_mnist.txt')
 
 class TestPudu(unittest.TestCase):
     """Tests for `pudu` package."""
@@ -47,7 +51,7 @@ class TestPudu(unittest.TestCase):
         imp.speed(delta=1, window=200)
         imp.synergy(delta=1, inspect=3, window=200)
         
-        tp = 6 #4
+        tp = 6
 
         for a, b in zip(imp.imp[0,0,:,0], results[0]):
             self.assertAlmostEqual(a, b, places=tp)
@@ -65,4 +69,27 @@ class TestPudu(unittest.TestCase):
             self.assertAlmostEqual(a, b, places=tp)
         
         for a, b in zip(imp.syn_norm[0,0,:,0], results[5]):
+            self.assertAlmostEqual(a, b, places=tp)
+
+        ### 2d
+        (x, y), (_, _) = keras.datasets.mnist.load_data()
+        x = x.astype("float32") / 255
+        x = np.expand_dims(x, -1)
+        y = y[10]
+        x = x[10]
+        x = np.expand_dims(x, 0)
+        model = load_model(MNIST_MODEL)
+        fac, uac = spep.load(MNIST_RESULTS)
+
+        def cnn2d_prob(X):
+            X = X[0,:,:,:]
+            return MNIST_MODEL.predict(np.array([X, X]), verbose=0)[0] # verbose 0 is important!
+        
+        imp = pudu.pudu(x, y, cnn2d_prob, model)
+        imp.activations(layer=2, slope=0, p=0.005, window=(5, 5), mode='positive', delta=0.1)
+
+        for a, b in zip(imp.fac, fac):
+            self.assertAlmostEqual(a, b, places=tp)
+        
+        for a, b in zip(imp.uac[338:364], uac):
             self.assertAlmostEqual(a, b, places=tp)

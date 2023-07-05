@@ -1,10 +1,31 @@
+"""
+## EXPLANATION START ##
+
+This function calculates the hypotenuse of a right triangle.
+
+The calculation is based on the Pythagorean theorem:
+
+.. math::
+
+   c = \sqrt{a^2 + b^2}
+
+where:
+- :math:`c` is the length of the hypotenuse,
+- :math:`a` and :math:`b` are the lengths of the other two sides.
+
+## EXPLANATION END ##
+"""
+
 import matplotlib.pyplot as plt
 from lime import lime_tabular
 import spectrapepper as spep
-from pudu import pudu
 import numpy as np
 import pickle
 import lime
+
+# from pudu import pudu, plots
+import pudu7 as pudu
+import plots
 
 # Load features (spectra) and targets (open circuit coltage, voc)
 features = spep.load('data/features.txt')
@@ -15,6 +36,7 @@ lda = pickle.load(open('data/lda_model.sav', 'rb'))
 pca = pickle.load(open('data/pca_model.sav', 'rb'))
 
 ### LIME ###
+# First we try LIME. then we try pudu and see the difference.
 # We need to wrap the probability function
 def pcalda_proba(X):
     X = pca.transform(X)
@@ -67,21 +89,21 @@ def pf(X):
 imp = pudu.pudu(x, y, pf)
 
 # Evaluate `importance` for all features
-imp.importance(delta=0.1, method='bidirectional')
-imp.plot(imp.x, imp.imp, title="Importance", yticks=[], font_size=15)
+imp.importance(delta=0.1, window=1, mode='bidirectional')
+plots.plot(imp.x, imp.imp_norm, title="Importance", yticks=[], font_size=15)
 
 # Single pixels might be irrelevant for spectroscopy. We can group features
 # to evaluate together.
-imp.importance(delta=0.1, window=50, method='bidirectional')
-imp.plot(imp.x, imp.imp, title="Importance", yticks=[], font_size=15)
+imp.importance(delta=0.1, window=50, mode='bidirectional')
+plots.plot(imp.x, imp.imp, title="Importance", yticks=[], font_size=15)
 
 # We can see how fast would the classification change according to
 # the change in the features.
-imp.speed(delta=0.1, window=50, method='bidirectional')
-imp.plot(imp.x, imp.grad, title="Speed", yticks=[], font_size=15)
+imp.speed(delta=0.1, window=50, mode='bidirectional')
+plots.plot(imp.x, imp.spe, title="Speed", yticks=[], font_size=15)
 
 # Finally we evaluate how different changes complement each other.
 # We want ot evaluate the main Raman peak (aprox. 3rd position) and see
 # its synergy with the rest of the data
-imp.synergy(delta=0.1, inspect=3, window=50, method='bidirectional')
-imp.plot(imp.x, imp.syn, title="Synergy", yticks=[], font_size=15)
+imp.synergy(delta=0.1, inspect=3, window=50, mode='bidirectional')
+plots.plot(imp.x, imp.syn, title="Synergy", yticks=[], font_size=15)

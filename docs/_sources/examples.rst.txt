@@ -5,15 +5,25 @@ Example 1: PC-LDA with Scikit-learn for classification of spectroscopic data
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. literalinclude:: ../examples/example_pclda.py
+    :encoding: latin-1
+    :start-after: ## Explanation Start ##
+    :end-before: ## Explanation End ##
 
+.. code-block:: python
+   :linenos:
+   .. literalinclude:: example.py
+      :start-after: ## Explanation End ##
 
 Examples 2: Regression for predicition of open circuit voltage of solar cells with RBFN
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. literalinclude:: ../examples/example_rbnf.py
+    :language: python
+
 
 
 Examples 3: Handwritten numbers recognition using CNN with Keras and Mnist
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. literalinclude:: ../examples/example_cnn_mnist.py
+    :language: python

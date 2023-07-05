@@ -4,10 +4,10 @@ import random
 import numpy as np
 
 
-def function(x, row, col, mode='bidirectional', delta=0.1, power=1, bias=0, base=math.e,
+def function(x, row, col, mode='bidirectional', alpha=0.01, delta=0.1, power=1, bias=0, base=math.e,
              rr=(0, 1), exp=2, th=0.5, upper=1, lower=0, scale_factor=1, frequency=30,
              amplitude=1, mean=1, stddev=1, offset=1, constant=0, custom=None,
-             percentage=None,qty=None, vector=None, mask_type=None):
+             percentage=None, qty=None, vector=None, mask_type=None):
     
     temp = x.copy()
     temp2 = False
@@ -36,9 +36,9 @@ def function(x, row, col, mode='bidirectional', delta=0.1, power=1, bias=0, base
 
     elif mode == 'binary':
         if np.all(temp[0, row, col, 0]) > th:
-            temp[0, row, col, 0] = upper # upper value
+            temp[0, row, col, 0] = upper
         else:
-            temp[0, row, col, 0] = lower # assume default
+            temp[0, row, col, 0] = lower
 
     elif mode == 'sinusoidal':
         temp[0, row, col, 0] = (temp[0, row, col, 0] + bias) * math.sin(frequency * temp[0, row, col, 0]) + amplitude
@@ -54,6 +54,9 @@ def function(x, row, col, mode='bidirectional', delta=0.1, power=1, bias=0, base
 
     elif mode == 'relu':
         temp[0, row, col, 0] = max(0, temp[0, row, col, 0] + bias)
+
+    elif mode == 'leakyrelu':
+        temp[0, row, col, 0] = max(alpha, temp[0, row, col, 0] + bias)
 
     elif mode == 'softplus':
         temp[0, row, col, 0] = math.log(1 + math.exp(scale_factor * (temp[0, row, col, 0] + bias)))
@@ -87,7 +90,7 @@ def function(x, row, col, mode='bidirectional', delta=0.1, power=1, bias=0, base
     else:
         raise ValueError(f"Method not recognized, please choose one of from the list or use the\
                         default: %s" % str(['bidirectional', 'positive', 'negative', 'bias','log', 'random', 'exp',
-                        'binary', 'sinusoidal', 'gaussian', 'tanh', 'sigmoid', 'relu', 'softplus',
+                        'binary', 'sinusoidal', 'gaussian', 'tanh', 'sigmoid', 'relu', 'leakyrelu', 'softplus',
                         'inverse', 'gaussian_noise', 'uniform_noise', 'offset', 'constant',
                         'vector', 'upper-threshold', 'lower-threshold']))
 

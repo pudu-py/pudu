@@ -1,6 +1,4 @@
-import copy
-import math
-import random
+import copy, math, random
 import numpy as np
 
 
@@ -9,8 +7,8 @@ def function(x, row, col, mode='bidirectional', alpha=0.01, delta=0.1, power=1, 
              amplitude=1, mean=1, stddev=1, offset=1, constant=0, custom=None,
              percentage=None, qty=None, vector=None, mask_type=None):
     
-    temp = x.copy()
-    temp2 = False
+    temp, temp2 = x.copy(), False
+
     if mode == 'bidirectional':
         temp2 = x.copy()
         temp[0, row, col, 0] = (temp[0, row, col, 0] + bias) * (1 - delta * power)
@@ -44,7 +42,7 @@ def function(x, row, col, mode='bidirectional', alpha=0.01, delta=0.1, power=1, 
         temp[0, row, col, 0] = (temp[0, row, col, 0] + bias) * math.sin(frequency * temp[0, row, col, 0]) + amplitude
 
     elif mode == 'gaussian':
-        temp[0, row, col, 0] = (temp[0, row, col, 0] + bias) * math.exp(-((temp[0, row, col, 0] - mean) ** 2) / (2 * std_dev ** 2))
+        temp[0, row, col, 0] = (temp[0, row, col, 0] + bias) * math.exp(-((temp[0, row, col, 0] - mean) ** 2) / (2 * stddev ** 2))
 
     elif mode == 'tanh':
         temp[0, row, col, 0] = math.tanh(scale_factor * (temp[0, row, col, 0] + bias))
@@ -76,7 +74,7 @@ def function(x, row, col, mode='bidirectional', alpha=0.01, delta=0.1, power=1, 
     elif mode == 'constant':
         temp[0, row, col, 0] = constant
 
-    elif mode == 'vector':
+    elif mode == 'custom':
         temp[0, row, col, 0] = temp[0, row, col, 0]*custom[0, row, col, 0]
 
     elif mode == 'upper-threshold':

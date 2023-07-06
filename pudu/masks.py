@@ -2,7 +2,7 @@ import numpy as np
 import random
 
 def function(mask_type='all', sh=None, padd=None, scope=None, window=None, percentage=1,
-            qty=None, vector=None,
+            qty=1, vector=None,
             mode=None, delta=None, power=None, bias=None, base=None, rr=None, exp=None, 
             th=None, upper=None, lower=None, scale_factor=None, frequency=None, amplitude=None, 
             mean=None, stddev=None, offset=None, constant=None, custom=None):
@@ -34,7 +34,7 @@ def function(mask_type='all', sh=None, padd=None, scope=None, window=None, perce
                 if section <= to_eval:
                     val = 1
 
-            if mask_type == 'randompercentage':
+            elif mask_type == 'randompercentage':
                 if section <= to_eval_rand:
                     val = 1
 
@@ -71,7 +71,7 @@ def function(mask_type='all', sh=None, padd=None, scope=None, window=None, perce
             else:
                 raise ValueError(f"Mask method not recognized, please choose one of from the list or use the\
                         default: %s" % str(['percentage', 'randompercentage', 'quantity', 'everyother', 'pairs',
-                                            'odds', 'random', 'custom', 'circular', 'randomwalking', 'all']))
+                                            'odds', 'random', 'custom', 'all']))
 
             mask[0, row:row+window[0], col:col+window[1], 0] = val
 

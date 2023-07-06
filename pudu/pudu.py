@@ -3,7 +3,8 @@ import matplotlib.pyplot as plt
 from keras.models import Model
 import numpy as np
 import copy
-from . import masks, perturbation, error_handler, plots, standards
+# from . import masks, perturbation, error_handler, plots, standards
+import masks, perturbation, error_handler, plots, standards
 
 class pudu:
     def __init__(self, x, y, pf, model=None):
@@ -51,11 +52,11 @@ class pudu:
         self.icc = None
 
         # Normalized results are calculated automatically so if the user needs them
-        self.imp_norm = None
-        self.spe_norm = None
-        self.syn_norm = None
-        self.lac_norm = None
-        self.uac_norm = None
+        self.imp_rel = None
+        self.spe_rel = None
+        self.syn_rel = None
+        self.lac_rel = None
+        self.uac_rel = None
         
         # Some error handling        
         error_handler.for_constructor(model, x, y)
@@ -133,7 +134,7 @@ class pudu:
         self.imp = d_temp
         
         max_val, min_val = d_temp.max(), d_temp.min()
-        self.imp_norm = (d_temp - min_val) / (max_val - min_val)
+        self.imp_rel = (d_temp - min_val) / (max_val - min_val)
 
 
     def speed(self, window=1, scope=None, evolution=None, padding='center', 
@@ -226,7 +227,7 @@ class pudu:
         self.spe = d_temp
         
         max_val, min_val = d_temp.max(), d_temp.min()
-        self.spe_norm = (d_temp - min_val) / (max_val - min_val)
+        self.spe_rel = (d_temp - min_val) / (max_val - min_val)
 
     
     def synergy(self, delta=0.1, window=1, inspect=0, scope=None, absolute=False,
@@ -318,7 +319,7 @@ class pudu:
         self.syn = d_temp
         
         max_val, min_val = d_temp.max(), d_temp.min()
-        self.syn_norm = (d_temp - min_val) / (max_val - min_val)
+        self.syn_rel = (d_temp - min_val) / (max_val - min_val)
 
 
     def activations(self, layer=0, slope=0, p=0.005, window=1, scope=None, 
@@ -472,11 +473,11 @@ class pudu:
 
         self.lac = d_temp # this shows the activation mapping, or activations per feature
         max_val, min_val = d_temp.max(), d_temp.min()
-        self.lac_norm = (d_temp - min_val) / (1 if (max_val - min_val) == 0 else (max_val - min_val))
+        self.lac_rel = (d_temp - min_val) / (1 if (max_val - min_val) == 0 else (max_val - min_val))
         
         self.uac = counts_units # new
         max_val, min_val = counts_units.max(), counts_units.min()
-        self.uac_norm = (counts_units - min_val) / (1 if (max_val - min_val) == 0 else (max_val - min_val))
+        self.uac_rel = (counts_units - min_val) / (1 if (max_val - min_val) == 0 else (max_val - min_val))
 
         un_fe = defaultdict(list)
         for u, f in zip(units, feats):

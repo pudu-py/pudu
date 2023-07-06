@@ -3,8 +3,8 @@ import matplotlib.pyplot as plt
 from keras.models import Model
 import numpy as np
 import copy
-# from . import masks, perturbation, error_handler, plots, standards
-import masks, perturbation, error_handler, plots, standards
+from . import masks, perturbation, error_handler, plots, standards
+# import masks, perturbation, error_handler, plots, standards
 
 class pudu:
     def __init__(self, x, y, pf, model=None):

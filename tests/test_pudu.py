@@ -7,14 +7,15 @@ from sklearn.decomposition import PCA
 from tensorflow import keras
 from keras.models import load_model
 import spectrapepper as spep
-# from pudu import pudu
-# from pudu import perturbations as ptn
-import pudu7 as pudu
-import standards, error_handler, masks, perturbation
 import numpy as np
 import unittest
 import pickle
 import os
+
+from pudu import pudu, standards, masks, perturbation
+# import pudu7 as pudu
+# import standards, error_handler, masks, perturbation
+
 
 TESTDATA_FEATURES = os.path.join(os.path.dirname(__file__), 'data/features.txt')
 TESTDATA_TARGETS = os.path.join(os.path.dirname(__file__), 'data/targets.txt')

@@ -1,21 +1,3 @@
-"""
-## EXPLANATION START ##
-
-This function calculates the hypotenuse of a right triangle.
-
-The calculation is based on the Pythagorean theorem:
-
-.. math::
-
-   c = \sqrt{a^2 + b^2}
-
-where:
-- :math:`c` is the length of the hypotenuse,
-- :math:`a` and :math:`b` are the lengths of the other two sides.
-
-## EXPLANATION END ##
-"""
-
 import matplotlib.pyplot as plt
 from lime import lime_tabular
 import spectrapepper as spep
@@ -47,7 +29,7 @@ fn = [str(i) for i in range(len(features[100]))]
 cf = [i for i in range(len(features[100]))]
 
 # Make explainer and evaluate an instance
-explainer = lime.lime_tabular.LimeTabularExplainer(np.array(features), 
+explainer = lime.lime_tabular.LimeTabularExplainer(np.array(features),
     mode='classification', feature_names=fn, categorical_features=cf, verbose=False)
 exp = explainer.explain_instance(features[10], pcalda_proba, 
                                  num_features=len(fn), num_samples=1000)
@@ -90,7 +72,7 @@ imp = pudu.pudu(x, y, pf)
 
 # Evaluate `importance` for all features
 imp.importance(delta=0.1, window=1, mode='bidirectional')
-plots.plot(imp.x, imp.imp_norm, title="Importance", yticks=[], font_size=15)
+plots.plot(imp.x, imp.imp_rel, title="Importance", yticks=[], font_size=15)
 
 # Single pixels might be irrelevant for spectroscopy. We can group features
 # to evaluate together.

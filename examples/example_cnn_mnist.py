@@ -3,7 +3,10 @@ from tensorflow import keras
 from keras.models import load_model
 import matplotlib.pyplot as plt
 import sys
-from pudu import pudu
+
+# from pudu import pudu, plots
+import pudu7 as pudu
+import plots
 
 # Model / data parameters
 num_classes = 10
@@ -25,8 +28,10 @@ y_test = keras.utils.to_categorical(y_test, num_classes)
 
 # Load the model and test it
 model = load_model('mnist_class.h5')
+model.summary()
 score = model.evaluate(x_test, y_test, verbose=0)
 print("Test loss:", score[0], "| Test accuracy:", score[1])
+
 
 ### PUDU ###
 # Input should be 4d: (batch * rows * columns * depth)
@@ -34,7 +39,7 @@ print("Test loss:", score[0], "| Test accuracy:", score[1])
 # probability by category: [prob_1, prob_2, ..., prob_c]
 def cnn2d_prob(X):
     X = X[0,:,:,:]
-    return model.predict(np.array([X, X]))[0]
+    return model.predict(np.array([X, X]), verbose=0)[0] # verbose 0 is important!
 
 # Dimention standarization for parameters
 y = np.argmax(y_train[0])
@@ -42,10 +47,18 @@ x = np.expand_dims(x_train[0], 0)
 
 # Build `pudu`, evaluate importance, and plot
 imp = pudu.pudu(x, y, cnn2d_prob)
-imp.importance(delta=0.1, window=(4, 5), scope=None, method='bidirectional', 
-                    padding='center', evolution=None, bias=0)
-imp.plot(imp.x, imp.imp, axis=None, figsize=(10, 10), cmap='cool')
 
+# in this case, 'window' is a tuple that indicates the width and height.
+imp.importance(delta=0.1, window=(3, 3), scope=None, mode='bidirectional', 
+                    padding='center', bias=0.05)
+plots.plot(imp.x, imp.imp, axis=None, figsize=(10, 10), cmap='cool')
+
+
+# In this case, as there are many `0` values in the image, including some bias 
+# can help us to visualize importance in those areas, since 0*delta = 0
+imp.importance(delta=0.1, window=(3, 3), scope=None, mode='bidirectional', 
+                    padding='center', bias=0.1)
+plots.plot(imp.x, imp.imp, axis=None, figsize=(10, 10), cmap='cool')
 
 ### LIME ###
 from lime import lime_image
@@ -62,7 +75,7 @@ image = gray2rgb(image)
 def cnn2d_prob(X):
     X = X[:, :, :, 0]
     X = X[:, :, :, np.newaxis]
-    return model.predict(X)
+    return model.predict(X, verbose=0)
 
 explainer = lime_image.LimeImageExplainer()
 explanation = explainer.explain_instance(image, cnn2d_prob, batch_size=1, num_samples=1000)
@@ -118,10 +131,6 @@ image = np.expand_dims(x_train[0], axis=0)
 
 # Remove last layer's softmax
 model.layers[-1].activation = None
-
-# # Print what the top predicted class is
-# preds = model.predict(image)
-# print("Predicted:", decode_predictions(preds, top=1)[0])
 
 # Generate class activation heatmap
 heatmap = make_gradcam_heatmap(image, model, last_conv_layer_name)

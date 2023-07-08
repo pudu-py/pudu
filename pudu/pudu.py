@@ -4,9 +4,9 @@ from keras.models import Model
 import numpy as np
 import copy
 
-import masks as msk
-import perturbation as ptn
-import standards, error_handler 
+from . import masks as msk
+from . import perturbation as ptn
+from . import standards, error_handler 
 
 
 class pudu:

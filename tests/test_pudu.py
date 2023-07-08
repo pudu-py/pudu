@@ -13,17 +13,23 @@ import pickle
 import os
 
 from pudu import pudu, standards, masks, perturbation
-# import pudu7 as pudu
-# import standards, error_handler, masks, perturbation
+from pudu import standards
+from pudu import masks as msk
+from pudu import perturbation as ptn
+
+# import pudu8 as pudu
+# import perturbation8 as ptn
+# import masks8 as msk
+# import standards8 as standards
 
 
 TESTDATA_FEATURES = os.path.join(os.path.dirname(__file__), 'data/features.txt')
 TESTDATA_TARGETS = os.path.join(os.path.dirname(__file__), 'data/targets.txt')
 TESTDATA_LDA = os.path.join(os.path.dirname(__file__), 'data/lda_model.sav')
 TESTDATA_PCA = os.path.join(os.path.dirname(__file__), 'data/pca_model.sav')
-TESTDATA_RESULTS = os.path.join(os.path.dirname(__file__), 'data/pudu_test_results.txt')
+TESTDATA_RESULTS = os.path.join(os.path.dirname(__file__), 'data/pudu_test_results8.txt')
 MNIST_MODEL = os.path.join(os.path.dirname(__file__), 'data/mnist_class.h5')
-MNIST_RESULTS = os.path.join(os.path.dirname(__file__), 'data/act_results_mnist.txt')
+MNIST_RESULTS = os.path.join(os.path.dirname(__file__), 'data/act_results_mnist8.txt')
 TEST_PERTURBATIONS = os.path.join(os.path.dirname(__file__), 'data/perturbations.txt')
 TEST_MASKS = os.path.join(os.path.dirname(__file__), 'data/masks.txt')
 
@@ -52,9 +58,10 @@ class TestPudu(unittest.TestCase):
 
         imp = pudu.pudu(x, y, pf)
 
-        imp.importance(delta=1, window=200)
-        imp.speed(delta=1, window=200)
-        imp.synergy(delta=1, inspect=3, window=200)
+        # just vanilla settings except for window=200
+        imp.importance(window=200)
+        imp.speed(window=200)
+        imp.synergy(window=200)
         
         tp = 6
 
@@ -77,40 +84,41 @@ class TestPudu(unittest.TestCase):
             self.assertAlmostEqual(a, b, places=tp)
 
         ### perturbations
-        perturbations = spep.load('data/perturbations.txt')
-        vector = [i*0.01 for i in range(1536)]
+        sh = np.array(x).shape
+        scope, window, padd, evolution, total = standards.params_std(None, sh, None, 1, 'center', 0)
+
+        ptn_results = spep.load(TEST_PERTURBATIONS)
+        vector = [i*0.01 for i in range(sh[2])]
         vector = np.array(vector)[np.newaxis, np.newaxis, :, np.newaxis]
 
-        f = ['negative', 'bias', 'log', 'exp', 'binary', 'sinusoidal', 'gaussian', 'tanh',
-            'sigmoid', 'relu', 'leakyrelu', 'softplus', 'inverse',
-            'offset', 'constant', 'custom', 'upper-threshold', 'lower-threshold']
+        f = [ptn.Negative(), ptn.Log(), ptn.Exp(), ptn.Binary(), ptn.Sinusoidal(), ptn.Gaussian(), ptn.Tanh(),
+                ptn.Sigmoid(), ptn.ReLU(), ptn.LeakyReLU(), ptn.Softplus(), ptn.Inverse(), ptn.Offset(), 
+                ptn.Constant(), ptn.Custom(custom=vector), ptn.UpperThreshold(), ptn.LowerThreshold()]
 
         for i,j in enumerate(f):
-            print(j)
-            a = perturbation.function(x, 0, 100, mode=j, custom=vector)
-            a = np.array(a[0]).reshape((1536))
-            b = perturbations[i]
+            a = j.apply(x, 0, 0, window, 0)
+            a = np.array(a[0]).reshape((sh[2]))
+            b = ptn_results[i]
             for k, l in zip(a, b):
                 self.assertAlmostEqual(k, l, places=tp)
 
         ### masks
-        masks_test = spep.load('data/masks.txt')
+        masks_test = spep.load(TEST_MASKS)
         sh = np.array(x).shape
-        scope, window, padding, _ = standards.params_std(0, sh, None, 1, 'center', 0)
+        scope, window, padding, evolution, total  = standards.params_std(0, sh, None, 1, 'center', 0)
         padding = standards.calc_pad(padding, scope, window)
 
-        f = ['percentage', 'quantity', 'everyother', 'pairs', 'odds', 'all']
-        m = []
+        f = [msk.Percentage(), msk.Quantity(qty=50), msk.EveryOther(), msk.Pairs(), msk.Odds(), msk.All()]
         for i,j in enumerate(f):
-            print(j)
-            a = masks.function(sh=sh, padd=padding, scope=scope, window=window, mask_type=j)
-            a = np.array(a).reshape((1536))
-            b = masks_test[i]
-            for k, l in zip(a, b):
+            mask_temp = []
+            for k in range(100):
+                a = j.apply(k, total)
+                mask_temp.append(a)
+            for k, l in zip(mask_temp, masks_test[i]):
                 self.assertAlmostEqual(k, l, places=tp)
 
 
-        ### 2d
+        ### 2d activations
         (x, y), (_, _) = keras.datasets.mnist.load_data()
         x = x.astype("float32") / 255
         x = np.expand_dims(x, -1)
@@ -125,7 +133,7 @@ class TestPudu(unittest.TestCase):
             return MNIST_MODEL.predict(np.array([X, X]), verbose=0)[0] # verbose 0 is important!
         
         imp = pudu.pudu(x, y, cnn2d_prob, model)
-        imp.activations(layer=2, slope=0, p=0.005, window=(5, 5), delta=0.1, mode='positive')
+        imp.activations(layer=2, slope=0, p=0.005, window=(5, 5), perturbation=ptn.Positive(delta=0.1))
 
         for a, b in zip(imp.fac, fac):
             self.assertAlmostEqual(a, b, places=tp)

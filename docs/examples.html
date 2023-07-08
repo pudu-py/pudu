@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Examples &mdash; pudu  documentation</title>
@@ -11,17 +11,16 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Contributing" href="contributions.html" />
-    <link rel="prev" title="Functions" href="functions.html" /> 
+    <link rel="prev" title="Perturbation Functions" href="perturbations.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -29,11 +28,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> pudu
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pudu
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -43,7 +46,8 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">pudu</a></li>
 <li class="toctree-l1"><a class="reference internal" href="definitions.html">Definitions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="functions.html">Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pudu.html">pudu</a></li>
+<li class="toctree-l1"><a class="reference internal" href="perturbations.html">Perturbation Functions</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#example-1-pc-lda-with-scikit-learn-for-classification-of-spectroscopic-data">Example 1: PC-LDA with Scikit-learn for classification of spectroscopic data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#examples-2-regression-for-predicition-of-open-circuit-voltage-of-solar-cells-with-rbfn">Examples 2: Regression for predicition of open circuit voltage of solar cells with RBFN</a></li>
@@ -66,7 +70,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
       <li class="breadcrumb-item active">Examples</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/examples.rst.txt" rel="nofollow"> View page source</a>
@@ -81,115 +85,97 @@
 <h1>Examples<a class="headerlink" href="#examples" title="Permalink to this heading"></a></h1>
 <section id="example-1-pc-lda-with-scikit-learn-for-classification-of-spectroscopic-data">
 <h2>Example 1: PC-LDA with Scikit-learn for classification of spectroscopic data<a class="headerlink" href="#example-1-pc-lda-with-scikit-learn-for-classification-of-spectroscopic-data" title="Permalink to this heading"></a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos">  1</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="linenos">  2</span><span class="sd">## EXPLANATION START ##</span>
-<span class="linenos">  3</span>
-<span class="linenos">  4</span><span class="sd">This function calculates the hypotenuse of a right triangle.</span>
-<span class="linenos">  5</span>
-<span class="linenos">  6</span><span class="sd">The calculation is based on the Pythagorean theorem:</span>
-<span class="linenos">  7</span>
-<span class="linenos">  8</span><span class="sd">.. math::</span>
-<span class="linenos">  9</span>
-<span class="linenos"> 10</span><span class="sd">   c = \sqrt{a^2 + b^2}</span>
-<span class="linenos"> 11</span>
-<span class="linenos"> 12</span><span class="sd">where:</span>
-<span class="linenos"> 13</span><span class="sd">- :math:`c` is the length of the hypotenuse,</span>
-<span class="linenos"> 14</span><span class="sd">- :math:`a` and :math:`b` are the lengths of the other two sides.</span>
-<span class="linenos"> 15</span>
-<span class="linenos"> 16</span><span class="sd">## EXPLANATION END ##</span>
-<span class="linenos"> 17</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="linenos"> 18</span>
-<span class="linenos"> 19</span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="linenos"> 20</span><span class="kn">from</span> <span class="nn">lime</span> <span class="kn">import</span> <span class="n">lime_tabular</span>
-<span class="linenos"> 21</span><span class="kn">import</span> <span class="nn">spectrapepper</span> <span class="k">as</span> <span class="nn">spep</span>
-<span class="linenos"> 22</span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="linenos"> 23</span><span class="kn">import</span> <span class="nn">pickle</span>
-<span class="linenos"> 24</span><span class="kn">import</span> <span class="nn">lime</span>
-<span class="linenos"> 25</span>
-<span class="linenos"> 26</span><span class="c1"># from pudu import pudu, plots</span>
-<span class="linenos"> 27</span><span class="kn">import</span> <span class="nn">pudu7</span> <span class="k">as</span> <span class="nn">pudu</span>
-<span class="linenos"> 28</span><span class="kn">import</span> <span class="nn">plots</span>
-<span class="linenos"> 29</span>
-<span class="linenos"> 30</span><span class="c1"># Load features (spectra) and targets (open circuit coltage, voc)</span>
-<span class="linenos"> 31</span><span class="n">features</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;data/features.txt&#39;</span><span class="p">)</span>
-<span class="linenos"> 32</span><span class="n">targets</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;data/targets.txt&#39;</span><span class="p">,</span> <span class="n">transpose</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span>
-<span class="linenos"> 33</span>
-<span class="linenos"> 34</span><span class="c1"># Load pre-trained LDA and PCA models</span>
-<span class="linenos"> 35</span><span class="n">lda</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s1">&#39;data/lda_model.sav&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">))</span>
-<span class="linenos"> 36</span><span class="n">pca</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s1">&#39;data/pca_model.sav&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">))</span>
-<span class="linenos"> 37</span>
-<span class="linenos"> 38</span><span class="c1">### LIME ###</span>
-<span class="linenos"> 39</span><span class="c1"># First we try LIME. then we try pudu and see the difference.</span>
-<span class="linenos"> 40</span><span class="c1"># We need to wrap the probability function</span>
-<span class="linenos"> 41</span><span class="k">def</span> <span class="nf">pcalda_proba</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
-<span class="linenos"> 42</span>    <span class="n">X</span> <span class="o">=</span> <span class="n">pca</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-<span class="linenos"> 43</span>    <span class="k">return</span> <span class="n">lda</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-<span class="linenos"> 44</span>
-<span class="linenos"> 45</span><span class="c1"># Feature names and categorical features in the correct format</span>
-<span class="linenos"> 46</span><span class="n">fn</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">features</span><span class="p">[</span><span class="mi">100</span><span class="p">]))]</span>
-<span class="linenos"> 47</span><span class="n">cf</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">features</span><span class="p">[</span><span class="mi">100</span><span class="p">]))]</span>
-<span class="linenos"> 48</span>
-<span class="linenos"> 49</span><span class="c1"># Make explainer and evaluate an instance</span>
-<span class="linenos"> 50</span><span class="n">explainer</span> <span class="o">=</span> <span class="n">lime</span><span class="o">.</span><span class="n">lime_tabular</span><span class="o">.</span><span class="n">LimeTabularExplainer</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">features</span><span class="p">),</span> 
-<span class="linenos"> 51</span>    <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;classification&#39;</span><span class="p">,</span> <span class="n">feature_names</span><span class="o">=</span><span class="n">fn</span><span class="p">,</span> <span class="n">categorical_features</span><span class="o">=</span><span class="n">cf</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="linenos"> 52</span><span class="n">exp</span> <span class="o">=</span> <span class="n">explainer</span><span class="o">.</span><span class="n">explain_instance</span><span class="p">(</span><span class="n">features</span><span class="p">[</span><span class="mi">10</span><span class="p">],</span> <span class="n">pcalda_proba</span><span class="p">,</span> 
-<span class="linenos"> 53</span>                                 <span class="n">num_features</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">fn</span><span class="p">),</span> <span class="n">num_samples</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
-<span class="linenos"> 54</span>
-<span class="linenos"> 55</span><span class="c1"># Reformat the output so it is in order to plot over the feature</span>
-<span class="linenos"> 56</span><span class="n">e</span> <span class="o">=</span> <span class="n">exp</span><span class="o">.</span><span class="n">as_list</span><span class="p">()</span>
-<span class="linenos"> 57</span><span class="n">lm</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1536</span><span class="p">)]</span>
-<span class="linenos"> 58</span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">e</span><span class="p">:</span>
-<span class="linenos"> 59</span>    <span class="n">lm</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">str</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;=&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])]</span> <span class="o">=</span> <span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-<span class="linenos"> 60</span>
-<span class="linenos"> 61</span><span class="c1"># Plot the result with the evaluated feature</span>
-<span class="linenos"> 62</span><span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;font&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
-<span class="linenos"> 63</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
-<span class="linenos"> 64</span><span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">lm</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Greens&#39;</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;nearest&#39;</span><span class="p">,</span> 
-<span class="linenos"> 65</span>    <span class="n">extent</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1536</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">features</span><span class="p">[</span><span class="mi">100</span><span class="p">]),</span> <span class="nb">max</span><span class="p">(</span><span class="n">features</span><span class="p">[</span><span class="mi">100</span><span class="p">])],</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="linenos"> 66</span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">features</span><span class="p">[</span><span class="mi">100</span><span class="p">],</span> <span class="s1">&#39;k&#39;</span><span class="p">)</span>
-<span class="linenos"> 67</span><span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
-<span class="linenos"> 68</span><span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Lime&#39;</span><span class="p">)</span> 
-<span class="linenos"> 69</span><span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Feature&#39;</span><span class="p">)</span>
-<span class="linenos"> 70</span><span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Intensity&#39;</span><span class="p">)</span>
-<span class="linenos"> 71</span><span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">([])</span>
-<span class="linenos"> 72</span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-<span class="linenos"> 73</span>
-<span class="linenos"> 74</span>
-<span class="linenos"> 75</span><span class="c1">### PUDU ###</span>
-<span class="linenos"> 76</span><span class="c1"># Select x (feature) and respective y (target)</span>
-<span class="linenos"> 77</span><span class="n">x</span> <span class="o">=</span> <span class="n">features</span><span class="p">[</span><span class="mi">100</span><span class="p">]</span>
-<span class="linenos"> 78</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
-<span class="linenos"> 79</span><span class="n">y</span> <span class="o">=</span> <span class="n">targets</span><span class="p">[</span><span class="mi">100</span><span class="p">]</span>
-<span class="linenos"> 80</span>
-<span class="linenos"> 81</span><span class="c1"># Input should be 4d: (batch * rows * columns * depth)</span>
-<span class="linenos"> 82</span><span class="c1"># This is a classification problem, thus the output should be the </span>
-<span class="linenos"> 83</span><span class="c1"># probability by category: [prob_1, prob_2, ..., prob_c]</span>
-<span class="linenos"> 84</span><span class="k">def</span> <span class="nf">pf</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
-<span class="linenos"> 85</span>    <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,:,</span><span class="mi">0</span><span class="p">]</span>
-<span class="linenos"> 86</span>    <span class="k">return</span> <span class="n">lda</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">pca</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
-<span class="linenos"> 87</span>
-<span class="linenos"> 88</span><span class="c1"># Build pudu</span>
-<span class="linenos"> 89</span><span class="n">imp</span> <span class="o">=</span> <span class="n">pudu</span><span class="o">.</span><span class="n">pudu</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">pf</span><span class="p">)</span>
-<span class="linenos"> 90</span>
-<span class="linenos"> 91</span><span class="c1"># Evaluate `importance` for all features</span>
-<span class="linenos"> 92</span><span class="n">imp</span><span class="o">.</span><span class="n">importance</span><span class="p">(</span><span class="n">delta</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;bidirectional&#39;</span><span class="p">)</span>
-<span class="linenos"> 93</span><span class="n">plots</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">imp</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">imp</span><span class="o">.</span><span class="n">imp_norm</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Importance&quot;</span><span class="p">,</span> <span class="n">yticks</span><span class="o">=</span><span class="p">[],</span> <span class="n">font_size</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
-<span class="linenos"> 94</span>
-<span class="linenos"> 95</span><span class="c1"># Single pixels might be irrelevant for spectroscopy. We can group features</span>
-<span class="linenos"> 96</span><span class="c1"># to evaluate together.</span>
-<span class="linenos"> 97</span><span class="n">imp</span><span class="o">.</span><span class="n">importance</span><span class="p">(</span><span class="n">delta</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;bidirectional&#39;</span><span class="p">)</span>
-<span class="linenos"> 98</span><span class="n">plots</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">imp</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">imp</span><span class="o">.</span><span class="n">imp</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Importance&quot;</span><span class="p">,</span> <span class="n">yticks</span><span class="o">=</span><span class="p">[],</span> <span class="n">font_size</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
-<span class="linenos"> 99</span>
-<span class="linenos">100</span><span class="c1"># We can see how fast would the classification change according to</span>
-<span class="linenos">101</span><span class="c1"># the change in the features.</span>
-<span class="linenos">102</span><span class="n">imp</span><span class="o">.</span><span class="n">speed</span><span class="p">(</span><span class="n">delta</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;bidirectional&#39;</span><span class="p">)</span>
-<span class="linenos">103</span><span class="n">plots</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">imp</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">imp</span><span class="o">.</span><span class="n">spe</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Speed&quot;</span><span class="p">,</span> <span class="n">yticks</span><span class="o">=</span><span class="p">[],</span> <span class="n">font_size</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
-<span class="linenos">104</span>
-<span class="linenos">105</span><span class="c1"># Finally we evaluate how different changes complement each other.</span>
-<span class="linenos">106</span><span class="c1"># We want ot evaluate the main Raman peak (aprox. 3rd position) and see</span>
-<span class="linenos">107</span><span class="c1"># its synergy with the rest of the data</span>
-<span class="linenos">108</span><span class="n">imp</span><span class="o">.</span><span class="n">synergy</span><span class="p">(</span><span class="n">delta</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">inspect</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;bidirectional&#39;</span><span class="p">)</span>
-<span class="linenos">109</span><span class="n">plots</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">imp</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">imp</span><span class="o">.</span><span class="n">syn</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Synergy&quot;</span><span class="p">,</span> <span class="n">yticks</span><span class="o">=</span><span class="p">[],</span> <span class="n">font_size</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">lime</span> <span class="kn">import</span> <span class="n">lime_tabular</span>
+<span class="linenos"> 3</span><span class="kn">import</span> <span class="nn">spectrapepper</span> <span class="k">as</span> <span class="nn">spep</span>
+<span class="linenos"> 4</span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="linenos"> 5</span><span class="kn">import</span> <span class="nn">pickle</span>
+<span class="linenos"> 6</span><span class="kn">import</span> <span class="nn">lime</span>
+<span class="linenos"> 7</span>
+<span class="linenos"> 8</span><span class="c1"># from pudu import pudu, plots</span>
+<span class="linenos"> 9</span><span class="kn">import</span> <span class="nn">pudu7</span> <span class="k">as</span> <span class="nn">pudu</span>
+<span class="linenos">10</span><span class="kn">import</span> <span class="nn">plots</span>
+<span class="linenos">11</span>
+<span class="linenos">12</span><span class="c1"># Load features (spectra) and targets (open circuit coltage, voc)</span>
+<span class="linenos">13</span><span class="n">features</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;data/features.txt&#39;</span><span class="p">)</span>
+<span class="linenos">14</span><span class="n">targets</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;data/targets.txt&#39;</span><span class="p">,</span> <span class="n">transpose</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span>
+<span class="linenos">15</span>
+<span class="linenos">16</span><span class="c1"># Load pre-trained LDA and PCA models</span>
+<span class="linenos">17</span><span class="n">lda</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s1">&#39;data/lda_model.sav&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">))</span>
+<span class="linenos">18</span><span class="n">pca</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s1">&#39;data/pca_model.sav&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">))</span>
+<span class="linenos">19</span>
+<span class="linenos">20</span><span class="c1">### LIME ###</span>
+<span class="linenos">21</span><span class="c1"># First we try LIME. then we try pudu and see the difference.</span>
+<span class="linenos">22</span><span class="c1"># We need to wrap the probability function</span>
+<span class="linenos">23</span><span class="k">def</span> <span class="nf">pcalda_proba</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
+<span class="linenos">24</span>    <span class="n">X</span> <span class="o">=</span> <span class="n">pca</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="linenos">25</span>    <span class="k">return</span> <span class="n">lda</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="linenos">26</span>
+<span class="linenos">27</span><span class="c1"># Feature names and categorical features in the correct format</span>
+<span class="linenos">28</span><span class="n">fn</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">features</span><span class="p">[</span><span class="mi">100</span><span class="p">]))]</span>
+<span class="linenos">29</span><span class="n">cf</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">features</span><span class="p">[</span><span class="mi">100</span><span class="p">]))]</span>
+<span class="linenos">30</span>
+<span class="linenos">31</span><span class="c1"># Make explainer and evaluate an instance</span>
+<span class="linenos">32</span><span class="n">explainer</span> <span class="o">=</span> <span class="n">lime</span><span class="o">.</span><span class="n">lime_tabular</span><span class="o">.</span><span class="n">LimeTabularExplainer</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">features</span><span class="p">),</span>
+<span class="linenos">33</span>    <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;classification&#39;</span><span class="p">,</span> <span class="n">feature_names</span><span class="o">=</span><span class="n">fn</span><span class="p">,</span> <span class="n">categorical_features</span><span class="o">=</span><span class="n">cf</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="linenos">34</span><span class="n">exp</span> <span class="o">=</span> <span class="n">explainer</span><span class="o">.</span><span class="n">explain_instance</span><span class="p">(</span><span class="n">features</span><span class="p">[</span><span class="mi">10</span><span class="p">],</span> <span class="n">pcalda_proba</span><span class="p">,</span> 
+<span class="linenos">35</span>                                 <span class="n">num_features</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">fn</span><span class="p">),</span> <span class="n">num_samples</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<span class="linenos">36</span>
+<span class="linenos">37</span><span class="c1"># Reformat the output so it is in order to plot over the feature</span>
+<span class="linenos">38</span><span class="n">e</span> <span class="o">=</span> <span class="n">exp</span><span class="o">.</span><span class="n">as_list</span><span class="p">()</span>
+<span class="linenos">39</span><span class="n">lm</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1536</span><span class="p">)]</span>
+<span class="linenos">40</span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">e</span><span class="p">:</span>
+<span class="linenos">41</span>    <span class="n">lm</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">str</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;=&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])]</span> <span class="o">=</span> <span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="linenos">42</span>
+<span class="linenos">43</span><span class="c1"># Plot the result with the evaluated feature</span>
+<span class="linenos">44</span><span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;font&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="linenos">45</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="linenos">46</span><span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">lm</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Greens&#39;</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;nearest&#39;</span><span class="p">,</span> 
+<span class="linenos">47</span>    <span class="n">extent</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1536</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">features</span><span class="p">[</span><span class="mi">100</span><span class="p">]),</span> <span class="nb">max</span><span class="p">(</span><span class="n">features</span><span class="p">[</span><span class="mi">100</span><span class="p">])],</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="linenos">48</span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">features</span><span class="p">[</span><span class="mi">100</span><span class="p">],</span> <span class="s1">&#39;k&#39;</span><span class="p">)</span>
+<span class="linenos">49</span><span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
+<span class="linenos">50</span><span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Lime&#39;</span><span class="p">)</span> 
+<span class="linenos">51</span><span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Feature&#39;</span><span class="p">)</span>
+<span class="linenos">52</span><span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Intensity&#39;</span><span class="p">)</span>
+<span class="linenos">53</span><span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">([])</span>
+<span class="linenos">54</span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="linenos">55</span>
+<span class="linenos">56</span>
+<span class="linenos">57</span><span class="c1">### PUDU ###</span>
+<span class="linenos">58</span><span class="c1"># Select x (feature) and respective y (target)</span>
+<span class="linenos">59</span><span class="n">x</span> <span class="o">=</span> <span class="n">features</span><span class="p">[</span><span class="mi">100</span><span class="p">]</span>
+<span class="linenos">60</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+<span class="linenos">61</span><span class="n">y</span> <span class="o">=</span> <span class="n">targets</span><span class="p">[</span><span class="mi">100</span><span class="p">]</span>
+<span class="linenos">62</span>
+<span class="linenos">63</span><span class="c1"># Input should be 4d: (batch * rows * columns * depth)</span>
+<span class="linenos">64</span><span class="c1"># This is a classification problem, thus the output should be the </span>
+<span class="linenos">65</span><span class="c1"># probability by category: [prob_1, prob_2, ..., prob_c]</span>
+<span class="linenos">66</span><span class="k">def</span> <span class="nf">pf</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
+<span class="linenos">67</span>    <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,:,</span><span class="mi">0</span><span class="p">]</span>
+<span class="linenos">68</span>    <span class="k">return</span> <span class="n">lda</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">pca</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+<span class="linenos">69</span>
+<span class="linenos">70</span><span class="c1"># Build pudu</span>
+<span class="linenos">71</span><span class="n">imp</span> <span class="o">=</span> <span class="n">pudu</span><span class="o">.</span><span class="n">pudu</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">pf</span><span class="p">)</span>
+<span class="linenos">72</span>
+<span class="linenos">73</span><span class="c1"># Evaluate `importance` for all features</span>
+<span class="linenos">74</span><span class="n">imp</span><span class="o">.</span><span class="n">importance</span><span class="p">(</span><span class="n">delta</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;bidirectional&#39;</span><span class="p">)</span>
+<span class="linenos">75</span><span class="n">plots</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">imp</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">imp</span><span class="o">.</span><span class="n">imp_rel</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Importance&quot;</span><span class="p">,</span> <span class="n">yticks</span><span class="o">=</span><span class="p">[],</span> <span class="n">font_size</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="linenos">76</span>
+<span class="linenos">77</span><span class="c1"># Single pixels might be irrelevant for spectroscopy. We can group features</span>
+<span class="linenos">78</span><span class="c1"># to evaluate together.</span>
+<span class="linenos">79</span><span class="n">imp</span><span class="o">.</span><span class="n">importance</span><span class="p">(</span><span class="n">delta</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;bidirectional&#39;</span><span class="p">)</span>
+<span class="linenos">80</span><span class="n">plots</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">imp</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">imp</span><span class="o">.</span><span class="n">imp</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Importance&quot;</span><span class="p">,</span> <span class="n">yticks</span><span class="o">=</span><span class="p">[],</span> <span class="n">font_size</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="linenos">81</span>
+<span class="linenos">82</span><span class="c1"># We can see how fast would the classification change according to</span>
+<span class="linenos">83</span><span class="c1"># the change in the features.</span>
+<span class="linenos">84</span><span class="n">imp</span><span class="o">.</span><span class="n">speed</span><span class="p">(</span><span class="n">delta</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;bidirectional&#39;</span><span class="p">)</span>
+<span class="linenos">85</span><span class="n">plots</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">imp</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">imp</span><span class="o">.</span><span class="n">spe</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Speed&quot;</span><span class="p">,</span> <span class="n">yticks</span><span class="o">=</span><span class="p">[],</span> <span class="n">font_size</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="linenos">86</span>
+<span class="linenos">87</span><span class="c1"># Finally we evaluate how different changes complement each other.</span>
+<span class="linenos">88</span><span class="c1"># We want ot evaluate the main Raman peak (aprox. 3rd position) and see</span>
+<span class="linenos">89</span><span class="c1"># its synergy with the rest of the data</span>
+<span class="linenos">90</span><span class="n">imp</span><span class="o">.</span><span class="n">synergy</span><span class="p">(</span><span class="n">delta</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">inspect</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;bidirectional&#39;</span><span class="p">)</span>
+<span class="linenos">91</span><span class="n">plots</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">imp</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">imp</span><span class="o">.</span><span class="n">syn</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Synergy&quot;</span><span class="p">,</span> <span class="n">yticks</span><span class="o">=</span><span class="p">[],</span> <span class="n">font_size</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -199,8 +185,11 @@
 <span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">r2_score</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">spectrapepper</span> <span class="k">as</span> <span class="nn">spep</span>
-<span class="kn">from</span> <span class="nn">pudu</span> <span class="kn">import</span> <span class="n">pudu</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># from pudu import pudu, plots</span>
+<span class="kn">import</span> <span class="nn">pudu7</span> <span class="k">as</span> <span class="nn">pudu</span>
+<span class="kn">import</span> <span class="nn">plots</span>
 
 <span class="c1"># Load the file that contains the calculated areas from the spectras</span>
 <span class="n">ra</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;data/areas.txt&#39;</span><span class="p">,</span> <span class="n">transpose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -221,7 +210,7 @@
 
 <span class="c1"># Plot the regression</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">z_hat</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">z_hat_te</span><span class="p">,</span> <span class="n">voc_tr</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">z_hat_te</span><span class="p">,</span> <span class="n">voc_te</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Value&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Prediction&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -237,16 +226,24 @@
 <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
 <span class="n">y</span> <span class="o">=</span> <span class="n">z</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
-<span class="c1"># Build pudu and evaluate importance</span>
+<span class="c1"># Build pudu and evaluate importance, speed, and synergy</span>
 <span class="n">imp</span> <span class="o">=</span> <span class="n">pudu</span><span class="o">.</span><span class="n">pudu</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">rbf_pred</span><span class="p">)</span>
-<span class="n">imp</span><span class="o">.</span><span class="n">importance</span><span class="p">(</span><span class="n">delta</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">scope</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;bidirectional&#39;</span><span class="p">)</span>
-<span class="n">imp</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">imp</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">imp</span><span class="o">.</span><span class="n">imp</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Importance&quot;</span><span class="p">,</span> <span class="n">font_size</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">show_data</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">imp</span><span class="o">.</span><span class="n">importance</span><span class="p">(</span><span class="n">delta</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;bidirectional&#39;</span><span class="p">)</span>
+<span class="n">imp</span><span class="o">.</span><span class="n">speed</span><span class="p">(</span><span class="n">delta</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;bidirectional&#39;</span><span class="p">)</span>
+<span class="n">imp</span><span class="o">.</span><span class="n">synergy</span><span class="p">(</span><span class="n">delta</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">inspect</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;bidirectional&#39;</span><span class="p">)</span>
 
 <span class="c1"># Plot the ouput</span>
 <span class="n">axis</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mf">3.5</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
 <span class="n">ticks</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;A1&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;A2&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;A3&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;A4&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">]</span>
-<span class="n">imp</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">imp</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">imp</span><span class="o">.</span><span class="n">imp</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">,</span> <span class="n">xticks</span><span class="o">=</span><span class="n">ticks</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Importance&quot;</span><span class="p">,</span> 
-    <span class="n">font_size</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">show_data</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">plots</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">imp</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">imp</span><span class="o">.</span><span class="n">imp</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Importance&quot;</span><span class="p">,</span> <span class="n">font_size</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">show_data</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
+            <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">,</span> <span class="n">xticks</span><span class="o">=</span><span class="n">ticks</span><span class="p">)</span>
+
+<span class="n">plots</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">imp</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">imp</span><span class="o">.</span><span class="n">spe</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Speed&quot;</span><span class="p">,</span> <span class="n">font_size</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">show_data</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
+            <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">,</span> <span class="n">xticks</span><span class="o">=</span><span class="n">ticks</span><span class="p">)</span>
+
+<span class="n">plots</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">imp</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">imp</span><span class="o">.</span><span class="n">syn</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Synergy&quot;</span><span class="p">,</span> <span class="n">font_size</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">show_data</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
+            <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">,</span> <span class="n">xticks</span><span class="o">=</span><span class="n">ticks</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -257,7 +254,10 @@
 <span class="kn">from</span> <span class="nn">keras.models</span> <span class="kn">import</span> <span class="n">load_model</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">from</span> <span class="nn">pudu</span> <span class="kn">import</span> <span class="n">pudu</span>
+
+<span class="c1"># from pudu import pudu, plots</span>
+<span class="kn">import</span> <span class="nn">pudu7</span> <span class="k">as</span> <span class="nn">pudu</span>
+<span class="kn">import</span> <span class="nn">plots</span>
 
 <span class="c1"># Model / data parameters</span>
 <span class="n">num_classes</span> <span class="o">=</span> <span class="mi">10</span>
@@ -279,8 +279,10 @@
 
 <span class="c1"># Load the model and test it</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">load_model</span><span class="p">(</span><span class="s1">&#39;mnist_class.h5&#39;</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
 <span class="n">score</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Test loss:&quot;</span><span class="p">,</span> <span class="n">score</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;| Test accuracy:&quot;</span><span class="p">,</span> <span class="n">score</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
 
 <span class="c1">### PUDU ###</span>
 <span class="c1"># Input should be 4d: (batch * rows * columns * depth)</span>
@@ -288,7 +290,7 @@
 <span class="c1"># probability by category: [prob_1, prob_2, ..., prob_c]</span>
 <span class="k">def</span> <span class="nf">cnn2d_prob</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
     <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,:,:]</span>
-    <span class="k">return</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">X</span><span class="p">,</span> <span class="n">X</span><span class="p">]))[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">X</span><span class="p">,</span> <span class="n">X</span><span class="p">]),</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># verbose 0 is important!</span>
 
 <span class="c1"># Dimention standarization for parameters</span>
 <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">y_train</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
@@ -296,10 +298,18 @@
 
 <span class="c1"># Build `pudu`, evaluate importance, and plot</span>
 <span class="n">imp</span> <span class="o">=</span> <span class="n">pudu</span><span class="o">.</span><span class="n">pudu</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">cnn2d_prob</span><span class="p">)</span>
-<span class="n">imp</span><span class="o">.</span><span class="n">importance</span><span class="p">(</span><span class="n">delta</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">scope</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;bidirectional&#39;</span><span class="p">,</span> 
-                    <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">evolution</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">imp</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">imp</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">imp</span><span class="o">.</span><span class="n">imp</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;cool&#39;</span><span class="p">)</span>
 
+<span class="c1"># in this case, &#39;window&#39; is a tuple that indicates the width and height.</span>
+<span class="n">imp</span><span class="o">.</span><span class="n">importance</span><span class="p">(</span><span class="n">delta</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">scope</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;bidirectional&#39;</span><span class="p">,</span> 
+                    <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+<span class="n">plots</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">imp</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">imp</span><span class="o">.</span><span class="n">imp</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;cool&#39;</span><span class="p">)</span>
+
+
+<span class="c1"># In this case, as there are many `0` values in the image, including some bias </span>
+<span class="c1"># can help us to visualize importance in those areas, since 0*delta = 0</span>
+<span class="n">imp</span><span class="o">.</span><span class="n">importance</span><span class="p">(</span><span class="n">delta</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">scope</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;bidirectional&#39;</span><span class="p">,</span> 
+                    <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="n">plots</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">imp</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">imp</span><span class="o">.</span><span class="n">imp</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;cool&#39;</span><span class="p">)</span>
 
 <span class="c1">### LIME ###</span>
 <span class="kn">from</span> <span class="nn">lime</span> <span class="kn">import</span> <span class="n">lime_image</span>
@@ -316,7 +326,7 @@
 <span class="k">def</span> <span class="nf">cnn2d_prob</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
     <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span>
     <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
-    <span class="k">return</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
 <span class="n">explainer</span> <span class="o">=</span> <span class="n">lime_image</span><span class="o">.</span><span class="n">LimeImageExplainer</span><span class="p">()</span>
 <span class="n">explanation</span> <span class="o">=</span> <span class="n">explainer</span><span class="o">.</span><span class="n">explain_instance</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">cnn2d_prob</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_samples</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
@@ -373,10 +383,6 @@
 <span class="c1"># Remove last layer&#39;s softmax</span>
 <span class="n">model</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">activation</span> <span class="o">=</span> <span class="kc">None</span>
 
-<span class="c1"># # Print what the top predicted class is</span>
-<span class="c1"># preds = model.predict(image)</span>
-<span class="c1"># print(&quot;Predicted:&quot;, decode_predictions(preds, top=1)[0])</span>
-
 <span class="c1"># Generate class activation heatmap</span>
 <span class="n">heatmap</span> <span class="o">=</span> <span class="n">make_gradcam_heatmap</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">last_conv_layer_name</span><span class="p">)</span>
 
@@ -393,14 +399,14 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="functions.html" class="btn btn-neutral float-left" title="Functions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="perturbations.html" class="btn btn-neutral float-left" title="Perturbation Functions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="contributions.html" class="btn btn-neutral float-right" title="Contributing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, Institut de Recerca en Energia de Catalunya.</p>
+    <p>&#169; Copyright 2023, Institut de Recerca en Energia de Catalunya.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

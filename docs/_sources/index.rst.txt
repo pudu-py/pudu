@@ -9,7 +9,9 @@
 
    introduction
    definitions
-   functions
+   pudu
+   perturbations
+   masks
    examples
    contributions
 

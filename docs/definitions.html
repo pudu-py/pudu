@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Definitions &mdash; pudu  documentation</title>
@@ -11,17 +11,16 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
         <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Functions" href="functions.html" />
+    <link rel="next" title="pudu" href="pudu.html" />
     <link rel="prev" title="pudu" href="introduction.html" /> 
 </head>
 
@@ -30,11 +29,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> pudu
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pudu
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -48,12 +51,16 @@
 <li class="toctree-l2"><a class="reference internal" href="#speed">Speed</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#synergy">Synergy</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#activations-and-re-activaiton">Activations and re-activaiton</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#references">References</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#units">Units</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#acitvation-map">Acitvation map</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#re-activation-map">Re-activation map</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#references">References</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="functions.html">Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pudu.html">pudu</a></li>
+<li class="toctree-l1"><a class="reference internal" href="perturbations.html">Perturbation Functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributions.html">Contributing</a></li>
 </ul>
@@ -71,7 +78,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
       <li class="breadcrumb-item active">Definitions</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/definitions.rst.txt" rel="nofollow"> View page source</a>
@@ -118,14 +125,31 @@ is <span class="math notranslate nohighlight">\(LI_{j*,j}\)</span>. Then,</p>
 </section>
 <section id="activations-and-re-activaiton">
 <h2>Activations and re-activaiton<a class="headerlink" href="#activations-and-re-activaiton" title="Permalink to this heading"></a></h2>
+<section id="units">
+<h3>Units<a class="headerlink" href="#units" title="Permalink to this heading"></a></h3>
+<p>In a convolutional layer <span class="math notranslate nohighlight">\(l \in L\)</span>, where <span class="math notranslate nohighlight">\(L\)</span> is the group of all convolutional layers in
+the model <span class="math notranslate nohighlight">\(M\)</span>, the number of units in <span class="math notranslate nohighlight">\(K\)</span> is defined by the size of the input <span class="math notranslate nohighlight">\((h, w)\)</span>,
+kernel size <span class="math notranslate nohighlight">\((k_h, k_w)\)</span>, strides <span class="math notranslate nohighlight">\((s_h, s_w)\)</span> and the filters <span class="math notranslate nohighlight">\(f\)</span>. Specifically, the
+number of units can be calculated as:</p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}H_o = (h - k_h) / s_h + 1\\W_o = (w - k_w) / s_w + 1\\units = f * H_o * W_o\end{aligned}\end{align} \]</div>
+<p>Where <span class="math notranslate nohighlight">\((H_o, W_o)\)</span> are the dimensions of the output of layer <span class="math notranslate nohighlight">\(l\)</span>.</p>
+</section>
+<section id="acitvation-map">
+<h3>Acitvation map<a class="headerlink" href="#acitvation-map" title="Permalink to this heading"></a></h3>
 <p>As defined by Bau and Zhou et al. (2017), for <span class="math notranslate nohighlight">\(x\)</span>, take the activation map <span class="math notranslate nohighlight">\(A_k(x)\)</span>
 for each of the units <span class="math notranslate nohighlight">\(k\)</span>. Then <span class="math notranslate nohighlight">\(a_k\)</span> is the activation distribution for each
 individual unit. Then, all the activations belonging to the <span class="math notranslate nohighlight">\(p\)</span> quantile as
 <span class="math notranslate nohighlight">\(P(a_k&gt;T_k)=p\)</span> were <span class="math notranslate nohighlight">\(T_k\)</span> is the value above which the quantile exists.</p>
+</section>
+<section id="re-activation-map">
+<h3>Re-activation map<a class="headerlink" href="#re-activation-map" title="Permalink to this heading"></a></h3>
 <p>The above can be evaluated based in feature perturbations considering <span class="math notranslate nohighlight">\(x\)</span>, the original data,
 and <span class="math notranslate nohighlight">\(x_j\)</span>, the perturbated input in feature <span class="math notranslate nohighlight">\(j\)</span>, and evaluate the difference as
-<span class="math notranslate nohighlight">\(A_k(x_j)-A_k(x)=\Delta A_{k,j}\)</span>. From here we can extract the distribution
-<span class="math notranslate nohighlight">\(\Delta a_{k,j}\)</span> and select the quantile as <span class="math notranslate nohighlight">\(P(\Delta a_{k,j}&gt;T_k)=p\)</span>.</p>
+<span class="math notranslate nohighlight">\(B_k(x_j)-B_k(x)=\Delta B_{k,j}\)</span>, where <span class="math notranslate nohighlight">\(B\)</span> is the pre-activatoin map of unit <span class="math notranslate nohighlight">\(k\)</span>.
+From here we can extract the distribution <span class="math notranslate nohighlight">\(\Delta b_{k,j}\)</span> and select then pass the data
+through the activation function to obtain <span class="math notranslate nohighlight">\(a_{k,j}\)</span>. Finally, select the  <span class="math notranslate nohighlight">\(p\)</span> quantile
+as <span class="math notranslate nohighlight">\(P(\Delta a_{k,j}&gt;T_k)=p\)</span>.</p>
 <p>The latter accounts then for difference in unit activations after perturbation that would account
 for a re-activation. For example, if unit <span class="math notranslate nohighlight">\(k\)</span> has and activation value of <span class="math notranslate nohighlight">\(u\)</span>, and
 after perturbation the same unit <span class="math notranslate nohighlight">\(k\)</span> obtains a value of <span class="math notranslate nohighlight">\(u* = u \rightarrow \Delta u = 0\)</span>,
@@ -139,14 +163,15 @@ meaning significant a value that would be considered an activation in <span clas
 <li><p>What unit is re-activated the most, per unit of change</p></li>
 <li><p>Which feature re-activates what unit the most times <span class="math notranslate nohighlight">\(^1\)</span></p></li>
 </ol>
-<p><span class="math notranslate nohighlight">\(^1\)</span> For point <strong>4</strong>, though can be obtained for a single sample <span class="math notranslate nohighlight">\(x\)</span>, it is better to use
+<p><span class="math notranslate nohighlight">\(^1\)</span> Though can be obtained for a single sample <span class="math notranslate nohighlight">\(x\)</span>, it is better to use
 a significant number of them.</p>
+</section>
+</section>
 <section id="references">
-<h3>References<a class="headerlink" href="#references" title="Permalink to this heading"></a></h3>
+<h2>References<a class="headerlink" href="#references" title="Permalink to this heading"></a></h2>
 <ol class="arabic simple">
 <li><p>Bau, D., Zhou, B., Khosla, A., Aude, O. &amp; Torralba, A. Network Dissection: Quantifying Interpretability of Deep Visual Representation. (2017).</p></li>
 </ol>
-</section>
 </section>
 </section>
 
@@ -155,13 +180,13 @@ a significant number of them.</p>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="introduction.html" class="btn btn-neutral float-left" title="pudu" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="functions.html" class="btn btn-neutral float-right" title="Functions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="pudu.html" class="btn btn-neutral float-right" title="pudu" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, Institut de Recerca en Energia de Catalunya.</p>
+    <p>&#169; Copyright 2023, Institut de Recerca en Energia de Catalunya.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

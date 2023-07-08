@@ -42,7 +42,7 @@ def for_constructor(model, x, y):
                             "Got `x` with length (batch size): %s and `y` with length: %s" 
                             % (str(x_shape[0]), str(len(y))))
 
-def for_params(window, scope, padding, absolute, inspect, steps, layer, p):
+def for_params(window, scope, padding, absolute, inspect, layer, p):
     """
     Handles erros for the main parameters of the different functions.
     """
@@ -91,8 +91,3 @@ def for_params(window, scope, padding, absolute, inspect, steps, layer, p):
     elif (not isinstance(inspect, int)) or inspect < 0:
         raise ValueError("Expected value for inspect is an integer greater than 0." 
                             "Got instead: %s" % str(inspect))
-
-    if not isinstance(steps, list):
-        raise ValueError("Expected value for inspect is a list. Got instead: %s" % str(steps))
-
-

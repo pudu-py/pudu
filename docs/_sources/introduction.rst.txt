@@ -1,6 +1,6 @@
-====
-pudu
-====
+====================
+Introduction to pudu
+====================
 
 .. image:: https://img.shields.io/pypi/v/pudu.svg
         :target: https://pypi.python.org/pypi/pudu
@@ -28,9 +28,6 @@ pudu
 * PyPI: https://pypi.python.org/pypi/pudu
 * Conda-forge: https://anaconda.org/conda-forge/pudu
 * Free software: MIT license
-
-Introduction
-============
 
 **pudu** is a Python package that helps intepret and explore the results of machinme learning algorythms. It does this by quantifying the change
 in probability according to the change in the features. This library works with any case that has a probability function, which is normally available in ``scikit-learn`` and ``keras`` methods, and works for both 1-d (vectrors) and 2-d problems (images). In order to see the exact procedure and format needed, please refer to the examples in the ``docs``.
@@ -60,7 +57,14 @@ Quickstart
 
 4. If you find this library useful, please consider a reference or citation as::
 
-        ...
+        @misc{Grau-Luque2023Pudu,
+        author = {E. Grau-Luque, I. Becerril-Romero, A. Perez-Rodriguez, M. Guc, V. Izquierdo-Roca},
+        title = {pudu},
+        year = {2023},
+        publisher = {GitHub},
+        journal = {GitHub repository},
+        howpublished = {\url{https://github.com/pudu-py/pudu}},
+        }
 
 5. Stay up-to-date by updating the library using::
 

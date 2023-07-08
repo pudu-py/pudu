@@ -79,37 +79,10 @@ def params_std(y, sh, scope, window, padding, evolution):
     if evolution is None:
         evolution = int(y)
     
-    return scope, window, padding, evolution
+    padding = calc_pad(padding, scope, window)
 
+    sec_row = (scope[0][1] - scope[0][0] - padding[0][0] - padding[0][1] - window[0]) // window[0] + 1
+    sec_col = (scope[1][1] - scope[1][0] - padding[1][0] - padding[1][1] - window[1]) // window[1] + 1
+    total = sec_row*sec_col
 
-# def calc_p_uac(layer, activation_model, temp, act_val, p):
-#     """
-#     Calculates the activations of a given layer in a model.
-
-#     :type layer: int
-#     :param layer: Index of the layer for which to calculate activations.
-
-#     :type activation_model: keras Model
-#     :param activation_model: The model that is used for the prediction.
-
-#     :type temp: numpy array
-#     :param temp: input data for the model.
-
-#     :type act_val: float
-#     :param act_val: Activation value threshold. Activations below this value are set to 0.
-
-#     :type p: float
-#     :param p: Quantile value used to calculate the threshold for activation.
-
-#     :rtype: numpy array
-#     :returns: An array of activations for the specified layer.
-#     """
-#     activations = activation_model.predict(temp, verbose=0)
-#     # activations = activations[layer][0] # this to select  number 0 o batch
-#     activations = activations[layer]
-#     quantile = np.quantile(activations, 1-p)
-    
-#     # activations[activations <= max(quantile, act_val)] = 0 # probar el otro
-#     activations = np.where(activations > max(quantile, act_val), 1, 0)
-    
-#     return activations
+    return scope, window, padding, evolution, total

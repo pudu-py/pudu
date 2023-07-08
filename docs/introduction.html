@@ -1,20 +1,19 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pudu &mdash; pudu  documentation</title>
+  <title>Introduction to pudu &mdash; pudu  documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -29,11 +28,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> pudu
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pudu
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -41,17 +44,16 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">pudu</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#features">Features</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#quickstart">Quickstart</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#credits">Credits</a></li>
-</ul>
-</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Introduction to pudu</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#features">Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#quickstart">Quickstart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#credits">Credits</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="definitions.html">Definitions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="functions.html">Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pudu.html">pudu</a></li>
+<li class="toctree-l1"><a class="reference internal" href="perturbations.html">Perturbation Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="masks.html">Mask Functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributions.html">Contributing</a></li>
 </ul>
@@ -69,8 +71,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a></li>
-      <li class="breadcrumb-item active">pudu</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Introduction to pudu</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/introduction.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -80,8 +82,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="pudu">
-<h1>pudu<a class="headerlink" href="#pudu" title="Permalink to this heading"></a></h1>
+  <section id="introduction-to-pudu">
+<h1>Introduction to pudu<a class="headerlink" href="#introduction-to-pudu" title="Permalink to this heading"></a></h1>
 <a class="reference external image-reference" href="https://pypi.python.org/pypi/pudu"><img alt="https://img.shields.io/pypi/v/pudu.svg" src="https://img.shields.io/pypi/v/pudu.svg" /></a>
 <a class="reference external image-reference" href="https://anaconda.org/conda-forge/pudu"><img alt="https://img.shields.io/conda/vn/conda-forge/pudu.svg" src="https://img.shields.io/conda/vn/conda-forge/pudu.svg" /></a>
 <a class="reference external image-reference" href="https://opensource.org/licenses/MIT"><img alt="https://img.shields.io/badge/License-MIT-yellow.svg" src="https://img.shields.io/badge/License-MIT-yellow.svg" /></a>
@@ -99,12 +101,10 @@
 <li><p>Conda-forge: <a class="reference external" href="https://anaconda.org/conda-forge/pudu">https://anaconda.org/conda-forge/pudu</a></p></li>
 <li><p>Free software: MIT license</p></li>
 </ul>
-<section id="introduction">
-<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading"></a></h2>
 <p><strong>pudu</strong> is a Python package that helps intepret and explore the results of machinme learning algorythms. It does this by quantifying the change
 in probability according to the change in the features. This library works with any case that has a probability function, which is normally available in <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code> and <code class="docutils literal notranslate"><span class="pre">keras</span></code> methods, and works for both 1-d (vectrors) and 2-d problems (images). In order to see the exact procedure and format needed, please refer to the examples in the <code class="docutils literal notranslate"><span class="pre">docs</span></code>.</p>
 <section id="features">
-<h3>Features<a class="headerlink" href="#features" title="Permalink to this heading"></a></h3>
+<h2>Features<a class="headerlink" href="#features" title="Permalink to this heading"></a></h2>
 <p>The following is a list of the main procedures that <strong>pudu</strong> package enables.</p>
 <ul class="simple">
 <li><p>Importance: estimates the absolute or relative importance oif the features.</p></li>
@@ -114,7 +114,7 @@ in probability according to the change in the features. This library works with 
 </ul>
 </section>
 <section id="quickstart">
-<h3>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this heading"></a></h3>
+<h2>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this heading"></a></h2>
 <ol class="arabic">
 <li><p>Install this library using <code class="docutils literal notranslate"><span class="pre">pip</span></code>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">pudu</span>
@@ -128,7 +128,14 @@ in probability according to the change in the features. This library works with 
 </li>
 <li><p>Test it by running one of the examples in the <code class="docutils literal notranslate"><span class="pre">docs</span></code>.</p></li>
 <li><p>If you find this library useful, please consider a reference or citation as:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@misc</span><span class="p">{</span><span class="n">Grau</span><span class="o">-</span><span class="n">Luque2023Pudu</span><span class="p">,</span>
+<span class="n">author</span> <span class="o">=</span> <span class="p">{</span><span class="n">E</span><span class="o">.</span> <span class="n">Grau</span><span class="o">-</span><span class="n">Luque</span><span class="p">,</span> <span class="n">I</span><span class="o">.</span> <span class="n">Becerril</span><span class="o">-</span><span class="n">Romero</span><span class="p">,</span> <span class="n">A</span><span class="o">.</span> <span class="n">Perez</span><span class="o">-</span><span class="n">Rodriguez</span><span class="p">,</span> <span class="n">M</span><span class="o">.</span> <span class="n">Guc</span><span class="p">,</span> <span class="n">V</span><span class="o">.</span> <span class="n">Izquierdo</span><span class="o">-</span><span class="n">Roca</span><span class="p">},</span>
+<span class="n">title</span> <span class="o">=</span> <span class="p">{</span><span class="n">pudu</span><span class="p">},</span>
+<span class="n">year</span> <span class="o">=</span> <span class="p">{</span><span class="mi">2023</span><span class="p">},</span>
+<span class="n">publisher</span> <span class="o">=</span> <span class="p">{</span><span class="n">GitHub</span><span class="p">},</span>
+<span class="n">journal</span> <span class="o">=</span> <span class="p">{</span><span class="n">GitHub</span> <span class="n">repository</span><span class="p">},</span>
+<span class="n">howpublished</span> <span class="o">=</span> <span class="p">{</span>\<span class="n">url</span><span class="p">{</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">pudu</span><span class="o">-</span><span class="n">py</span><span class="o">/</span><span class="n">pudu</span><span class="p">}},</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 </li>
@@ -147,9 +154,8 @@ in probability according to the change in the features. This library works with 
 </ol>
 </section>
 <section id="credits">
-<h3>Credits<a class="headerlink" href="#credits" title="Permalink to this heading"></a></h3>
+<h2>Credits<a class="headerlink" href="#credits" title="Permalink to this heading"></a></h2>
 <p>This package was created with <a class="reference external" href="https://github.com/audreyr/cookiecutter">Cookiecutter</a> and the <a class="reference external" href="https://github.com/giswqs/pypackage">giswqs/pypackage</a> project template.</p>
-</section>
 </section>
 </section>
 
@@ -164,7 +170,7 @@ in probability according to the change in the features. This library works with 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, Institut de Recerca en Energia de Catalunya.</p>
+    <p>&#169; Copyright 2023, Institut de Recerca en Energia de Catalunya.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

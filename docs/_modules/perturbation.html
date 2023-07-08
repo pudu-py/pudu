@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>perturbation &mdash; pudu  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            pudu
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">pudu</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../definitions.html">Definitions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pudu.html">pudu</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../perturbations.html">Perturbation Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributions.html">Contributing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pudu</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Module code</a></li>
+      <li class="breadcrumb-item active">perturbation</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for perturbation</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">math</span><span class="o">,</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+
+<div class="viewcode-block" id="Bidirectional"><a class="viewcode-back" href="../perturbations.html#perturbation.Bidirectional">[docs]</a><span class="k">class</span> <span class="nc">Bidirectional</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates perturbations for positive and negative changes.</span>
+
+<span class="sd">    :type delta: float</span>
+<span class="sd">    :param delta: Percetage of positive and negative change as 1+delta or 1-delta</span>
+
+<span class="sd">    :rtype: 4d array</span>
+<span class="sd">    :return: Both of perturbated arrays</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">delta</span> <span class="o">=</span> <span class="n">delta</span>
+    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="n">bias</span><span class="p">):</span>
+        <span class="n">x2</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">row</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">:</span><span class="n">col</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">row</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">:</span><span class="n">col</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">bias</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">delta</span><span class="p">)</span>
+        <span class="n">x2</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">row</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">:</span><span class="n">col</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">x2</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">row</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">:</span><span class="n">col</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">bias</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">delta</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">x2</span></div>
+
+
+<div class="viewcode-block" id="Positive"><a class="viewcode-back" href="../perturbations.html#perturbation.Positive">[docs]</a><span class="k">class</span> <span class="nc">Positive</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Applies a positive perturbation to the input array.</span>
+
+<span class="sd">    :type delta: float</span>
+<span class="sd">    :param delta: Percentage of positive change as 1+delta</span>
+
+<span class="sd">    :rtype: 4d array</span>
+<span class="sd">    :return: Perturbated array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">delta</span> <span class="o">=</span> <span class="n">delta</span>
+    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="n">bias</span><span class="p">):</span>
+        <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">row</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">:</span><span class="n">col</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">row</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">:</span><span class="n">col</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">bias</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">delta</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="Negative"><a class="viewcode-back" href="../perturbations.html#perturbation.Negative">[docs]</a><span class="k">class</span> <span class="nc">Negative</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Applies a negative perturbation to the input array.</span>
+
+<span class="sd">    :type delta: float</span>
+<span class="sd">    :param delta: Percentage of negative change as 1-delta</span>
+
+<span class="sd">    :rtype: 4d array</span>
+<span class="sd">    :return: Perturbated array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">delta</span> <span class="o">=</span> <span class="n">delta</span>
+    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="n">bias</span><span class="p">):</span>
+        <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">row</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">:</span><span class="n">col</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">row</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">:</span><span class="n">col</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">bias</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">delta</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="kc">None</span>   </div>
+
+
+<div class="viewcode-block" id="Log"><a class="viewcode-back" href="../perturbations.html#perturbation.Log">[docs]</a><span class="k">class</span> <span class="nc">Log</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Applies a logarithmic perturbation to the input array.</span>
+
+<span class="sd">    :type base: int</span>
+<span class="sd">    :param base: The base of the logarithm.</span>
+
+<span class="sd">    :rtype: 4d array</span>
+<span class="sd">    :return: Perturbated array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base</span> <span class="o">=</span> <span class="n">base</span>
+    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="n">bias</span><span class="p">):</span>
+        <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">row</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">:</span><span class="n">col</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">row</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">:</span><span class="n">col</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">bias</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="RandomPtn"><a class="viewcode-back" href="../perturbations.html#perturbation.RandomPtn">[docs]</a><span class="k">class</span> <span class="nc">RandomPtn</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Applies a random perturbation to the input array.</span>
+
+<span class="sd">    :type r: tuple</span>
+<span class="sd">    :param r: The range of random values for perturbation.</span>
+
+<span class="sd">    :rtype: 4d array</span>
+<span class="sd">    :return: Perturbated array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">r</span> <span class="o">=</span> <span class="n">r</span>
+    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="n">bias</span><span class="p">):</span>
+        <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">row</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">:</span><span class="n">col</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">row</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">:</span><span class="n">col</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">bias</span><span class="p">)</span> <span class="o">*</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">r</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="Exp"><a class="viewcode-back" href="../perturbations.html#perturbation.Exp">[docs]</a><span class="k">class</span> <span class="nc">Exp</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Applies an exponential perturbation to the input array.</span>
+
+<span class="sd">    :type exp: float</span>
+<span class="sd">    :param exp: The exponent for the perturbation.</span>
+
+<span class="sd">    :rtype: 4d array</span>
+<span class="sd">    :return: Perturbated array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exp</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exp</span> <span class="o">=</span> <span class="n">exp</span>
+    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="n">bias</span><span class="p">):</span>
+        <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">row</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">:</span><span class="n">col</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">row</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">:</span><span class="n">col</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">bias</span><span class="p">)</span> <span class="o">**</span> <span class="bp">self</span><span class="o">.</span><span class="n">exp</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="Binary"><a class="viewcode-back" href="../perturbations.html#perturbation.Binary">[docs]</a><span class="k">class</span> <span class="nc">Binary</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Applies a binary perturbation to the input array based on a threshold.</span>
+
+<span class="sd">    :type th: float</span>
+<span class="sd">    :param th: Threshold value for binary perturbation.</span>
+
+<span class="sd">    :type upper: float</span>
+<span class="sd">    :param upper: Value to set if input is above the threshold.</span>
+
+<span class="sd">    :type lower: float</span>
+<span class="sd">    :param lower: Value to set if input is below the threshold.</span>
+
+<span class="sd">    :rtype: 4d array</span>
+<span class="sd">    :return: Perturbated array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">th</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">upper</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">th</span> <span class="o">=</span> <span class="n">th</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">upper</span> <span class="o">=</span> <span class="n">upper</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lower</span> <span class="o">=</span> <span class="n">lower</span>
+    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="n">bias</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">th</span><span class="p">:</span>
+            <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">row</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">:</span><span class="n">col</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">upper</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">row</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">:</span><span class="n">col</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="Sinusoidal"><a class="viewcode-back" href="../perturbations.html#perturbation.Sinusoidal">[docs]</a><span class="k">class</span> <span class="nc">Sinusoidal</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Applies a sinusoidal perturbation to the input array.</span>
+
+<span class="sd">    :type freq: float</span>
+<span class="sd">    :param freq: Frequency of the sine wave.</span>
+
+<span class="sd">    :type amp: float</span>
+<span class="sd">    :param amp: Amplitude of the sine wave.</span>
+
+<span class="sd">    :rtype: 4d array</span>
+<span class="sd">    :return: Perturbated array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">amp</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">freq</span> <span class="o">=</span> <span class="n">freq</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">amp</span> <span class="o">=</span> <span class="n">amp</span>
+    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="n">bias</span><span class="p">):</span>
+        <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">row</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">:</span><span class="n">col</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">row</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">:</span><span class="n">col</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">bias</span><span class="p">)</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">freq</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">row</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">:</span><span class="n">col</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">amp</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="kc">None</span></div>
+    
+
+<div class="viewcode-block" id="Gaussian"><a class="viewcode-back" href="../perturbations.html#perturbation.Gaussian">[docs]</a><span class="k">class</span> <span class="nc">Gaussian</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Applies a Gaussian perturbation to the input array.</span>
+
+<span class="sd">    :type mean: float</span>
+<span class="sd">    :param mean: Mean of the Gaussian distribution.</span>
+
+<span class="sd">    :type stdv: float</span>
+<span class="sd">    :param stdv: Standard deviation of the Gaussian distribution.</span>
+
+<span class="sd">    :rtype: 4d array</span>
+<span class="sd">    :return: Perturbated array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mean</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">stdv</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mean</span> <span class="o">=</span> <span class="n">mean</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stdv</span> <span class="o">=</span> <span class="n">stdv</span>
+    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="n">bias</span><span class="p">):</span>
+        <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">row</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">:</span><span class="n">col</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">row</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">:</span><span class="n">col</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">bias</span><span class="p">)</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">((</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">row</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">:</span><span class="n">col</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">mean</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">stdv</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="Tanh"><a class="viewcode-back" href="../perturbations.html#perturbation.Tanh">[docs]</a><span class="k">class</span> <span class="nc">Tanh</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Applies a hyperbolic tangent perturbation to the input array.</span>
+
+<span class="sd">    :type sf: float</span>
+<span class="sd">    :param sf: Scale factor to apply before the tanh function.</span>
+
+<span class="sd">    :rtype: 4d array</span>
+<span class="sd">    :return: Perturbated array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sf</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sf</span> <span class="o">=</span> <span class="n">sf</span> <span class="c1"># scale factor</span>
+    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="n">bias</span><span class="p">):</span>
+        <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">row</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">:</span><span class="n">col</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">tanh</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sf</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">row</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">:</span><span class="n">col</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">bias</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="Sigmoid"><a class="viewcode-back" href="../perturbations.html#perturbation.Sigmoid">[docs]</a><span class="k">class</span> <span class="nc">Sigmoid</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Applies a sigmoid perturbation to the input array.</span>
+
+<span class="sd">    :type sf: float</span>
+<span class="sd">    :param sf: Scale factor to apply before the sigmoid function.</span>
+
+<span class="sd">    :rtype: 4d array</span>
+<span class="sd">    :return: Perturbated array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sf</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sf</span> <span class="o">=</span> <span class="n">sf</span>
+    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="n">bias</span><span class="p">):</span>
+        <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">row</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">:</span><span class="n">col</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">math</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">sf</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">row</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">:</span><span class="n">col</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">bias</span><span class="p">)))</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="kc">None</span></div>
+    
+
+<div class="viewcode-block" id="ReLU"><a class="viewcode-back" href="../perturbations.html#perturbation.ReLU">[docs]</a><span class="k">class</span> <span class="nc">ReLU</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Applies a Rectified Linear Unit (ReLU) perturbation to the input array.</span>
+
+<span class="sd">    :rtype: 4d array</span>
+<span class="sd">    :return: Perturbated array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="n">bias</span><span class="p">):</span>
+        <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">row</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">:</span><span class="n">col</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">row</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">:</span><span class="n">col</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">bias</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="kc">None</span></div>
+    
+
+<div class="viewcode-block" id="LeakyReLU"><a class="viewcode-back" href="../perturbations.html#perturbation.LeakyReLU">[docs]</a><span class="k">class</span> <span class="nc">LeakyReLU</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Applies a Leaky Rectified Linear Unit (LeakyReLU) perturbation to the input array.</span>
+
+<span class="sd">    :type alpha: float</span>
+<span class="sd">    :param alpha: Coefficient for negative inputs in LeakyReLU.</span>
+
+<span class="sd">    :rtype: 4d array</span>
+<span class="sd">    :return: Perturbated array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="n">alpha</span>
+    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="n">bias</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">row</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">:</span><span class="n">col</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">row</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">:</span><span class="n">col</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">bias</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="kc">None</span></div>
+    
+
+<div class="viewcode-block" id="Softplus"><a class="viewcode-back" href="../perturbations.html#perturbation.Softplus">[docs]</a><span class="k">class</span> <span class="nc">Softplus</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Applies a Softplus perturbation to the input array.</span>
+
+<span class="sd">    :type sf: float</span>
+<span class="sd">    :param sf: Scale factor to apply before the Softplus function.</span>
+
+<span class="sd">    :rtype: 4d array</span>
+<span class="sd">    :return: Perturbated array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sf</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sf</span> <span class="o">=</span> <span class="n">sf</span>
+    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="n">bias</span><span class="p">):</span>
+        <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">row</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">:</span><span class="n">col</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">math</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sf</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">row</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">:</span><span class="n">col</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">bias</span><span class="p">)))</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="kc">None</span></div>
+    
+
+<div class="viewcode-block" id="Inverse"><a class="viewcode-back" href="../perturbations.html#perturbation.Inverse">[docs]</a><span class="k">class</span> <span class="nc">Inverse</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Applies an inverse perturbation to the input array.</span>
+
+<span class="sd">    :rtype: 4d array</span>
+<span class="sd">    :return: Perturbated array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="n">bias</span><span class="p">):</span>
+        <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">row</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">:</span><span class="n">col</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">row</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">:</span><span class="n">col</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">bias</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="GaussianNoise"><a class="viewcode-back" href="../perturbations.html#perturbation.GaussianNoise">[docs]</a><span class="k">class</span> <span class="nc">GaussianNoise</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Applies Gaussian noise to the input array.</span>
+
+<span class="sd">    :type mean: float</span>
+<span class="sd">    :param mean: Mean of the Gaussian distribution.</span>
+
+<span class="sd">    :type stdv: float</span>
+<span class="sd">    :param stdv: Standard deviation of the Gaussian distribution.</span>
+
+<span class="sd">    :rtype: 4d array</span>
+<span class="sd">    :return: Perturbated array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mean</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">stdv</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mean</span> <span class="o">=</span> <span class="n">mean</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stdv</span> <span class="o">=</span> <span class="n">stdv</span>
+    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="n">bias</span><span class="p">):</span>
+        <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">row</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">:</span><span class="n">col</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">row</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">:</span><span class="n">col</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">bias</span> <span class="o">+</span> <span class="n">random</span><span class="o">.</span><span class="n">gauss</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mean</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">stdv</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="UniformNoise"><a class="viewcode-back" href="../perturbations.html#perturbation.UniformNoise">[docs]</a><span class="k">class</span> <span class="nc">UniformNoise</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Applies uniform noise to the input array.</span>
+
+<span class="sd">    :type lower: float</span>
+<span class="sd">    :param lower: Lower bound of the uniform distribution.</span>
+
+<span class="sd">    :type upper: float</span>
+<span class="sd">    :param upper: Upper bound of the uniform distribution.</span>
+
+<span class="sd">    :rtype: 4d array</span>
+<span class="sd">    :return: Perturbated array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lower</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">upper</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">upper</span> <span class="o">=</span> <span class="n">upper</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lower</span> <span class="o">=</span> <span class="n">lower</span>
+    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="n">bias</span><span class="p">):</span>
+        <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">row</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">:</span><span class="n">col</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">row</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">:</span><span class="n">col</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">bias</span> <span class="o">+</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lower</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">upper</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="Offset"><a class="viewcode-back" href="../perturbations.html#perturbation.Offset">[docs]</a><span class="k">class</span> <span class="nc">Offset</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Applies an offset to the input array.</span>
+
+<span class="sd">    :type offset: float</span>
+<span class="sd">    :param offset: The value to be added to the input array.</span>
+
+<span class="sd">    :rtype: 4d array</span>
+<span class="sd">    :return: Perturbated array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">offset</span> <span class="o">=</span> <span class="n">offset</span>
+    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="n">bias</span><span class="p">):</span>
+        <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">row</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">:</span><span class="n">col</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">row</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">:</span><span class="n">col</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">bias</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">offset</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="Constant"><a class="viewcode-back" href="../perturbations.html#perturbation.Constant">[docs]</a><span class="k">class</span> <span class="nc">Constant</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Replaces all values in the input array with a constant.</span>
+
+<span class="sd">    :type c: float</span>
+<span class="sd">    :param c: The constant value.</span>
+
+<span class="sd">    :rtype: 4d array</span>
+<span class="sd">    :return: Perturbated array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">c</span> <span class="o">=</span> <span class="n">c</span>
+    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="n">bias</span><span class="p">):</span>
+        <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">row</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">:</span><span class="n">col</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">c</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="Custom"><a class="viewcode-back" href="../perturbations.html#perturbation.Custom">[docs]</a><span class="k">class</span> <span class="nc">Custom</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Applies a custom function as a perturbation to the array.</span>
+
+<span class="sd">    :type func: callable</span>
+<span class="sd">    :param func: A function that takes a single argument and returns a single value.</span>
+
+<span class="sd">    :rtype: 4d array</span>
+<span class="sd">    :return: Custom perturbated array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">custom</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">custom</span> <span class="o">=</span> <span class="n">custom</span>
+    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="n">bias</span><span class="p">):</span>
+        <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">row</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">:</span><span class="n">col</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">row</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">:</span><span class="n">col</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">custom</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">row</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">:</span><span class="n">col</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="UpperThreshold"><a class="viewcode-back" href="../perturbations.html#perturbation.UpperThreshold">[docs]</a><span class="k">class</span> <span class="nc">UpperThreshold</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Sets values above a certain threshold to a specified value.</span>
+
+<span class="sd">    :type threshold: float</span>
+<span class="sd">    :param threshold: Threshold above which values will be set to a specific value.</span>
+<span class="sd">    :type value: float</span>
+<span class="sd">    :param value: Value to which entries above the threshold will be set.</span>
+
+<span class="sd">    :rtype: 4d array</span>
+<span class="sd">    :return: Array with upper threshold applied</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">th</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">th</span> <span class="o">=</span> <span class="n">th</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">c</span> <span class="o">=</span> <span class="n">c</span>
+    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="n">bias</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">th</span><span class="p">:</span>
+            <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">row</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">:</span><span class="n">col</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">c</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="LowerThreshold"><a class="viewcode-back" href="../perturbations.html#perturbation.LowerThreshold">[docs]</a><span class="k">class</span> <span class="nc">LowerThreshold</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Sets values below a certain threshold to a specified value.</span>
+
+<span class="sd">    :type threshold: float</span>
+<span class="sd">    :param threshold: Threshold below which values will be set to a specific value.</span>
+<span class="sd">    :type value: float</span>
+<span class="sd">    :param value: Value to which entries below the threshold will be set.</span>
+
+<span class="sd">    :rtype: 4d array</span>
+<span class="sd">    :return: Array with lower threshold applied</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">th</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">th</span> <span class="o">=</span> <span class="n">th</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">c</span> <span class="o">=</span> <span class="n">c</span>
+    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="n">bias</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">th</span><span class="p">:</span>
+            <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">row</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="p">:</span><span class="n">col</span><span class="o">+</span><span class="n">window</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">c</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="kc">None</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Institut de Recerca en Energia de Catalunya.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

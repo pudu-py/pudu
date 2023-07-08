@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mask Functions &mdash; pudu  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Examples" href="examples.html" />
+    <link rel="prev" title="Perturbation Functions" href="perturbations.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pudu
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">pudu</a></li>
+<li class="toctree-l1"><a class="reference internal" href="definitions.html">Definitions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pudu.html">pudu</a></li>
+<li class="toctree-l1"><a class="reference internal" href="perturbations.html">Perturbation Functions</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Mask Functions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#masks.All"><code class="docutils literal notranslate"><span class="pre">All</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#masks.Custom"><code class="docutils literal notranslate"><span class="pre">Custom</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#masks.EveryOther"><code class="docutils literal notranslate"><span class="pre">EveryOther</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#masks.Odds"><code class="docutils literal notranslate"><span class="pre">Odds</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#masks.Pairs"><code class="docutils literal notranslate"><span class="pre">Pairs</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#masks.Percentage"><code class="docutils literal notranslate"><span class="pre">Percentage</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#masks.Quantity"><code class="docutils literal notranslate"><span class="pre">Quantity</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#masks.RandomMask"><code class="docutils literal notranslate"><span class="pre">RandomMask</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributions.html">Contributing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pudu</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Mask Functions</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/masks.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-masks">
+<span id="mask-functions"></span><h1>Mask Functions<a class="headerlink" href="#module-masks" title="Permalink to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="masks.All">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">masks.</span></span><span class="sig-name descname"><span class="pre">All</span></span><a class="reference internal" href="_modules/masks.html#All"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#masks.All" title="Permalink to this definition"></a></dt>
+<dd><p>Always returns 1, regardless of the input parameters.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="masks.Custom">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">masks.</span></span><span class="sig-name descname"><span class="pre">Custom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vector</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/masks.html#Custom"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#masks.Custom" title="Permalink to this definition"></a></dt>
+<dd><p>Initializes the Custom class with a specific vector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>vector</strong> – list</p>
+</dd>
+</dl>
+<p>The vector to be used in the apply method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="masks.EveryOther">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">masks.</span></span><span class="sig-name descname"><span class="pre">EveryOther</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_eo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/masks.html#EveryOther"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#masks.EveryOther" title="Permalink to this definition"></a></dt>
+<dd><p>Initializes the EveryOther class with a specific state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>is_eo</strong> – int</p>
+</dd>
+</dl>
+<p>The state of the class.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="masks.Odds">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">masks.</span></span><span class="sig-name descname"><span class="pre">Odds</span></span><a class="reference internal" href="_modules/masks.html#Odds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#masks.Odds" title="Permalink to this definition"></a></dt>
+<dd><p>Returns 1 if the given section is odd, None otherwise.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="masks.Pairs">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">masks.</span></span><span class="sig-name descname"><span class="pre">Pairs</span></span><a class="reference internal" href="_modules/masks.html#Pairs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#masks.Pairs" title="Permalink to this definition"></a></dt>
+<dd><p>Returns 1 if the given section is even, None otherwise.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="masks.Percentage">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">masks.</span></span><span class="sig-name descname"><span class="pre">Percentage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">percentage</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/masks.html#Percentage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#masks.Percentage" title="Permalink to this definition"></a></dt>
+<dd><p>Initializes the Percentage class with a specific percentage.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>percentage</strong> – float</p>
+</dd>
+</dl>
+<p>The percentage at which the section will be evaluated.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="masks.Quantity">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">masks.</span></span><span class="sig-name descname"><span class="pre">Quantity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qty</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/masks.html#Quantity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#masks.Quantity" title="Permalink to this definition"></a></dt>
+<dd><p>Initializes the Quantity class with a specific quantity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>qty</strong> – int</p>
+</dd>
+</dl>
+<p>The quantity at which the section will be evaluated.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="masks.RandomMask">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">masks.</span></span><span class="sig-name descname"><span class="pre">RandomMask</span></span><a class="reference internal" href="_modules/masks.html#RandomMask"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#masks.RandomMask" title="Permalink to this definition"></a></dt>
+<dd><p>Returns a random integer between 0 and 1.</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="perturbations.html" class="btn btn-neutral float-left" title="Perturbation Functions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="examples.html" class="btn btn-neutral float-right" title="Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Institut de Recerca en Energia de Catalunya.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

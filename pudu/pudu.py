@@ -3,8 +3,11 @@ import matplotlib.pyplot as plt
 from keras.models import Model
 import numpy as np
 import copy
-from . import masks, perturbation, error_handler, plots, standards
-# import masks, perturbation, error_handler, plots, standards
+
+import masks as msk
+import perturbation as ptn
+import standards, error_handler 
+
 
 class pudu:
     def __init__(self, x, y, pf, model=None):
@@ -62,8 +65,8 @@ class pudu:
         error_handler.for_constructor(model, x, y)
         
 
-    def importance(self, window=1, scope=None, evolution=None, padding='center', 
-                    absolute=False, **kwargs):
+    def importance(self, window=1, scope=None, evolution=None, padding='center', bias=0,
+                    absolute=False, perturbation=ptn.Bidirectional(), mask=msk.All()):
         """
         Calculates the importance vector for the input feature.
 
@@ -88,31 +91,38 @@ class pudu:
         :type absolute: bool
         :param absolute: Weather or not the result is in absolute value or not. Default is `False`.
         """
-        error_handler.for_params(window, scope, padding, absolute, 0, [1, 2, 3], None, None)
+        error_handler.for_params(window, scope, padding, absolute, 0, None, None)
 
         # Initial values
         sh = np.array(self.x).shape
-        x_copy = copy.deepcopy(self.x)
         d_temp = np.zeros((sh[0], sh[1], sh[2], sh[3]))
-        
-        scope, window, padding, evolution = standards.params_std(self.y, sh, scope, window, padding, evolution)
-        padd = standards.calc_pad(padding, scope, window)
-        mask_array = masks.function(sh=sh, padd=padd, scope=scope, window=window, **kwargs)
+
+        scope, window, padd, evolution, total = standards.params_std(self.y, sh, scope, window, padding, evolution)
 
         p0 = self.pf(self.x)
+        section = 1
         row = padd[0][0] + scope[0][0]
         while row <= scope[0][1] - padd[0][1] - window[0]:
             col = padd[1][0] + scope[1][0]
             while col <= scope[1][1] - padd[1][1] - window[1]:
+                x_copy = copy.deepcopy(self.x)
 
-                if mask_array[0][row][col][0] == 1:
+                mask_val = mask.apply(section, total)
+
+                if mask_val == 1:
 
                     row_idx, col_idx = np.meshgrid(range(window[0]), range(window[1]), indexing='ij')
                     row_idx, col_idx = row_idx + row, col_idx + col
 
-                    temp, temp2 = perturbation.function(x=x_copy, row=row_idx, col=col_idx, **kwargs)
+                    temp, temp2 = perturbation.apply(x_copy, row, col, window, bias)
 
-                    if temp2 is False:
+                    # print(np.shape(temp[0,:,:,0]), np.shape(self.x[0,:,:,0]))
+                    # plt.plot(temp[0,0,:,0])
+                    # plt.plot(self.x[0,0,:,0])
+                    # plt.show()
+                    # exit()
+
+                    if temp2 is None:
                         val = self.pf(temp) - p0
                     else:
                         val = (self.pf(temp2) + self.pf(temp) - 2*p0) / 2
@@ -128,6 +138,8 @@ class pudu:
                 else:
                     pass
 
+                section += 1
+
                 col += window[1]
             row += window[0]
 
@@ -137,8 +149,9 @@ class pudu:
         self.imp_rel = (d_temp - min_val) / (max_val - min_val)
 
 
-    def speed(self, window=1, scope=None, evolution=None, padding='center', 
-                steps=[0,0.1,0.2], absolute=False, **kwargs):
+    def speed(self, window=1, scope=None, evolution=None, padding='center',
+                bias=0, absolute=False, mask=msk.All(), 
+                perturbation=[ptn.Bidirectional(delta=.1), ptn.Bidirectional(delta=.2), ptn.Bidirectional(delta=.3)]):
         """
         Calculates the gradient of the importance. In other words, the slope
             of the curve formed by the importance at different values. This 
@@ -164,42 +177,37 @@ class pudu:
 
         :type absolute: bool
         :param absolute: Weather or not the result is in absolute value or not. Default is `False`.
-
-        :type steps: list
-        :param steps: Contains the different values at which the importance will be measured.
-            In other words, the values at which the feature will be changed (feature*steps)
-            before applyin the perturbation function (perturbation(feature*steps)). This means
-            it orks somewhat differently than `importnace` and `synergy`.
         """
-        error_handler.for_params(window, scope, padding, absolute, 0, steps, None, None)
+        error_handler.for_params(window, scope, padding, absolute, 0, None, None)
 
         # Initial values
         sh = np.array(self.x).shape
-        x_copy = copy.deepcopy(self.x)
         d_temp = np.zeros((sh[0], sh[1], sh[2], sh[3]))
         
-        scope, window, padding, evolution = standards.params_std(self.y, sh, scope, window, padding, evolution)
-        padd = standards.calc_pad(padding, scope, window)
-        mask_array = masks.function(sh=sh, padd=padd, scope=scope, window=window, **kwargs)
+        scope, window, padd, evolution, total = standards.params_std(self.y, sh, scope, window, padding, evolution)
 
-        p0 = self.pf(self.x) 
+        p0 = self.pf(self.x)
+        section = 1
         row = padd[0][0] + scope[0][0]
         while row <= scope[0][1] - padd[0][1] - window[0]:
             col = padd[1][0] + scope[1][0]
             while col <= scope[1][1] - padd[1][1] - window[1]:
+                x_copy = copy.deepcopy(self.x)
 
-                if mask_array[0][row][col][0] == 1:
+                mask_val = mask.apply(section, total)
+
+                if mask_val == 1:
 
                     p = []
 
                     row_idx, col_idx = np.meshgrid(range(window[0]), range(window[1]), indexing='ij')
                     row_idx, col_idx = row_idx + row, col_idx + col
                     
-                    for j in steps:
+                    for j in perturbation:
                         temp = self.x.copy()
-                        temp[0, row, col, 0] = (x_copy[0, row, col, 0]) * j
-                        temp, temp2 = perturbation.function(x=temp, row=row_idx, col=col_idx, **kwargs)
-                        
+                       
+                        temp, temp2 = j.apply(x_copy, row, col, window, bias)
+
                         if temp2 is False:
                             val = self.pf(temp) - p0
                         else:
@@ -220,6 +228,8 @@ class pudu:
 
                 else:
                     pass    
+                
+                section += 1
 
                 col += window[1]
             row += window[0]
@@ -230,8 +240,8 @@ class pudu:
         self.spe_rel = (d_temp - min_val) / (max_val - min_val)
 
     
-    def synergy(self, delta=0.1, window=1, inspect=0, scope=None, absolute=False,
-                    evolution=None, padding='center', **kwargs):
+    def synergy(self, window=1, inspect=0, scope=None, absolute=False, bias=0,
+                    evolution=None, padding='center', perturbation=ptn.Bidirectional(), mask=msk.All()):
         """
         Calculates the synergy between features.
         
@@ -259,16 +269,13 @@ class pudu:
         :type absolute: bool
         :param absolute: Weather or not the result is in absolute value or not. Default is `False`.
         """
-        error_handler.for_params(window, scope, padding, absolute, inspect, [1, 2, 3], None, None)
+        error_handler.for_params(window, scope, padding, absolute, inspect, None, None)
 
         # Initial values
         sh = np.array(self.x).shape
-        x_copy = copy.deepcopy(self.x)
         d_temp = np.zeros((sh[0], sh[1], sh[2], sh[3]))
         
-        scope, window, padding, evolution = standards.params_std(self.y, sh, scope, window, padding, evolution)
-        padd = standards.calc_pad(padding, scope, window)
-        mask_array = masks.function(sh=sh, padd=padd, scope=scope, window=window, **kwargs)
+        scope, window, padd, evolution, total = standards.params_std(self.y, sh, scope, window, padding, evolution)
 
         # Position to range of the desired area to calculate synergy from
         if len(np.array(inspect).shape) == 0:
@@ -277,18 +284,23 @@ class pudu:
             else:
                 inspect = (window[0]*inspect + padd[0][0] + scope[0][0], 
                            window[1]*inspect + padd[1][0] + scope[1][0])
-        
-        base = copy.deepcopy(x_copy)
-        for i in range(inspect[0], inspect[0]+window[0]):
-            for j in range(inspect[1], inspect[1]+window[1]):
-                base[0][i][j][0] = x_copy[0][i][j][0]*(1+delta)
-        
-        p0 = self.pf(self.x)
+                
+        x_copy = copy.deepcopy(self.x)
+        base, base2 = perturbation.apply(x_copy, inspect[0], inspect[1], window, bias)
+
+        pb0 = self.pf(base)
+        pb2 = self.pf(base2)
+
+        section = 1
         row = padd[0][0] + scope[0][0]
         while row <= scope[0][1] - padd[0][1] - window[0]:
             col = padd[1][0] + scope[1][0]
             while col <= scope[1][1] - padd[1][1] - window[1]:
-                if mask_array[0][row][col][0] == 1:
+                x_copy = copy.deepcopy(self.x)
+
+                mask_val = mask.apply(section, total)
+
+                if mask_val == 1:
 
                     if inspect[0] == row and inspect[1] == col:
                         pass
@@ -296,12 +308,12 @@ class pudu:
                         row_idx, col_idx = np.meshgrid(range(window[0]), range(window[1]), indexing='ij')
                         row_idx, col_idx = row_idx + row, col_idx + col
 
-                        temp, temp2 = perturbation.function(x=x_copy, row=row_idx, col=col_idx, **kwargs)
+                        temp, temp2 = perturbation.apply(x_copy, row, col, window, bias)
 
                         if temp2 is False:
-                            val = self.pf(temp) - p0
+                            val = self.pf(temp) - pb0
                         else:
-                            val = (self.pf(temp2) + self.pf(temp)) / 2
+                            val = (self.pf(temp2) + self.pf(temp) - pb0 - pb2) / 2
 
                         if absolute:
                             val = abs(val)
@@ -313,6 +325,8 @@ class pudu:
                 else:
                     pass
 
+                section += 1
+
                 col += window[1]
             row += window[0]
 
@@ -322,11 +336,9 @@ class pudu:
         self.syn_rel = (d_temp - min_val) / (max_val - min_val)
 
 
-    def activations(self, layer=0, slope=0, p=0.005, window=1, scope=None, 
-                        padding='center', **kwargs):
+    def activations(self, layer=0, slope=0, p=0.005, window=1, scope=None, bias=0,
+                        padding='center', perturbation=ptn.Bidirectional(), mask=msk.All()):
         """
-        a_q_a
-        a_q_k
         Counts the unit activations in the selected `layer` of a `Keras` model according 
             to change in the feature.
         
@@ -352,17 +364,14 @@ class pudu:
             is applyied and `window` ends at length `x`. If perfet `center` is
             not possible, then ipadding left is added `1`.
         """
-        error_handler.for_params(window, scope, padding, False, 0, [1, 2, 3], layer, p)
+        error_handler.for_params(window, scope, padding, False, 0, layer, p)
         
         # Initial values
         sh = np.array(self.x).shape
-        x_copy = copy.deepcopy(self.x)
         d_temp = np.zeros((sh[0], sh[1], sh[2], sh[3]))
         o_b, o_h, o_w, o_d = sh[0], sh[1], sh[2], sh[3]
         
-        scope, window, padding, _ = standards.params_std(self.y, sh, scope, window, padding, None)
-        padd = standards.calc_pad(padding, scope, window)
-        mask_array = masks.function(sh=sh, padd=padd, scope=scope, window=window, **kwargs)
+        scope, window, padd, evolution, total = standards.params_std(self.y, sh, scope, window, padding, None)
 
         # Keras
         layer_outputs = [layer.output for layer in self.model.layers]
@@ -372,23 +381,27 @@ class pudu:
         activations = activation_model.predict(x, verbose=0)
         p0 = activations[layer] # raw activation values for the image
 
-        index_array = [[] for _ in range(len(p0.flatten()))] # to store unit idx and coordinates
-        # act_count = np.zeros_like(p0) # this one counts activations per unit
-        act_count = [] # new
-        
+        # index_array = [[] for _ in range(len(p0.flatten()))] # to store unit idx and coordinates
+
+        act_count = []
         act_idx_count = 1
+        section = 1
         row = padd[0][0] + scope[0][0]
         while row <= scope[0][1] - padd[0][1] - window[0]:
             col = padd[1][0] + scope[1][0]
             while col <= scope[1][1] - padd[1][1] - window[1]:
-                if mask_array[0][row][col][0] == 1:
+                x_copy = copy.deepcopy(self.x)
+                
+                mask_val = mask.apply(section, total)
+
+                if mask_val == 1:
 
                     row_idx, col_idx = np.meshgrid(range(window[0]), range(window[1]), indexing='ij')
                     row_idx, col_idx = row_idx + row, col_idx + col
 
-                    temp, temp2 = perturbation.function(x=x_copy, row=row_idx, col=col_idx, **kwargs)
+                    temp, temp2 = perturbation.apply(x_copy, row, col, window, bias)
 
-                    if temp2 is False:
+                    if temp2 is None:
                         temp = np.squeeze(temp, axis=0) if temp.shape[1] == 1 else temp
 
                         activations = activation_model.predict(temp, verbose=0)
@@ -407,8 +420,6 @@ class pudu:
 
                         activations = (p1 + p2 - 2*p0) / 2
 
-                    # act_flat = activations.flatten()
-                    # act_count.append(act_flat)
                     act_count.append(activations.flatten())
 
                     d_temp[0, row:row+window[0], col:col+window[1], 0] = act_idx_count
@@ -416,6 +427,8 @@ class pudu:
 
                 else:
                     pass
+
+                section += 1
 
                 col += window[1]
             row += window[0]
@@ -494,8 +507,8 @@ class pudu:
         return feats, units
 
 
-    def relatable(self, layer=0, slope=0, p=0.005, window=1, scope=None, 
-                    padding='center', **kwargs):
+    def relatable(self, layer=0, slope=0, p=0.005, window=1, scope=None, bias=0,
+                    padding='center', perturbation=ptn.Bidirectional(), mask=msk.All()):
         """
         This function generates an activation report for each set of coordinates in `x` and `y`. 
 
@@ -531,8 +544,10 @@ class pudu:
         # master = np.array()
         for x, y in zip(s_x, s_y):
             x = np.expand_dims(x, 0)
-            self.x, self.y = x, y 
-            feats, units = self.activations(layer, slope, p, window, scope, padding, **kwargs)
+            self.x, self.y = x, y
+
+            feats, units = self.activations(layer, slope, p, window, scope, bias, padding,
+                                            perturbation=perturbation, mask=mask)
 
             master.extend((i, j) for i, j in zip(feats, units))
 
@@ -553,7 +568,8 @@ class pudu:
 
     def preview(self, window=1, scope=None, padding='center', axis=None, show_data=True,
                     title='Preview', xlabel='Feature', ylabel='Intensity', xticks=None, 
-                    yticks=[], cmap='Greens', font_size=15, figsize=(14, 4), bold=False, **kwargs):
+                    yticks=[], cmap='Greens', font_size=15, figsize=(14, 4), bold=False,
+                    mask = msk.All()):
         """
         Plots an approximate preview of the sections, areas, or mask to be analyzed over the data
             before executing. It is particularly useful to check if the parameters are
@@ -615,7 +631,7 @@ class pudu:
         :type bold: Boolean
         :param bold: To make the limit lines bolder. Default is 'False'.
         """
-        error_handler.for_params(window, scope, padding, False, 0, [1, 2, 3], None, None)
+        error_handler.for_params(window, scope, padding, False, 0, None, None)
 
         # Initial values
         image = [] # this will be the preview image
@@ -623,16 +639,16 @@ class pudu:
         d_temp = np.zeros((sh[0], sh[1], sh[2], sh[3]))
         countour = np.zeros((sh[0], sh[1], sh[2], sh[3]))
                 
-        scope, window, padding, _ = standards.params_std(self.y, sh, scope, window, padding, evolution=None)
-        padd = standards.calc_pad(padding, scope, window)
-        mask_array = masks.function(sh=sh, padd=padd, scope=scope, window=window, **kwargs)
+        scope, window, padd, evolution, total = standards.params_std(self.y, sh, scope, window, padding, None)
 
+        section = 1
         row = padd[0][0] + scope[0][0]
         while row <= scope[0][1] - padd[0][1] - window[0]:
             col = padd[1][0] + scope[1][0]
             while col <= scope[1][1] - padd[1][1] - window[1]:
+                mask_val = mask.apply(section, total)
 
-                if mask_array[0][row][col][0] == 1:
+                if mask_val == 1:
                     countour[0, row, col, 0] = 1
                     d_temp[0, row:row+window[0], col:col+window[1], 0] = 1
 
@@ -643,7 +659,8 @@ class pudu:
                             countour[0, row, i, 0] = 1
                 else:
                     pass
-
+                
+                section += 1
                 col += window[1]
             row += window[0]
 

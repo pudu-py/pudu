@@ -43,15 +43,38 @@ is :math:`LI_{j*,j}`. Then,
 
 Activations and re-activaiton
 =============================
+
+Units
+_____
+In a convolutional layer :math:`l \in L`, where :math:`L` is the group of all convolutional layers in
+the model :math:`M`, the number of units in :math:`K` is defined by the size of the input :math:`(h, w)`,
+kernel size :math:`(k_h, k_w)`, strides :math:`(s_h, s_w)` and the filters :math:`f`. Specifically, the
+number of units can be calculated as:
+
+.. math::
+        H_o = (h - k_h) / s_h + 1
+
+        W_o = (w - k_w) / s_w + 1
+
+        units = f * H_o * W_o
+
+Where :math:`(H_o, W_o)` are the dimensions of the output of layer :math:`l`.
+
+Acitvation map
+______________
 As defined by Bau and Zhou et al. (2017), for :math:`x`, take the activation map :math:`A_k(x)` 
 for each of the units :math:`k`. Then :math:`a_k` is the activation distribution for each
 individual unit. Then, all the activations belonging to the :math:`p` quantile as
 :math:`P(a_k>T_k)=p` were :math:`T_k` is the value above which the quantile exists.
 
+Re-activation map
+_________________
 The above can be evaluated based in feature perturbations considering :math:`x`, the original data,
 and :math:`x_j`, the perturbated input in feature :math:`j`, and evaluate the difference as 
-:math:`A_k(x_j)-A_k(x)=\Delta A_{k,j}`. From here we can extract the distribution
-:math:`\Delta a_{k,j}` and select the quantile as :math:`P(\Delta a_{k,j}>T_k)=p`.
+:math:`B_k(x_j)-B_k(x)=\Delta B_{k,j}`, where :math:`B` is the pre-activatoin map of unit :math:`k`.
+From here we can extract the distribution :math:`\Delta b_{k,j}` and select then pass the data 
+through the activation function to obtain :math:`a_{k,j}`. Finally, select the  :math:`p` quantile
+as :math:`P(\Delta a_{k,j}>T_k)=p`.
 
 The latter accounts then for difference in unit activations after perturbation that would account
 for a re-activation. For example, if unit :math:`k` has and activation value of :math:`u`, and
@@ -71,10 +94,10 @@ With this, it is possible to obtain the following information:
 4. Which feature re-activates what unit the most times :math:`^1`
 
 
-:math:`^1` For point **4**, though can be obtained for a single sample :math:`x`, it is better to use
+:math:`^1` Though can be obtained for a single sample :math:`x`, it is better to use
 a significant number of them.
 
 References
-----------
+==========
 
 1. Bau, D., Zhou, B., Khosla, A., Aude, O. & Torralba, A. Network Dissection: Quantifying Interpretability of Deep Visual Representation. (2017).

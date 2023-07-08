@@ -109,10 +109,10 @@ ENV/
 .vscode//docs/_build
 
 # Files in tests
-tests/pudu7.py
-tests/perturbation.py
-tests/masks.py
-tests/plots.py
-tests/standards.py
-tests/error_handler.py
+tests/pudu8.py
+tests/perturbation8.py
+tests/masks8.py
+tests/plots8.py
+tests/standards8.py
+tests/error_handler8.py
 

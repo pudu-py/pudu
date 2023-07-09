@@ -15,9 +15,37 @@ Examples 2: Regression for predicition of open circuit voltage of solar cells wi
     :language: python
 
 
-
 Examples 3: Handwritten numbers recognition using CNN with Keras and Mnist
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. literalinclude:: ../examples/example_cnn_mnist.py
     :language: python
+
+
+Examples 4: How to call different masks 
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. literalinclude:: ../examples/example_masking.py
+    :language: python
+
+
+Examples 5: How to call different perturbations 
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. literalinclude:: ../examples/example_perturbation.py
+    :language: python
+
+
+Examples 6: Re-activations with 1-D CNN 
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. literalinclude:: ../examples/example_activations_1d.py
+    :language: python
+
+
+Examples 7: Re-activations with 2-D CNN 
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. literalinclude:: ../examples/example_activations_2d.py
+    :language: python
+    

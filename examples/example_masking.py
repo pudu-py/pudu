@@ -6,13 +6,11 @@ import pickle
 import lime
 
 from pudu import pudu, plots
-import perturbation as ptn
+from pudu import masks as msk
 
-
-# Other examples are with `bidirectional` or `positive` mode, that
-# is an average of changing positevly and neatively the feature by 
-# `delta` times. Depending on the nature of your features, you can
-# diferent modes that will yield different results
+# Masking allows you to cover your featuresof analysis. It serves the
+# same purpose of `scope` but it works ni a structured and patterned way.
+# This example shows the use of `mask` options available.
 
 # Load features (spectra) and targets (open circuit coltage, voc)
 features = spep.load('data/features.txt')
@@ -38,10 +36,9 @@ def pf(X):
 # Build pudu
 imp = pudu.pudu(x, y, pf)
 
-# Evaluate `importance` with 'bidirectional', 'positive', 'negative', and 'relu'
-# Note that some of these work only with `w=1`, like `relu` and `leakyrelu`
-pert = [ptn.Bidirectional(), ptn.Positive(), ptn.Negative(), ptn.ReLU()]
-ptn_names = ['bidirectional', 'positive', 'negative', 'relu']
-for i,j in zip(pert, ptn_names):
-    imp.importance(window=1, perturbation=i, absolute=True)
-    plots.plot(imp.x, imp.imp, title="Importance - "+j, yticks=[], font_size=15)
+# Evaluate `importance` with no mask first, then 'everyother' and 'random'
+masks = [msk.All(), msk.EveryOther(), msk.RandomMask()]
+m_names = ['All', 'EveryOther', 'RandomMask']
+for i,j in zip(masks, m_names):
+    imp.importance(window=100, absolute=False, mask=i)
+    plots.plot(imp.x, imp.imp, title="Importance - "+j, yticks=[], font_size=15, cmap='jet')

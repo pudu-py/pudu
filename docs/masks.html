@@ -44,7 +44,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="introduction.html">pudu</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction to pudu</a></li>
 <li class="toctree-l1"><a class="reference internal" href="definitions.html">Definitions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pudu.html">pudu</a></li>
 <li class="toctree-l1"><a class="reference internal" href="perturbations.html">Perturbation Functions</a></li>
@@ -93,6 +93,14 @@
 <dt class="sig sig-object py" id="masks.All">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">masks.</span></span><span class="sig-name descname"><span class="pre">All</span></span><a class="reference internal" href="_modules/masks.html#All"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#masks.All" title="Permalink to this definition"></a></dt>
 <dd><p>Always returns 1, regardless of the input parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>1</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py class">
@@ -101,13 +109,13 @@
 <dd><p>Initializes the Custom class with a specific vector.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>vector</strong> – list</p>
+<dd class="field-odd"><p><strong>vector</strong> (<em>list</em>) – The vector to be used in the apply method.</p>
 </dd>
-</dl>
-<p>The vector to be used in the apply method.</p>
-<dl class="field-list simple">
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>None</p>
+<dd class="field-odd"><p>Either 0 or 1</p>
 </dd>
 </dl>
 </dd></dl>
@@ -118,22 +126,43 @@
 <dd><p>Initializes the EveryOther class with a specific state.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>is_eo</strong> – int</p>
+<dd class="field-odd"><p><strong>is_eo</strong> (<em>int</em>) – The state of the class.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Either 0 or 1</p>
 </dd>
 </dl>
-<p>The state of the class.</p>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="masks.Odds">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">masks.</span></span><span class="sig-name descname"><span class="pre">Odds</span></span><a class="reference internal" href="_modules/masks.html#Odds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#masks.Odds" title="Permalink to this definition"></a></dt>
 <dd><p>Returns 1 if the given section is odd, None otherwise.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Either 0 or 1</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="masks.Pairs">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">masks.</span></span><span class="sig-name descname"><span class="pre">Pairs</span></span><a class="reference internal" href="_modules/masks.html#Pairs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#masks.Pairs" title="Permalink to this definition"></a></dt>
 <dd><p>Returns 1 if the given section is even, None otherwise.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Either 0 or 1</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py class">
@@ -142,10 +171,15 @@
 <dd><p>Initializes the Percentage class with a specific percentage.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>percentage</strong> – float</p>
+<dd class="field-odd"><p><strong>percentage</strong> (<em>float</em>) – The percentage at which the section will be evaluated.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Either 0 or 1</p>
 </dd>
 </dl>
-<p>The percentage at which the section will be evaluated.</p>
 </dd></dl>
 
 <dl class="py class">
@@ -154,16 +188,29 @@
 <dd><p>Initializes the Quantity class with a specific quantity.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>qty</strong> – int</p>
+<dd class="field-odd"><p><strong>qty</strong> (<em>int</em>) – The quantity at which the section will be evaluated.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Either 0 or 1</p>
 </dd>
 </dl>
-<p>The quantity at which the section will be evaluated.</p>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="masks.RandomMask">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">masks.</span></span><span class="sig-name descname"><span class="pre">RandomMask</span></span><a class="reference internal" href="_modules/masks.html#RandomMask"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#masks.RandomMask" title="Permalink to this definition"></a></dt>
 <dd><p>Returns a random integer between 0 and 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Either 0 or 1</p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>

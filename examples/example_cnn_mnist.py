@@ -2,11 +2,8 @@ import numpy as np
 from tensorflow import keras
 from keras.models import load_model
 import matplotlib.pyplot as plt
-import sys
 
-# from pudu import pudu, plots
-import pudu7 as pudu
-import plots
+from pudu import pudu, plots
 
 # Model / data parameters
 num_classes = 10
@@ -49,15 +46,12 @@ x = np.expand_dims(x_train[0], 0)
 imp = pudu.pudu(x, y, cnn2d_prob)
 
 # in this case, 'window' is a tuple that indicates the width and height.
-imp.importance(delta=0.1, window=(3, 3), scope=None, mode='bidirectional', 
-                    padding='center', bias=0.05)
+imp.importance(window=(3, 3), scope=None, padding='center')
 plots.plot(imp.x, imp.imp, axis=None, figsize=(10, 10), cmap='cool')
-
 
 # In this case, as there are many `0` values in the image, including some bias 
 # can help us to visualize importance in those areas, since 0*delta = 0
-imp.importance(delta=0.1, window=(3, 3), scope=None, mode='bidirectional', 
-                    padding='center', bias=0.1)
+imp.importance(window=(3, 3), scope=None, padding='center', bias=0.1)
 plots.plot(imp.x, imp.imp, axis=None, figsize=(10, 10), cmap='cool')
 
 ### LIME ###
@@ -70,8 +64,7 @@ from skimage.color import gray2rgb
 image = x_train[0,:,:,0]
 image = gray2rgb(image) 
 
-# Similarly, model.predict is not for RGB, so we have to wrap it so the input
-# is RBG.
+# model.predict is not for RGB, so we have to wrap it so the input is RBG.
 def cnn2d_prob(X):
     X = X[:, :, :, 0]
     X = X[:, :, :, np.newaxis]

@@ -1,12 +1,11 @@
 from collections import defaultdict, Counter
-import matplotlib.pyplot as plt
 from keras.models import Model
 import numpy as np
 import copy
 
+from . import error_handler, standards
 from . import masks as msk
 from . import perturbation as ptn
-from . import standards, error_handler 
 
 
 class pudu:
@@ -336,7 +335,7 @@ class pudu:
         self.syn_rel = (d_temp - min_val) / (max_val - min_val)
 
 
-    def activations(self, layer=0, slope=0, p=0.005, window=1, scope=None, bias=0,
+    def reactivations(self, layer=0, slope=0, p=0.005, window=1, scope=None, bias=0,
                         padding='center', perturbation=ptn.Bidirectional(), mask=msk.All()):
         """
         Counts the unit activations in the selected `layer` of a `Keras` model according 
@@ -546,7 +545,7 @@ class pudu:
             x = np.expand_dims(x, 0)
             self.x, self.y = x, y
 
-            feats, units = self.activations(layer, slope, p, window, scope, bias, padding,
+            feats, units = self.reactivations(layer, slope, p, window, scope, bias, padding,
                                             perturbation=perturbation, mask=mask)
 
             master.extend((i, j) for i, j in zip(feats, units))

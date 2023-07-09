@@ -79,6 +79,9 @@ versions with tox::
         $ coverage run -m unittest test_pudu.py
         $ coverage xml
 
+Independently of what you do, all tests must pass. I you add functionality, like `functions`
+or `classes`, the they must include a test.
+
 7. Commit your changes and push your branch to GitHub::
 
         $ git add .
@@ -92,8 +95,8 @@ Pull Request Guidelines
 
 Before you submit a pull request, check that it meets these guidelines:
 
-1. The pull request should include tests. Coverage should not go below 80% with `Codecov`.
+1. The pull request should include tests. Coverage should not go below 70% with `Codecov`.
 2. CodeQL should pass.
-3. If the pull request adds functionality, the docs should be updated. Put
-   your new functionality into a function with a docstring.
+3. If the pull request adds functionality, the docs should be updated. Add useful
+documentation to your functionality so it is included in the `docs`.
 4. The pull request should work for Python 3.6 through 3.10.

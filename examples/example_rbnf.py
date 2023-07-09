@@ -1,12 +1,12 @@
-from localreg import RBFnet, plot_corr
+from localreg import RBFnet
 from sklearn.metrics import r2_score
 import matplotlib.pyplot as plt
 import spectrapepper as spep
 import numpy as np
 
-# from pudu import pudu, plots
-import pudu7 as pudu
-import plots
+from pudu import pudu, plots
+from pudu import perturbation as ptn
+from pudu import masks as msk
 
 # Load the file that contains the calculated areas from the spectras
 ra = spep.load('data/areas.txt', transpose=True)
@@ -45,9 +45,13 @@ y = z[0]
 
 # Build pudu and evaluate importance, speed, and synergy
 imp = pudu.pudu(x, y, rbf_pred)
-imp.importance(delta=0.1, window=1, mode='bidirectional')
-imp.speed(delta=0.1, window=1, mode='bidirectional')
-imp.synergy(delta=0.1, inspect=0, window=1, mode='bidirectional')
+imp.importance(window=1, perturbation=ptn.Bidirectional(delta=0.1))
+imp.speed(window=1, perturbation=[
+                                  ptn.Bidirectional(delta=0.1), 
+                                  ptn.Bidirectional(delta=0.2), 
+                                  ptn.Bidirectional(delta=0.3)
+                                ])
+imp.synergy(window=1, inspect=0, perturbation=ptn.Bidirectional(delta=0.1))
 
 # Plot the ouput
 axis = [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4]

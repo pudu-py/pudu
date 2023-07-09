@@ -41,7 +41,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../introduction.html">pudu</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction to pudu</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../definitions.html">Definitions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../pudu.html">pudu</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../perturbations.html">Perturbation Functions</a></li>
@@ -75,16 +75,19 @@
            <div itemprop="articleBody">
              
   <h1>Source code for masks</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">random</span>
+<span></span><span class="kn">import</span> <span class="nn">random</span>
 
 <div class="viewcode-block" id="Percentage"><a class="viewcode-back" href="../masks.html#masks.Percentage">[docs]</a><span class="k">class</span> <span class="nc">Percentage</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Initializes the Percentage class with a specific percentage.</span>
 
-<span class="sd">    :param percentage: float</span>
-<span class="sd">    The percentage at which the section will be evaluated. </span>
+<span class="sd">    :type percentage: float</span>
+<span class="sd">    :param percentage: The percentage at which the section will be evaluated.</span>
+
+<span class="sd">    :rtype: int</span>
+<span class="sd">    :returns: Either 0 or 1</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">percentage</span><span class="o">=</span><span class="mf">0.2</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">percentage</span> <span class="o">=</span> <span class="n">percentage</span>
     <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section</span><span class="p">,</span> <span class="n">total</span><span class="p">):</span>
@@ -97,8 +100,11 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Initializes the Quantity class with a specific quantity.</span>
 
-<span class="sd">    :param qty: int</span>
-<span class="sd">    The quantity at which the section will be evaluated.</span>
+<span class="sd">    :type qty: int</span>
+<span class="sd">    :param qty: The quantity at which the section will be evaluated.</span>
+
+<span class="sd">    :rtype: int</span>
+<span class="sd">    :returns: Either 0 or 1</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">qty</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">qty</span> <span class="o">=</span> <span class="n">qty</span>
@@ -112,8 +118,11 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Initializes the EveryOther class with a specific state.</span>
 
-<span class="sd">    :param is_eo: int</span>
-<span class="sd">    The state of the class.</span>
+<span class="sd">    :type is_eo: int</span>
+<span class="sd">    :param is_eo: The state of the class.</span>
+
+<span class="sd">    :rtype: int</span>
+<span class="sd">    :returns: Either 0 or 1</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_eo</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">is_eo</span> <span class="o">=</span> <span class="n">is_eo</span>
@@ -124,6 +133,9 @@
 <div class="viewcode-block" id="Pairs"><a class="viewcode-back" href="../masks.html#masks.Pairs">[docs]</a><span class="k">class</span> <span class="nc">Pairs</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Returns 1 if the given section is even, None otherwise.</span>
+
+<span class="sd">    :rtype: int</span>
+<span class="sd">    :returns: Either 0 or 1</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section</span><span class="p">,</span> <span class="n">total</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">section</span><span class="o">%</span><span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -134,6 +146,9 @@
 <div class="viewcode-block" id="Odds"><a class="viewcode-back" href="../masks.html#masks.Odds">[docs]</a><span class="k">class</span> <span class="nc">Odds</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Returns 1 if the given section is odd, None otherwise.</span>
+
+<span class="sd">    :rtype: int</span>
+<span class="sd">    :returns: Either 0 or 1</span>
 <span class="sd">    &quot;&quot;&quot;</span>   
     <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section</span><span class="p">,</span> <span class="n">total</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">section</span><span class="o">%</span><span class="mi">2</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span> 
@@ -144,6 +159,9 @@
 <div class="viewcode-block" id="RandomMask"><a class="viewcode-back" href="../masks.html#masks.RandomMask">[docs]</a><span class="k">class</span> <span class="nc">RandomMask</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Returns a random integer between 0 and 1.</span>
+
+<span class="sd">    :rtype: int</span>
+<span class="sd">    :returns: Either 0 or 1</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section</span><span class="p">,</span> <span class="n">total</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span></div>
@@ -152,10 +170,11 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Initializes the Custom class with a specific vector.</span>
 
-<span class="sd">    :param vector: list</span>
-<span class="sd">    The vector to be used in the apply method.</span>
+<span class="sd">    :type vector: list</span>
+<span class="sd">    :param vector: The vector to be used in the apply method.</span>
 
-<span class="sd">    :return: None</span>
+<span class="sd">    :rtype: int</span>
+<span class="sd">    :returns: Either 0 or 1</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vector</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">vector</span> <span class="o">=</span> <span class="n">vector</span>
@@ -165,6 +184,9 @@
 <div class="viewcode-block" id="All"><a class="viewcode-back" href="../masks.html#masks.All">[docs]</a><span class="k">class</span> <span class="nc">All</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Always returns 1, regardless of the input parameters.</span>
+
+<span class="sd">    :rtype: int</span>
+<span class="sd">    :returns: 1</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section</span><span class="p">,</span> <span class="n">total</span><span class="p">):</span>
         <span class="k">return</span> <span class="mi">1</span></div>

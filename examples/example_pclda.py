@@ -5,9 +5,8 @@ import numpy as np
 import pickle
 import lime
 
-# from pudu import pudu, plots
-import pudu7 as pudu
-import plots
+from pudu import pudu, plots
+
 
 # Load features (spectra) and targets (open circuit coltage, voc)
 features = spep.load('data/features.txt')
@@ -27,6 +26,7 @@ def pcalda_proba(X):
 # Feature names and categorical features in the correct format
 fn = [str(i) for i in range(len(features[100]))]
 cf = [i for i in range(len(features[100]))]
+
 
 # Make explainer and evaluate an instance
 explainer = lime.lime_tabular.LimeTabularExplainer(np.array(features),
@@ -53,7 +53,6 @@ plt.ylabel('Intensity')
 plt.yticks([])
 plt.show()
 
-
 ### PUDU ###
 # Select x (feature) and respective y (target)
 x = features[100]
@@ -70,22 +69,23 @@ def pf(X):
 # Build pudu
 imp = pudu.pudu(x, y, pf)
 
-# Evaluate `importance` for all features
-imp.importance(delta=0.1, window=1, mode='bidirectional')
-plots.plot(imp.x, imp.imp_rel, title="Importance", yticks=[], font_size=15)
+# Evaluate `importance`. We use Vanilla settings for this one
+# except for `window`.
+imp.importance(window=50)
+plots.plot(imp.x, imp.imp, title="Importance", yticks=[], font_size=15)
 
 # Single pixels might be irrelevant for spectroscopy. We can group features
 # to evaluate together.
-imp.importance(delta=0.1, window=50, mode='bidirectional')
+imp.importance(window=50)
 plots.plot(imp.x, imp.imp, title="Importance", yticks=[], font_size=15)
 
 # We can see how fast would the classification change according to
 # the change in the features.
-imp.speed(delta=0.1, window=50, mode='bidirectional')
+imp.speed(window=50)
 plots.plot(imp.x, imp.spe, title="Speed", yticks=[], font_size=15)
 
 # Finally we evaluate how different changes complement each other.
 # We want ot evaluate the main Raman peak (aprox. 3rd position) and see
 # its synergy with the rest of the data
-imp.synergy(delta=0.1, inspect=3, window=50, mode='bidirectional')
+imp.synergy(inspect=3, window=50)
 plots.plot(imp.x, imp.syn, title="Synergy", yticks=[], font_size=15)

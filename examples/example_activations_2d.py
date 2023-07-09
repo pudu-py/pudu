@@ -1,10 +1,10 @@
 import numpy as np
 from tensorflow import keras
 from keras.models import load_model
-import matplotlib.pyplot as plt
-# from pudu import pudu, plots
-import pudu7 as pudu
-import plots
+
+from pudu import pudu, plots
+from pudu import perturbation as ptn
+
 
 # Model / data parameters
 num_classes = 10
@@ -47,13 +47,13 @@ x = np.expand_dims(x_train[sample], 0)
 imp = pudu.pudu(x, y, cnn2d_prob, model)
 
 # First we check importance
-imp.importance(window=(3, 3), mode='positive', delta=0.1, bias=0.1)
+imp.importance(window=(3, 3), perturbation=ptn.Positive(delta=0.1), bias=0.1)
 plots.plot(imp.x, imp.imp, axis=None, figsize=(10, 10), cmap='cool')
 
 # Now we explore the unit activations observed in layer 2 (last conv. layer)
 # We only consider the top 0.5% of the values as activated with `p=0.005`.
 # Negative values indicate that less units are being activated.
-imp.activations(layer=0, slope=0, p=0.005, window=(3, 3), mode='positive', delta=0.1)
+imp.reactivations(layer=2, slope=0, p=0.005, window=(5, 5), perturbation=ptn.Positive(delta=0.1))
 plots.plot(imp.x, imp.lac, axis=None, figsize=(10, 10), cmap='cool', 
             title='Nº of unit activations in layer 0')
 
@@ -73,6 +73,6 @@ N = 10 # The more the better, 10 to keep computational times "low"
 y = [np.argmax(i) for i in y_train[:N]]
 x = x_train[:N]
 imp = pudu.pudu(x, y, cnn2d_prob, model) # we need to build another pudu
-imp.relatable(layer=2, slope=0, p=0.005, window=(3, 3), mode='positive', delta=0.1, bias=0)
+imp.relatable(layer=2, slope=0, p=0.005, window=(3, 3), perturbation=ptn.Positive(delta=0.1))
 idx, cnt, cor = imp.icc # this outputs the unit index, activation counts, and position of the feature
 plots.relate_report(idx, cnt, cor, plot=True, print_report=True, show_top=30, font_size=10, rot_ticks=90, sort=True)

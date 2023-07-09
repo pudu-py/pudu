@@ -44,13 +44,13 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="introduction.html">pudu</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction to pudu</a></li>
 <li class="toctree-l1"><a class="reference internal" href="definitions.html">Definitions</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">pudu</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#pudu.pudu"><code class="docutils literal notranslate"><span class="pre">pudu</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#pudu.pudu.__init__"><code class="docutils literal notranslate"><span class="pre">pudu.__init__()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pudu.pudu.activations"><code class="docutils literal notranslate"><span class="pre">pudu.activations()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#pudu.pudu.importance"><code class="docutils literal notranslate"><span class="pre">pudu.importance()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pudu.pudu.reactivations"><code class="docutils literal notranslate"><span class="pre">pudu.reactivations()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#pudu.pudu.relatable"><code class="docutils literal notranslate"><span class="pre">pudu.relatable()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#pudu.pudu.speed"><code class="docutils literal notranslate"><span class="pre">pudu.speed()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#pudu.pudu.synergy"><code class="docutils literal notranslate"><span class="pre">pudu.synergy()</span></code></a></li>
@@ -59,6 +59,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="perturbations.html">Perturbation Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="masks.html">Mask Functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributions.html">Contributing</a></li>
 </ul>
@@ -118,8 +119,31 @@ cases.</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pudu.pudu.activations">
-<span class="sig-name descname"><span class="pre">activations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer=0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">slope=0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p=0.005</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scope=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias=0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding='center'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">perturbation=&lt;perturbation.Bidirectional</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask=&lt;masks.All</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pudu.html#pudu.activations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pudu.pudu.activations" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="pudu.pudu.importance">
+<span class="sig-name descname"><span class="pre">importance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">window=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scope=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evolution=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding='center'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias=0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">absolute=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">perturbation=&lt;perturbation.Bidirectional</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask=&lt;masks.All</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pudu.html#pudu.importance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pudu.pudu.importance" title="Permalink to this definition"></a></dt>
+<dd><p>Calculates the importance vector for the input feature.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>window</strong> (<em>int</em>) – feature width to be changeg each time.</p></li>
+<li><p><strong>scope</strong> (<em>tupple</em><em>(</em><em>int</em><em>, </em><em>int</em><em>)</em>) – Starting and ending point of the analysis for each feature.
+If <cite>None</cite>, the all the vector is analysed.</p></li>
+<li><p><strong>evolution</strong> (<em>int</em>) – feature width to be changeg each time.</p></li>
+<li><p><strong>padding</strong> (<em>string</em>) – Type of padding. If the legnth of <cite>x</cite> is not divisible
+by <cite>window</cite> then padding is applyed. If <cite>center</cite>, then equal padding
+to each side is applyed. If <cite>right</cite>, then paading to the right is
+added and <cite>window`starts from `0</cite>. If <cite>left</cite>, padding to the left
+is applyied and <cite>window</cite> ends at length <cite>x</cite>. If perfet <cite>center</cite> is
+not possible, then ipadding left is added <cite>1</cite>.</p></li>
+<li><p><strong>absolute</strong> (<em>bool</em>) – Weather or not the result is in absolute value or not. Default is <cite>False</cite>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pudu.pudu.reactivations">
+<span class="sig-name descname"><span class="pre">reactivations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer=0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">slope=0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p=0.005</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scope=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias=0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding='center'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">perturbation=&lt;perturbation.Bidirectional</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask=&lt;masks.All</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pudu.html#pudu.reactivations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pudu.pudu.reactivations" title="Permalink to this definition"></a></dt>
 <dd><dl class="simple">
 <dt>Counts the unit activations in the selected <cite>layer</cite> of a <cite>Keras</cite> model according</dt><dd><p>to change in the feature.</p>
 </dd>
@@ -139,29 +163,6 @@ to each side is applyed. If <cite>right</cite>, then paading to the right is
 added and <cite>window`starts from `0</cite>. If <cite>left</cite>, padding to the left
 is applyied and <cite>window</cite> ends at length <cite>x</cite>. If perfet <cite>center</cite> is
 not possible, then ipadding left is added <cite>1</cite>.</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pudu.pudu.importance">
-<span class="sig-name descname"><span class="pre">importance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">window=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scope=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evolution=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding='center'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias=0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">absolute=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">perturbation=&lt;perturbation.Bidirectional</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask=&lt;masks.All</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pudu.html#pudu.importance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pudu.pudu.importance" title="Permalink to this definition"></a></dt>
-<dd><p>Calculates the importance vector for the input feature.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>window</strong> (<em>int</em>) – feature width to be changeg each time.</p></li>
-<li><p><strong>scope</strong> (<em>tupple</em><em>(</em><em>int</em><em>, </em><em>int</em><em>)</em>) – Starting and ending point of the analysis for each feature.
-If <cite>None</cite>, the all the vector is analysed.</p></li>
-<li><p><strong>evolution</strong> (<em>int</em>) – feature width to be changeg each time.</p></li>
-<li><p><strong>padding</strong> (<em>string</em>) – Type of padding. If the legnth of <cite>x</cite> is not divisible
-by <cite>window</cite> then padding is applyed. If <cite>center</cite>, then equal padding
-to each side is applyed. If <cite>right</cite>, then paading to the right is
-added and <cite>window`starts from `0</cite>. If <cite>left</cite>, padding to the left
-is applyied and <cite>window</cite> ends at length <cite>x</cite>. If perfet <cite>center</cite> is
-not possible, then ipadding left is added <cite>1</cite>.</p></li>
-<li><p><strong>absolute</strong> (<em>bool</em>) – Weather or not the result is in absolute value or not. Default is <cite>False</cite>.</p></li>
 </ul>
 </dd>
 </dl>

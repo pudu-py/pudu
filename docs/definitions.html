@@ -21,7 +21,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="pudu" href="pudu.html" />
-    <link rel="prev" title="pudu" href="introduction.html" /> 
+    <link rel="prev" title="Introduction to pudu" href="introduction.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -45,7 +45,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="introduction.html">pudu</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction to pudu</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Definitions</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#importance">Importance</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#speed">Speed</a></li>
@@ -61,6 +61,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="pudu.html">pudu</a></li>
 <li class="toctree-l1"><a class="reference internal" href="perturbations.html">Perturbation Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="masks.html">Mask Functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributions.html">Contributing</a></li>
 </ul>
@@ -96,7 +97,7 @@
 <p>Let <span class="math notranslate nohighlight">\(x \in X\)</span> be a 2-d array of dimensions <span class="math notranslate nohighlight">\(h \times w\)</span>. Let <span class="math notranslate nohighlight">\(P_M\)</span> be
 the probability function of the model <span class="math notranslate nohighlight">\(M\)</span>. Then, <span class="math notranslate nohighlight">\(P_M(x)\)</span> is the probability of <span class="math notranslate nohighlight">\(x\)</span>
 to belong to a classification class according to the problem solved by <span class="math notranslate nohighlight">\(M\)</span>. Considering
-<span class="math notranslate nohighlight">\(j \in J\)</span> the feature in position <span class="math notranslate nohighlight">\((h_j, w_j)\)</span> of <span class="math notranslate nohighlight">\(x\)</span>, the local importance
+<span class="math notranslate nohighlight">\(j \in J\)</span> the feature in position <span class="math notranslate nohighlight">\((h_j, w_j)\)</span> of <span class="math notranslate nohighlight">\(x\)</span>, then the local importance
 (<span class="math notranslate nohighlight">\(LI\)</span>) for said feature <span class="math notranslate nohighlight">\(j\)</span> is defined as:</p>
 <div class="math notranslate nohighlight">
 \[LI_j = P_M \left( x \right) -P_M \left( R_j \left( x \right) \right)\]</div>
@@ -104,8 +105,8 @@ to belong to a classification class according to the problem solved by <span cla
 importance (<span class="math notranslate nohighlight">\(RI\)</span>) can be denoted as:</p>
 <div class="math notranslate nohighlight">
 \[RI_j = \frac{ LI_j - min \left( LI \right) }{max \left( LI \right)-min \left( LI \right)}\]</div>
-<p>Then, importance is the difference in a model’s classification probability according to change
-in the features.</p>
+<p>Where <span class="math notranslate nohighlight">\(LI\)</span> contains all the <span class="math notranslate nohighlight">\(LI_j\)</span> of sample <span class="math notranslate nohighlight">\(x\)</span>. Then, importance is the difference
+in a model’s classification probability according to change in the features.</p>
 </section>
 <section id="speed">
 <h2>Speed<a class="headerlink" href="#speed" title="Permalink to this heading"></a></h2>
@@ -114,14 +115,21 @@ importance for <span class="math notranslate nohighlight">\(x\)</span>, the loca
 perturbaions would be <span class="math notranslate nohighlight">\(LI_{j,1}, LI_{j,2}, ...\)</span>. Then, speed is the slope calculated
 according to the linear fit of the local importance points as
 <span class="math notranslate nohighlight">\(\left( 1, LI_{j,1} \right), \left( 2, LI_{j,2} \right), ...\)</span></p>
+<p>Then, the speed is how fast the imortance changes accoding to change in the feature, or
+how sensitive it is. These can have positive or negative values, depending on the slope.
+A positive value means that a bigger change will produce a bigger change in the
+prediciton. A negative value means that bigger changes produce smaller changes in the
+prediction.</p>
 </section>
 <section id="synergy">
 <h2>Synergy<a class="headerlink" href="#synergy" title="Permalink to this heading"></a></h2>
-<p>Consider a feature <span class="math notranslate nohighlight">\(j* \in J_{h \times w}\)</span> and a distinct feature <span class="math notranslate nohighlight">\(j \in J_{h \times w}\)</span> from <span class="math notranslate nohighlight">\(x_i\)</span>. Both are
+<p>Consider a feature <span class="math notranslate nohighlight">\(j* \in J\)</span> and a distinct feature <span class="math notranslate nohighlight">\(j \in J\)</span> from <span class="math notranslate nohighlight">\(x_i\)</span>. Both are
 perturbated under <span class="math notranslate nohighlight">\(R\)</span> obtaining <span class="math notranslate nohighlight">\(x_{j*,j}\)</span>. Then, the local importance obtained
 is <span class="math notranslate nohighlight">\(LI_{j*,j}\)</span>. Then,</p>
 <div class="math notranslate nohighlight">
 \[LI_{j*} = \left( LI_{j*,1}, LI_{j*,2}, ... \forall j \neq j* \in J \right)\]</div>
+<p>The synergy indicates how feature complement each other in terms of change anf effec tion the
+prediction.</p>
 </section>
 <section id="activations-and-re-activaiton">
 <h2>Activations and re-activaiton<a class="headerlink" href="#activations-and-re-activaiton" title="Permalink to this heading"></a></h2>
@@ -139,17 +147,19 @@ number of units can be calculated as:</p>
 <h3>Acitvation map<a class="headerlink" href="#acitvation-map" title="Permalink to this heading"></a></h3>
 <p>As defined by Bau and Zhou et al. (2017), for <span class="math notranslate nohighlight">\(x\)</span>, take the activation map <span class="math notranslate nohighlight">\(A_k(x)\)</span>
 for each of the units <span class="math notranslate nohighlight">\(k\)</span>. Then <span class="math notranslate nohighlight">\(a_k\)</span> is the activation distribution for each
-individual unit. Then, all the activations belonging to the <span class="math notranslate nohighlight">\(p\)</span> quantile as
-<span class="math notranslate nohighlight">\(P(a_k&gt;T_k)=p\)</span> were <span class="math notranslate nohighlight">\(T_k\)</span> is the value above which the quantile exists.</p>
+individual units for <span class="math notranslate nohighlight">\(X_s \in X\)</span>, where <span class="math notranslate nohighlight">\(X_s\)</span> is a subset of all samples <span class="math notranslate nohighlight">\(X\)</span>.
+Then, all the activations belonging to the <span class="math notranslate nohighlight">\(p\)</span> quantile as <span class="math notranslate nohighlight">\(P(a_k&gt;T_k)=p\)</span> were
+<span class="math notranslate nohighlight">\(T_k\)</span> is the value above which the quantile exists.</p>
 </section>
 <section id="re-activation-map">
 <h3>Re-activation map<a class="headerlink" href="#re-activation-map" title="Permalink to this heading"></a></h3>
 <p>The above can be evaluated based in feature perturbations considering <span class="math notranslate nohighlight">\(x\)</span>, the original data,
 and <span class="math notranslate nohighlight">\(x_j\)</span>, the perturbated input in feature <span class="math notranslate nohighlight">\(j\)</span>, and evaluate the difference as
-<span class="math notranslate nohighlight">\(B_k(x_j)-B_k(x)=\Delta B_{k,j}\)</span>, where <span class="math notranslate nohighlight">\(B\)</span> is the pre-activatoin map of unit <span class="math notranslate nohighlight">\(k\)</span>.
-From here we can extract the distribution <span class="math notranslate nohighlight">\(\Delta b_{k,j}\)</span> and select then pass the data
-through the activation function to obtain <span class="math notranslate nohighlight">\(a_{k,j}\)</span>. Finally, select the  <span class="math notranslate nohighlight">\(p\)</span> quantile
-as <span class="math notranslate nohighlight">\(P(\Delta a_{k,j}&gt;T_k)=p\)</span>.</p>
+<span class="math notranslate nohighlight">\(B_k(x_j)-B_k(x)=\Delta B_{k,j}, \forall j \in J\)</span>, where <span class="math notranslate nohighlight">\(B\)</span> is the pre-activatoin map of unit <span class="math notranslate nohighlight">\(k\)</span>.
+From here we can extract the distribution <span class="math notranslate nohighlight">\(\Delta b_{k}\)</span> and select then pass the data
+through the activation function to obtain <span class="math notranslate nohighlight">\(a_{k}\)</span>. Finally, select the  <span class="math notranslate nohighlight">\(p\)</span> quantile
+as <span class="math notranslate nohighlight">\(P(\Delta a_{k}&gt;T_k)=p\)</span>. In this case, <span class="math notranslate nohighlight">\(X_s\)</span> is the set of perturbed samples derived
+from <span class="math notranslate nohighlight">\(x\)</span>.</p>
 <p>The latter accounts then for difference in unit activations after perturbation that would account
 for a re-activation. For example, if unit <span class="math notranslate nohighlight">\(k\)</span> has and activation value of <span class="math notranslate nohighlight">\(u\)</span>, and
 after perturbation the same unit <span class="math notranslate nohighlight">\(k\)</span> obtains a value of <span class="math notranslate nohighlight">\(u* = u \rightarrow \Delta u = 0\)</span>,
@@ -179,7 +189,7 @@ a significant number of them.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="introduction.html" class="btn btn-neutral float-left" title="pudu" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="introduction.html" class="btn btn-neutral float-left" title="Introduction to pudu" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="pudu.html" class="btn btn-neutral float-right" title="pudu" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

@@ -7,7 +7,7 @@ Importance
 Let :math:`x \in X` be a 2-d array of dimensions :math:`h \times w`. Let :math:`P_M` be
 the probability function of the model :math:`M`. Then, :math:`P_M(x)` is the probability of :math:`x`
 to belong to a classification class according to the problem solved by :math:`M`. Considering 
-:math:`j \in J` the feature in position :math:`(h_j, w_j)` of :math:`x`, the local importance 
+:math:`j \in J` the feature in position :math:`(h_j, w_j)` of :math:`x`, then the local importance 
 (:math:`LI`) for said feature :math:`j` is defined as:
 
 .. math::
@@ -19,8 +19,8 @@ importance (:math:`RI`) can be denoted as:
 .. math::
         RI_j = \frac{ LI_j - min \left( LI \right) }{max \left( LI \right)-min \left( LI \right)} 
 
-Then, importance is the difference in a model's classification probability according to change
-in the features.
+Where :math:`LI` contains all the :math:`LI_j` of sample :math:`x`. Then, importance is the difference
+in a model's classification probability according to change in the features.
 
 Speed
 =====
@@ -30,16 +30,24 @@ perturbaions would be :math:`LI_{j,1}, LI_{j,2}, ...`. Then, speed is the slope 
 according to the linear fit of the local importance points as
 :math:`\left( 1, LI_{j,1} \right), \left( 2, LI_{j,2} \right), ...`
 
+Then, the speed is how fast the imortance changes accoding to change in the feature, or
+how sensitive it is. These can have positive or negative values, depending on the slope.
+A positive value means that a bigger change will produce a bigger change in the 
+prediciton. A negative value means that bigger changes produce smaller changes in the
+prediction.
+
 
 Synergy
 =======
-Consider a feature :math:`j* \in J_{h \times w}` and a distinct feature :math:`j \in J_{h \times w}` from :math:`x_i`. Both are
+Consider a feature :math:`j* \in J` and a distinct feature :math:`j \in J` from :math:`x_i`. Both are
 perturbated under :math:`R` obtaining :math:`x_{j*,j}`. Then, the local importance obtained
 is :math:`LI_{j*,j}`. Then, 
 
 .. math::
         LI_{j*} = \left( LI_{j*,1}, LI_{j*,2}, ... \forall j \neq j* \in J \right) 
 
+The synergy indicates how feature complement each other in terms of change anf effec tion the
+prediction.
 
 Activations and re-activaiton
 =============================
@@ -64,17 +72,19 @@ Acitvation map
 ______________
 As defined by Bau and Zhou et al. (2017), for :math:`x`, take the activation map :math:`A_k(x)` 
 for each of the units :math:`k`. Then :math:`a_k` is the activation distribution for each
-individual unit. Then, all the activations belonging to the :math:`p` quantile as
-:math:`P(a_k>T_k)=p` were :math:`T_k` is the value above which the quantile exists.
+individual units for :math:`X_s \in X`, where :math:`X_s` is a subset of all samples :math:`X`. 
+Then, all the activations belonging to the :math:`p` quantile as :math:`P(a_k>T_k)=p` were 
+:math:`T_k` is the value above which the quantile exists.
 
 Re-activation map
 _________________
 The above can be evaluated based in feature perturbations considering :math:`x`, the original data,
 and :math:`x_j`, the perturbated input in feature :math:`j`, and evaluate the difference as 
-:math:`B_k(x_j)-B_k(x)=\Delta B_{k,j}`, where :math:`B` is the pre-activatoin map of unit :math:`k`.
-From here we can extract the distribution :math:`\Delta b_{k,j}` and select then pass the data 
-through the activation function to obtain :math:`a_{k,j}`. Finally, select the  :math:`p` quantile
-as :math:`P(\Delta a_{k,j}>T_k)=p`.
+:math:`B_k(x_j)-B_k(x)=\Delta B_{k,j}, \forall j \in J`, where :math:`B` is the pre-activatoin map of unit :math:`k`.
+From here we can extract the distribution :math:`\Delta b_{k}` and select then pass the data 
+through the activation function to obtain :math:`a_{k}`. Finally, select the  :math:`p` quantile
+as :math:`P(\Delta a_{k}>T_k)=p`. In this case, :math:`X_s` is the set of perturbed samples derived 
+from :math:`x`.
 
 The latter accounts then for difference in unit activations after perturbation that would account
 for a re-activation. For example, if unit :math:`k` has and activation value of :math:`u`, and

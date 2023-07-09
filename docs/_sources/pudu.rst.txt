@@ -2,4 +2,4 @@ pudu
 ====
 
 .. autoclass:: pudu.pudu
-   :members: __init__, importance, speed, synergy, activations, relatable
+   :members: __init__, importance, speed, synergy, reactivations, relatable

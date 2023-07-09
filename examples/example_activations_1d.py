@@ -3,12 +3,14 @@ from tensorflow import keras
 from keras.models import load_model
 import matplotlib.pyplot as plt
 import spectrapepper as spep
-# from pudu import pudu, plots
-import pudu7 as pudu
-import plots
+
+from pudu import pudu, plots
+from pudu import masks as msk
+from pudu import perturbation as ptn
+
 
 # Scale images to the [0, 1] range
-x = spep.load('for_1d_cnn_c3.txt')
+x = spep.load('data/for_1d_cnn_c3.txt')
 x = np.expand_dims(x, 2)
 y = [3, 3, 3] # these are all class 3
 
@@ -16,7 +18,7 @@ y = [3, 3, 3] # these are all class 3
 y = keras.utils.to_categorical(y)
 
 # Load the model and test it
-model = load_model('0_526_model_(80;79).h5')
+model = load_model('data/0_526_model_(80;79).h5')
 score = model.evaluate(x, y, verbose=0)
 print("Test loss:", score[0], "| Test accuracy:", score[1])
 model.summary()
@@ -37,13 +39,13 @@ x0 = np.expand_dims(np.expand_dims(x[0], 0), 1)
 imp = pudu.pudu(x0, y0, cnn1d_prob, model)
 
 # First we check importance
-imp.importance(window=150, mode='positive', delta=0.1)
+imp.importance(window=150, perturbation=ptn.Positive(delta=0.1))
 plots.plot(imp.x, imp.imp, axis=None, figsize=(10, 5), cmap='cool')
 
 # Now we explore the unit activations observed in layer 4 (last conv. layer)
 # We only consider the top 0.5% of the values as activated with `p=0.005`.
 # Negative values indicate that less units are being activated.
-imp.activations(layer=4, slope=0, p=0.0025, window=150, mode='positive', delta=0.1)
+imp.reactivations(layer=4, slope=0, p=0.0025, window=150, perturbation=ptn.Positive(delta=0.1))
 plots.plot(imp.x, imp.lac, axis=None, figsize=(10, 4), cmap='cool', 
             title='Nº of unit activations in layer 0')
 
@@ -64,6 +66,6 @@ x = x.reshape(3, 1, 14730, 1)
 y = [np.argmax(i) for i in y]
 
 imp = pudu.pudu(x, y, cnn1d_prob, model) # we need to build another pudu
-imp.relatable(layer=2, slope=0, p=0.0025, window=150, mode='positive', delta=0.1)
+imp.relatable(layer=2, slope=0, p=0.0025, window=150, perturbation=ptn.Positive(delta=0.1))
 idx, cnt, cor = imp.icc # this outputs the unit index, activation counts, and position of the feature
 plots.relate_report(idx, cnt, cor, plot=True, show_top=20, font_size=10, rot_ticks=45, sort=True)

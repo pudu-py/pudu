@@ -133,7 +133,7 @@ class TestPudu(unittest.TestCase):
             return MNIST_MODEL.predict(np.array([X, X]), verbose=0)[0] # verbose 0 is important!
         
         imp = pudu.pudu(x, y, cnn2d_prob, model)
-        imp.activations(layer=2, slope=0, p=0.005, window=(5, 5), perturbation=ptn.Positive(delta=0.1))
+        imp.reactivations(layer=2, slope=0, p=0.005, window=(5, 5), perturbation=ptn.Positive(delta=0.1))
 
         for a, b in zip(imp.fac, fac):
             self.assertAlmostEqual(a, b, places=tp)

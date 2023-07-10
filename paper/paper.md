@@ -1,5 +1,5 @@
 ---
-title: "pudu: A generalized and agnostic Python library for feature selection and explainability of Machine Learning classification and regression problems."
+title: "pudu: A Python library for agnostic feature selection and explainability of Machine Learning classification and regression problems."
 tags:
     - Python
     - Machine Learning

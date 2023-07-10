@@ -44,11 +44,11 @@ Even though there are products and libraries available for explaining different 
 
 # Overview
 
-The **pudu** library is a Python toolkit created to help make sense of machine learning results. It does this by taking a clear and deterministic (or stochastic if the user desires) approach, performing sensitivity analysis on classification and regression tasks. This toolbox uses the same basic principles as RELIEF, but offers the user plenty of flexibility with parameters and use cases. Additionally, it offers activation analysis for Neural Networks, adapting some of the guidelines defined in [Bau2018] to measure the impact of feature changes through sensitivity analysis. **pudu** measures the importance of features based on how changes in the input affect the target instance. To do this, **pudu** works under the assumption that the algorithm in use has a classification probability function or a prediction function for classification and regression problems, respectively. Using this, it changes the feature space in a predictable (or random) way and evaluates the importance of the defined features based on the changes to the target. **pudu** is versatile: it can analyze both classification and regression problems for both 1-dimensional (vectors) and 2-dimensional (non-RGB images) data types as input. **pudu** creates visual explanations in an easy-to-understand way by highlighting the importance of a feature on each decision, and also offers the ability to provide localized explanations by selecting specific areas of interest.
+The **pudu** library is a Python toolkit created to help make sense of machine learning results. It does this by taking a clear and deterministic approach, performing sensitivity analysis on classification and regression tasks. This toolbox uses the same basic principles as RELIEF, but offers the user plenty of flexibility with parameters and use cases. Additionally, it offers activation analysis for Neural Networks, adapting some of the guidelines defined in [Bau2018] to measure the impact of feature changes through sensitivity analysis. **pudu** measures the importance of features based on how changes in the input affect the target instance. To do this, **pudu** works under the assumption that the algorithm in use has a classification probability function or a prediction function for classification and regression problems, respectively. Using this, it changes the feature space in a predictable way and evaluates the importance of the defined features based on the changes to the target. **pudu** is versatile: it can analyze both classification and regression problems for both 1-dimensional and 2-dimensional data types as input. **pudu** creates visual explanations in an easy-to-understand way by highlighting the importance of a feature on each decision, and also offers the ability to provide localized explanations by selecting specific areas of interest.
 
 To illustrate this functionality, examples using scikit-learn [@Pedregosa2011], keras [@chollet2018keras], and localreg [@Marholm2022] are included in the documentation, along with the use of LIME and GradCAM to show how **pudu** can complement the understanding of AI decisions in different types of problems.
 
-**pudu** is built in Python 3 [@VanRossumGuidoDrake2009], and also uses third-party packages including numpy [@Harris2020], matplotlib [@Hunter2007], and keras. It is available in both pipy and conda, and comes with complete documentation, including quick start, examples, and contribution guidelines. Source code and documentation can be downloaded from https://github.com/pudu-py/pudu.
+**pudu** is built in Python 3 [@VanRossumGuidoDrake2009], and also uses third-party packages including numpy [@Harris2020], matplotlib [@Hunter2007], and keras. It is available in both [PyPI](https://pypi.org/project/pudu/) and [conda] (https://anaconda.org/conda-forge/pudu), and comes with complete documentation, including quick start, examples, and contribution guidelines. Source code and documentation can be downloaded from https://github.com/pudu-py/pudu.
 
 # Features
 
@@ -58,17 +58,15 @@ A brief list of features includes:
 - Importance: estimates the importance of the features  with sensitivity analysis.
 - Speed: calculates how fast a prediction changes according to the changes in the features.
 - Synergy: explores the interaction between features and how they influence the classification probability.
-- Layer Activation: identifies how changes in features affect the activation of units within a layer.
-- Unit Activation: tracks how often each unit within a layer activates in response to input changes.
-- Unit to Feature: links features and units by identifying the most activated unit based on specific feature changes.
-- Wide selection of feature perturbation and masking functions is available, including fully customizable options to ensure complete tailoring capability.
+- Reactivation: identifies how perturbations in features affect the activation of units within a layer in Convolutional Neural Networks.
+- Selection of feature perturbation and masking functions is available, including fully customizable options to ensure complete tailoring capability.
 - Easy plotting of the results.
 
 # Acknowledgements
 
 This work has received funding from the European Union's Horizon 2020 Research and Innovation Programme under grant agreement no. 952982 (Custom-Art project) and Fast Track to Innovation Programme under grant agreement no. 870004 (Solar-Win project). Authors from IREC belong to the SEMS (Solar Energy Materials and Systems) Consolidated Research Group of the “Generalitat de Catalunya” (ref. 2017 SGR 862) and are grateful to European Regional Development Funds (ERDF, FEDER Programa Competitivitat de Catalunya 2007–2013). MG acknowledges the financial support from Spanish Ministry of Science, Innovation and Universities within the Juan de la Cierva fellowship (IJC2018-038199-I).
 
-# Authors contribution with [CRediT](/guides/content/editing-an-existing-page)
+# Authors contribution with [CRediT](https://credit.niso.org/)
 
 - Enric Grau-Luque: Conceptualization, Data curation, Software, Writing – original draft
 - Ignacio Becerril-Romero: Investigation, Methodology, Writing – review & edition

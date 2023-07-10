@@ -51,12 +51,13 @@
 <li class="toctree-l1"><a class="reference internal" href="masks.html">Mask Functions</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#example-1-pc-lda-with-scikit-learn-for-classification-of-spectroscopic-data">Example 1: PC-LDA with Scikit-learn for classification of spectroscopic data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#examples-2-regression-for-predicition-of-open-circuit-voltage-of-solar-cells-with-rbfn">Examples 2: Regression for predicition of open circuit voltage of solar cells with RBFN</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#examples-3-handwritten-numbers-recognition-using-cnn-with-keras-and-mnist">Examples 3: Handwritten numbers recognition using CNN with Keras and Mnist</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#examples-4-how-to-call-different-masks">Examples 4: How to call different masks</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#examples-5-how-to-call-different-perturbations">Examples 5: How to call different perturbations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#examples-6-re-activations-with-1-d-cnn">Examples 6: Re-activations with 1-D CNN</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#examples-7-re-activations-with-2-d-cnn">Examples 7: Re-activations with 2-D CNN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-2-regression-for-predicition-of-open-circuit-voltage-of-solar-cells-with-rbfn">Example 2: Regression for predicition of open circuit voltage of solar cells with RBFN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-3-handwritten-numbers-recognition-using-cnn-with-keras-and-mnist">Example 3: Handwritten numbers recognition using CNN with Keras and Mnist</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-4-how-to-call-different-masks">Example 4: How to call different masks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-5-how-to-call-different-perturbations">Example 5: How to call different perturbations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-6-re-activations-with-1-d-cnn">Example 6: Re-activations with 1-D CNN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-7-re-activations-with-2-d-cnn">Example 7: Re-activations with 2-D CNN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-8-seelcting-specific-sections-to-evaluate">Example 8: SEelcting specific sections to evaluate</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="contributions.html">Contributing</a></li>
@@ -184,8 +185,8 @@
 </pre></div>
 </div>
 </section>
-<section id="examples-2-regression-for-predicition-of-open-circuit-voltage-of-solar-cells-with-rbfn">
-<h2>Examples 2: Regression for predicition of open circuit voltage of solar cells with RBFN<a class="headerlink" href="#examples-2-regression-for-predicition-of-open-circuit-voltage-of-solar-cells-with-rbfn" title="Permalink to this heading"></a></h2>
+<section id="example-2-regression-for-predicition-of-open-circuit-voltage-of-solar-cells-with-rbfn">
+<h2>Example 2: Regression for predicition of open circuit voltage of solar cells with RBFN<a class="headerlink" href="#example-2-regression-for-predicition-of-open-circuit-voltage-of-solar-cells-with-rbfn" title="Permalink to this heading"></a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">localreg</span> <span class="kn">import</span> <span class="n">RBFnet</span>
 <span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">r2_score</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
@@ -256,8 +257,8 @@
 </pre></div>
 </div>
 </section>
-<section id="examples-3-handwritten-numbers-recognition-using-cnn-with-keras-and-mnist">
-<h2>Examples 3: Handwritten numbers recognition using CNN with Keras and Mnist<a class="headerlink" href="#examples-3-handwritten-numbers-recognition-using-cnn-with-keras-and-mnist" title="Permalink to this heading"></a></h2>
+<section id="example-3-handwritten-numbers-recognition-using-cnn-with-keras-and-mnist">
+<h2>Example 3: Handwritten numbers recognition using CNN with Keras and Mnist<a class="headerlink" href="#example-3-handwritten-numbers-recognition-using-cnn-with-keras-and-mnist" title="Permalink to this heading"></a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">tensorflow</span> <span class="kn">import</span> <span class="n">keras</span>
 <span class="kn">from</span> <span class="nn">keras.models</span> <span class="kn">import</span> <span class="n">load_model</span>
@@ -395,8 +396,8 @@
 </pre></div>
 </div>
 </section>
-<section id="examples-4-how-to-call-different-masks">
-<h2>Examples 4: How to call different masks<a class="headerlink" href="#examples-4-how-to-call-different-masks" title="Permalink to this heading"></a></h2>
+<section id="example-4-how-to-call-different-masks">
+<h2>Example 4: How to call different masks<a class="headerlink" href="#example-4-how-to-call-different-masks" title="Permalink to this heading"></a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">from</span> <span class="nn">lime</span> <span class="kn">import</span> <span class="n">lime_tabular</span>
 <span class="kn">import</span> <span class="nn">spectrapepper</span> <span class="k">as</span> <span class="nn">spep</span>
@@ -444,8 +445,8 @@
 </pre></div>
 </div>
 </section>
-<section id="examples-5-how-to-call-different-perturbations">
-<h2>Examples 5: How to call different perturbations<a class="headerlink" href="#examples-5-how-to-call-different-perturbations" title="Permalink to this heading"></a></h2>
+<section id="example-5-how-to-call-different-perturbations">
+<h2>Example 5: How to call different perturbations<a class="headerlink" href="#example-5-how-to-call-different-perturbations" title="Permalink to this heading"></a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">from</span> <span class="nn">lime</span> <span class="kn">import</span> <span class="n">lime_tabular</span>
 <span class="kn">import</span> <span class="nn">spectrapepper</span> <span class="k">as</span> <span class="nn">spep</span>
@@ -496,8 +497,8 @@
 </pre></div>
 </div>
 </section>
-<section id="examples-6-re-activations-with-1-d-cnn">
-<h2>Examples 6: Re-activations with 1-D CNN<a class="headerlink" href="#examples-6-re-activations-with-1-d-cnn" title="Permalink to this heading"></a></h2>
+<section id="example-6-re-activations-with-1-d-cnn">
+<h2>Example 6: Re-activations with 1-D CNN<a class="headerlink" href="#example-6-re-activations-with-1-d-cnn" title="Permalink to this heading"></a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">tensorflow</span> <span class="kn">import</span> <span class="n">keras</span>
 <span class="kn">from</span> <span class="nn">keras.models</span> <span class="kn">import</span> <span class="n">load_model</span>
@@ -572,8 +573,8 @@
 </pre></div>
 </div>
 </section>
-<section id="examples-7-re-activations-with-2-d-cnn">
-<h2>Examples 7: Re-activations with 2-D CNN<a class="headerlink" href="#examples-7-re-activations-with-2-d-cnn" title="Permalink to this heading"></a></h2>
+<section id="example-7-re-activations-with-2-d-cnn">
+<h2>Example 7: Re-activations with 2-D CNN<a class="headerlink" href="#example-7-re-activations-with-2-d-cnn" title="Permalink to this heading"></a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">tensorflow</span> <span class="kn">import</span> <span class="n">keras</span>
 <span class="kn">from</span> <span class="nn">keras.models</span> <span class="kn">import</span> <span class="n">load_model</span>
@@ -652,6 +653,70 @@
 <span class="n">imp</span><span class="o">.</span><span class="n">relatable</span><span class="p">(</span><span class="n">layer</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">slope</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mf">0.005</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">perturbation</span><span class="o">=</span><span class="n">ptn</span><span class="o">.</span><span class="n">Positive</span><span class="p">(</span><span class="n">delta</span><span class="o">=</span><span class="mf">0.1</span><span class="p">))</span>
 <span class="n">idx</span><span class="p">,</span> <span class="n">cnt</span><span class="p">,</span> <span class="n">cor</span> <span class="o">=</span> <span class="n">imp</span><span class="o">.</span><span class="n">icc</span> <span class="c1"># this outputs the unit index, activation counts, and position of the feature</span>
 <span class="n">plots</span><span class="o">.</span><span class="n">relate_report</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">cnt</span><span class="p">,</span> <span class="n">cor</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">print_report</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">show_top</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">font_size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">rot_ticks</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">sort</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="example-8-seelcting-specific-sections-to-evaluate">
+<h2>Example 8: SEelcting specific sections to evaluate<a class="headerlink" href="#example-8-seelcting-specific-sections-to-evaluate" title="Permalink to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">spectrapepper</span> <span class="k">as</span> <span class="nn">spep</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+
+<span class="kn">from</span> <span class="nn">pudu</span> <span class="kn">import</span> <span class="n">pudu</span><span class="p">,</span> <span class="n">plots</span>
+
+
+<span class="c1"># Load features (spectra) and targets (open circuit coltage, voc)</span>
+<span class="n">features</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;data/features.txt&#39;</span><span class="p">)</span>
+<span class="n">targets</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;data/targets.txt&#39;</span><span class="p">,</span> <span class="n">transpose</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span>
+
+<span class="c1"># Load pre-trained LDA and PCA models</span>
+<span class="n">lda</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s1">&#39;data/lda_model.sav&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">))</span>
+<span class="n">pca</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s1">&#39;data/pca_model.sav&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">))</span>
+
+
+<span class="c1">### PUDU ###</span>
+<span class="c1"># Select x (feature) and respective y (target)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">features</span><span class="p">[</span><span class="mi">100</span><span class="p">]</span>
+<span class="n">x_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">targets</span><span class="p">[</span><span class="mi">100</span><span class="p">]</span>
+
+<span class="c1"># Input should be 4d: (batch * rows * columns * depth)</span>
+<span class="c1"># This is a classification problem, thus the output should be the </span>
+<span class="c1"># probability by category: [prob_1, prob_2, ..., prob_c]</span>
+<span class="k">def</span> <span class="nf">pf</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,:,</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">lda</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">pca</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># Build pudu</span>
+<span class="n">imp</span> <span class="o">=</span> <span class="n">pudu</span><span class="o">.</span><span class="n">pudu</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">pf</span><span class="p">)</span>
+
+<span class="c1"># To evaluate more specific areas, we can do ir one-by-one and the</span>
+<span class="c1"># put them all together in a vector for plotting and/or normalizing.</span>
+<span class="c1"># This can be done for `importnace` and `speed` only.</span>
+
+<span class="c1"># For this, we first define the areas of interest</span>
+<span class="n">areas</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">170</span><span class="p">,</span> <span class="mi">200</span><span class="p">],[</span><span class="mi">225</span><span class="p">,</span> <span class="mi">250</span><span class="p">],</span> <span class="p">[</span><span class="mi">250</span><span class="p">,</span> <span class="mi">290</span><span class="p">],</span> <span class="p">[</span><span class="mi">300</span><span class="p">,</span> <span class="mi">330</span><span class="p">]]</span>
+
+<span class="c1"># In aloop we evaluate them individially. We make sure that `window`</span>
+<span class="c1"># and `scope` are equal so all the area is evaluated. The results are</span>
+<span class="c1"># saved in `custom`.</span>
+<span class="n">custom</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">x_len</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">areas</span><span class="p">:</span>
+    <span class="n">imp</span><span class="o">.</span><span class="n">importance</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">scope</span><span class="o">=</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="n">custom</span><span class="p">[</span><span class="n">imp</span><span class="o">.</span><span class="n">imp</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">imp</span><span class="o">.</span><span class="n">imp</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">imp</span><span class="o">.</span><span class="n">imp</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+
+<span class="n">custom</span> <span class="o">=</span> <span class="n">custom</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+<span class="n">plots</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">imp</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">custom</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Importance&quot;</span><span class="p">,</span> <span class="n">yticks</span><span class="o">=</span><span class="p">[],</span> <span class="n">font_size</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">)</span>
+
+<span class="c1"># Repeat the same for `speed`.</span>
+<span class="n">custom</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">x_len</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">areas</span><span class="p">:</span>
+    <span class="n">imp</span><span class="o">.</span><span class="n">speed</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">scope</span><span class="o">=</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="n">custom</span><span class="p">[</span><span class="n">imp</span><span class="o">.</span><span class="n">spe</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">imp</span><span class="o">.</span><span class="n">spe</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">imp</span><span class="o">.</span><span class="n">spe</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+
+<span class="n">custom</span> <span class="o">=</span> <span class="n">custom</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+<span class="n">plots</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">imp</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">custom</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Speed&quot;</span><span class="p">,</span> <span class="n">yticks</span><span class="o">=</span><span class="p">[],</span> <span class="n">font_size</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>

@@ -8,44 +8,50 @@ Example 1: PC-LDA with Scikit-learn for classification of spectroscopic data
     :linenos: 
 
 
-Examples 2: Regression for predicition of open circuit voltage of solar cells with RBFN
+Example 2: Regression for predicition of open circuit voltage of solar cells with RBFN
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. literalinclude:: ../examples/example_rbnf.py
     :language: python
 
 
-Examples 3: Handwritten numbers recognition using CNN with Keras and Mnist
+Example 3: Handwritten numbers recognition using CNN with Keras and Mnist
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. literalinclude:: ../examples/example_cnn_mnist.py
     :language: python
 
 
-Examples 4: How to call different masks 
+Example 4: How to call different masks 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. literalinclude:: ../examples/example_masking.py
     :language: python
 
 
-Examples 5: How to call different perturbations 
+Example 5: How to call different perturbations 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. literalinclude:: ../examples/example_perturbation.py
     :language: python
 
 
-Examples 6: Re-activations with 1-D CNN 
+Example 6: Re-activations with 1-D CNN 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. literalinclude:: ../examples/example_activations_1d.py
     :language: python
 
 
-Examples 7: Re-activations with 2-D CNN 
+Example 7: Re-activations with 2-D CNN 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. literalinclude:: ../examples/example_activations_2d.py
     :language: python
     
+
+Example 8: SEelcting specific sections to evaluate
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. literalinclude:: ../examples/example_specific_sections.py
+    :language: python

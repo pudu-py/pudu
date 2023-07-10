@@ -7,7 +7,6 @@ from . import error_handler, standards
 from . import masks as msk
 from . import perturbation as ptn
 
-
 class pudu:
     def __init__(self, x, y, pf, model=None):
         """
@@ -114,12 +113,6 @@ class pudu:
                     row_idx, col_idx = row_idx + row, col_idx + col
 
                     temp, temp2 = perturbation.apply(x_copy, row, col, window, bias)
-
-                    # print(np.shape(temp[0,:,:,0]), np.shape(self.x[0,:,:,0]))
-                    # plt.plot(temp[0,0,:,0])
-                    # plt.plot(self.x[0,0,:,0])
-                    # plt.show()
-                    # exit()
 
                     if temp2 is None:
                         val = self.pf(temp) - p0
@@ -540,23 +533,15 @@ class pudu:
         s_x, s_y = self.x, self.y
 
         master = []
-        # master = np.array()
         for x, y in zip(s_x, s_y):
             x = np.expand_dims(x, 0)
             self.x, self.y = x, y
 
             feats, units = self.reactivations(layer, slope, p, window, scope, bias, padding,
-                                            perturbation=perturbation, mask=mask)
+                                                perturbation, mask)
 
             master.extend((i, j) for i, j in zip(feats, units))
 
-            feats = np.array(feats)
-            units = np.array(units)
-            master = np.column_stack((feats, units))
-                        
-            master = master.tolist()
-
-        master = [tuple(arr) for arr in master]
         counts = Counter(master)
         result = [[j, count, i] for (i, j), count in counts.items()]
         result = np.transpose(result)

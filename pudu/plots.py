@@ -1,10 +1,12 @@
 import matplotlib.pyplot as plt
+from matplotlib import ticker
 import matplotlib as mpl
 import numpy as np
 
 def plot(feature, image, axis=None, show_data=True, title='Importance', 
         xlabel='Feature', ylabel='Intensity', xticks=None, yticks=[], cmap='Greens',
-        font_size=15, figsize=(14, 4)):
+        font_size=15, figsize=(14, 4), padding=(0, 0, 1, 1), cbar_pad=0.05, vmin=None,
+        vmax=None):
     """
     Easy plot function for `importance`, `speed`, or `synergy`. It shows the analyzed
         feature `feature` with a colormap overlay indicating the result along with
@@ -53,7 +55,13 @@ def plot(feature, image, axis=None, show_data=True, title='Importance',
 
     image = np.array(image)[0,:,:,0]
     feature = np.array(feature)[0,:,:,0]
-    
+
+    if vmin is None:
+        vmin = np.min(image)
+        
+    if vmax is None:
+        vmax = np.max(image)
+
     if dims[1] > 1:
         rows, cols = dims[1], dims[2]
         ext = [0, cols, 0, rows]
@@ -67,23 +75,27 @@ def plot(feature, image, axis=None, show_data=True, title='Importance',
             ext = [min(axis), max(axis), min(feature[0]), max(feature[0])]
     
     plt.rc('font', size=font_size)
+    plt.subplots_adjust(left=padding[0], bottom=padding[1], right=padding[2], top=padding[3])
     plt.figure(figsize=figsize)
     if dims[1] > 1 and show_data:
         plt.imshow(feature, cmap='binary', aspect="auto", 
-                    interpolation='nearest', extent=ext, alpha=1)
+                    interpolation='nearest', extent=ext, alpha=1,
+                    vmin=vmin, vmax=vmax)
     elif dims[1] == 1 and show_data:
         plt.plot(axis, feature[0], 'k')
     plt.imshow(image, cmap=cmap, aspect="auto", 
-                interpolation='nearest', extent=ext, alpha=0.5)
+                interpolation='nearest', extent=ext, alpha=0.5,
+                vmin=vmin, vmax=vmax)
     plt.title(title) 
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
     plt.yticks(yticks)
-
+  
     if xticks:
         plt.xticks(axis, xticks, rotation='vertical')
-
-    plt.colorbar()
+    
+    plt.tight_layout()
+    plt.colorbar(pad=cbar_pad, ticks=ticker.LinearLocator(numticks=5))
     plt.show()  
 
 

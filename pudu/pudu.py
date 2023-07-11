@@ -1,4 +1,5 @@
 from collections import defaultdict, Counter
+import matplotlib.pyplot as plt
 from keras.models import Model
 import numpy as np
 import copy

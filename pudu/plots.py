@@ -6,7 +6,7 @@ import numpy as np
 def plot(feature, image, axis=None, show_data=True, title='Importance', 
         xlabel='Feature', ylabel='Intensity', xticks=None, yticks=[], cmap='Greens',
         font_size=15, figsize=(14, 4), padding=(0, 0, 1, 1), cbar_pad=0.05, vmin=None,
-        vmax=None):
+        vmax=None, xlims=None):
     """
     Easy plot function for `importance`, `speed`, or `synergy`. It shows the analyzed
         feature `feature` with a colormap overlay indicating the result along with
@@ -51,7 +51,7 @@ def plot(feature, image, axis=None, show_data=True, title='Importance',
     :param figsize: Size of the figure. Default is `(14, 4)`.
     """
 
-    dims = np.array(image).shape
+    dims = np.array(feature).shape
 
     image = np.array(image)[0,:,:,0]
     feature = np.array(feature)[0,:,:,0]
@@ -86,11 +86,15 @@ def plot(feature, image, axis=None, show_data=True, title='Importance',
     plt.imshow(image, cmap=cmap, aspect="auto", 
                 interpolation='nearest', extent=ext, alpha=0.5,
                 vmin=vmin, vmax=vmax)
+    
     plt.title(title) 
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
     plt.yticks(yticks)
-  
+    
+    if xlims:
+        plt.xlim(xlims[0], xlims[1])
+
     if xticks:
         plt.xticks(axis, xticks, rotation='vertical')
     
@@ -317,28 +321,28 @@ def relate_report(x, y, z, plot=True, print_report=False, sort=True, title='Unit
         lists.sort(key=lambda i: i[1], reverse=True)
         x, y, z = zip(*lists)
 
+    if show_top == 0 or show_top == 'all' or (show_top is None):
+            show_top = len(x)
+
     if print_report:
         for i, j, k in zip(x[:show_top], y[:show_top], z[:show_top]):
             print(f"The unit {i} activates the most with feature {k}, {j} times.")
     
-    if show_top == 0 or show_top == 'all' or (show_top is None):
-            show_top = len(x)
-
     if plot:    
         x, y, z = x[:show_top], y[:show_top], z[:show_top]
         x = [str(int(i)) for i in x]
+       
 
-        last_seen, count = None, 0
-
-        
+        value_count = {}
         for i in range(len(x)):
-            if x[i] == last_seen:
-                count += 1
-                x[i] = f'{x[i]}-{count}'
+            value = x[i]
+            if value not in value_count:
+                value_count[value] = 0
             else:
-                last_seen = x[i]
-                count = 0
-                x[i] = f'{x[i]}-{count}'
+                value_count[value] += 1
+
+            x[i] = f'{value}-{value_count[value]}'
+
 
         bar_plot(x, y, z, font_size, fig_size, bar_width, bar_color, 
                 borders, title, xlabel, rot_ticks, x_lims, ylabel, background_color)
@@ -360,8 +364,8 @@ def bar_plot(x, y, z, font_size, fig_size, bar_width, bar_color, borders,
 
     if z is not None:
         for i, bar in enumerate(bars):
-            plt.text(bar.get_x() + bar.get_width()/2.0, bar.get_width()/2, z[i], va='bottom', rotation=90) # va='bottom' to align text # va='bottom' to align text
-
+            plt.text(bar.get_x() + bar.get_width()/2 - font_size/50, bar.get_width()/1, z[i], va='bottom', rotation=90) # va='bottom' to align text # va='bottom' to align text
+            print(bar.get_x(), bar.get_width())
     if not borders:
         for spine in plt.gca().spines.values():
             spine.set_visible(False)

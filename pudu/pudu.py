@@ -94,7 +94,8 @@ class pudu:
 
         # Initial values
         sh = np.array(self.x).shape
-        d_temp = np.zeros((sh[0], sh[1], sh[2], sh[3]))
+
+        self.imp = np.zeros((sh[0], sh[1], sh[2], sh[3]))
 
         scope, window, padd, evolution, total = standards.params_std(self.y, sh, scope, window, padding, evolution)
 
@@ -104,11 +105,10 @@ class pudu:
         while row <= scope[0][1] - padd[0][1] - window[0]:
             col = padd[1][0] + scope[1][0]
             while col <= scope[1][1] - padd[1][1] - window[1]:
-                x_copy = copy.deepcopy(self.x)
-
                 mask_val = mask.apply(section, total)
 
                 if mask_val == 1:
+                    x_copy = copy.deepcopy(self.x)
 
                     row_idx, col_idx = np.meshgrid(range(window[0]), range(window[1]), indexing='ij')
                     row_idx, col_idx = row_idx + row, col_idx + col
@@ -124,10 +124,11 @@ class pudu:
                         val = abs(val)
 
                     if np.shape(val):
-                        d_temp[0, row:row+window[0], col:col+window[1], 0] = val[evolution]
+                        self.imp[0, row:row+window[0], col:col+window[1], 0] = val[evolution]
                     else:
-                        d_temp[0, row:row+window[0], col:col+window[1], 0] = val
-                
+                        self.imp[0, row:row+window[0], col:col+window[1], 0] = val
+                    
+                    del x_copy, temp, temp2
                 else:
                     pass
 
@@ -135,11 +136,10 @@ class pudu:
 
                 col += window[1]
             row += window[0]
-
-        self.imp = d_temp
         
-        max_val, min_val = d_temp.max(), d_temp.min()
-        self.imp_rel = (d_temp - min_val) / (max_val - min_val)
+        max_val, min_val = self.imp.max(), self.imp.min()
+        self.imp_rel = (self.imp - min_val) / (max_val - min_val)
+
 
 
     def speed(self, window=1, scope=None, evolution=None, padding='center',
@@ -175,7 +175,7 @@ class pudu:
 
         # Initial values
         sh = np.array(self.x).shape
-        d_temp = np.zeros((sh[0], sh[1], sh[2], sh[3]))
+        self.spe = np.zeros((sh[0], sh[1], sh[2], sh[3]))
         
         scope, window, padd, evolution, total = standards.params_std(self.y, sh, scope, window, padding, evolution)
 
@@ -217,7 +217,7 @@ class pudu:
                     var_x = [i for i in range(len(p))]
                     var_y = [i for i in p]
                             
-                    d_temp[0, row:row+window[0], col:col+window[1], 0] = np.polyfit(var_x, var_y, 1)[0]
+                    self.spe[0, row:row+window[0], col:col+window[1], 0] = np.polyfit(var_x, var_y, 1)[0]
 
                 else:
                     pass    
@@ -226,11 +226,9 @@ class pudu:
 
                 col += window[1]
             row += window[0]
-
-        self.spe = d_temp
-        
-        max_val, min_val = d_temp.max(), d_temp.min()
-        self.spe_rel = (d_temp - min_val) / (max_val - min_val)
+       
+        max_val, min_val = self.spe.max(), self.spe.min()
+        self.spe_rel = (self.spe - min_val) / (max_val - min_val)
 
     
     def synergy(self, window=1, inspect=0, scope=None, absolute=False, bias=0,
@@ -266,7 +264,7 @@ class pudu:
 
         # Initial values
         sh = np.array(self.x).shape
-        d_temp = np.zeros((sh[0], sh[1], sh[2], sh[3]))
+        self.syn = np.zeros((sh[0], sh[1], sh[2], sh[3]))
         
         scope, window, padd, evolution, total = standards.params_std(self.y, sh, scope, window, padding, evolution)
 
@@ -312,9 +310,9 @@ class pudu:
                             val = abs(val)
 
                         if np.shape(val):
-                            d_temp[0, row:row+window[0], col:col+window[1], 0] = val[evolution]
+                            self.syn[0, row:row+window[0], col:col+window[1], 0] = val[evolution]
                         else:
-                            d_temp[0, row:row+window[0], col:col+window[1], 0] = val
+                            self.syn[0, row:row+window[0], col:col+window[1], 0] = val
                 else:
                     pass
 
@@ -322,15 +320,13 @@ class pudu:
 
                 col += window[1]
             row += window[0]
-
-        self.syn = d_temp
         
-        max_val, min_val = d_temp.max(), d_temp.min()
-        self.syn_rel = (d_temp - min_val) / (max_val - min_val)
+        max_val, min_val = self.syn.max(), self.syn.min()
+        self.syn_rel = (self.syn - min_val) / (max_val - min_val)
 
 
     def reactivations(self, layer=0, slope=0, p=0.005, window=1, scope=None, bias=0,
-                        padding='center', perturbation=ptn.Bidirectional(), mask=msk.All()):
+                        padding='center', threshold=0, perturbation=ptn.Bidirectional(), mask=msk.All()):
         """
         Counts the unit activations in the selected `layer` of a `Keras` model according 
             to change in the feature.
@@ -439,7 +435,7 @@ class pudu:
         act_count = np.array(act_count)
 
         act_count = np.transpose(act_count)
-        act_count = np.where(act_count > 0, act_count, slope * act_count) # new
+        act_count = np.where(act_count > threshold, act_count, slope * act_count) # new
         act_count = np.array(act_count)
 
         quantiles = [np.quantile(i, p) for i in act_count]
@@ -485,23 +481,23 @@ class pudu:
         max_val, min_val = counts_units.max(), counts_units.min()
         self.uac_rel = (counts_units - min_val) / (1 if (max_val - min_val) == 0 else (max_val - min_val))
 
-        un_fe = defaultdict(list)
-        for u, f in zip(units, feats):
-            un_fe[u].append(f)
-        un_fe = [un_fe[i] for i in range(max(units) + 1)]
+        # un_fe = defaultdict(list)
+        # for u, f in zip(units, feats):
+        #     un_fe[u].append(f)
+        # un_fe = [un_fe[i] for i in range(max(units) + 1)]
 
-        result = []
-        for i, sublist in enumerate(un_fe):
-            if sublist: # if not empty
-                counts = Counter(sublist) # reps. of each number
-                most_common_num, num_repetitions = counts.most_common(1)[0] # most reps.
-                result.append([i, most_common_num, num_repetitions])
+        # result = []
+        # for i, sublist in enumerate(un_fe):
+        #     if sublist: # if not empty
+        #         counts = Counter(sublist) # reps. of each number
+        #         most_common_num, num_repetitions = counts.most_common(1)[0] # most reps.
+        #         result.append([i, most_common_num, num_repetitions])
         
         return feats, units
 
 
     def relatable(self, layer=0, slope=0, p=0.005, window=1, scope=None, bias=0,
-                    padding='center', perturbation=ptn.Bidirectional(), mask=msk.All()):
+                    padding='center', threshold=0, perturbation=ptn.Bidirectional(), mask=msk.All()):
         """
         This function generates an activation report for each set of coordinates in `x` and `y`. 
 
@@ -539,12 +535,13 @@ class pudu:
             self.x, self.y = x, y
 
             feats, units = self.reactivations(layer, slope, p, window, scope, bias, padding,
-                                                perturbation, mask)
+                                                threshold, perturbation, mask)
 
             master.extend((i, j) for i, j in zip(feats, units))
 
         counts = Counter(master)
-        result = [[j, count, i] for (i, j), count in counts.items()]
+        result = [[j, count, i] for (i, j), count in counts.items()] 
+        # unit 'j' activates 'count' times with feature 'i'
         result = np.transpose(result)
 
         self.x, self.y = s_x, s_y

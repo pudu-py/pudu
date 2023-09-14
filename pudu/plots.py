@@ -365,7 +365,6 @@ def bar_plot(x, y, z, font_size, fig_size, bar_width, bar_color, borders,
     if z is not None:
         for i, bar in enumerate(bars):
             plt.text(bar.get_x() + bar.get_width()/2 - font_size/50, bar.get_width()/1, z[i], va='bottom', rotation=90) # va='bottom' to align text # va='bottom' to align text
-            print(bar.get_x(), bar.get_width())
     if not borders:
         for spine in plt.gca().spines.values():
             spine.set_visible(False)

@@ -24,7 +24,7 @@ y_train = keras.utils.to_categorical(y_train, num_classes)
 y_test = keras.utils.to_categorical(y_test, num_classes)
 
 # Load the model and test it
-model = load_model('data/mnist_class.h5')
+model = load_model('examples/data/mnist_class.h5')
 model.summary()
 score = model.evaluate(x_test, y_test, verbose=0)
 print("Test loss:", score[0], "| Test accuracy:", score[1])

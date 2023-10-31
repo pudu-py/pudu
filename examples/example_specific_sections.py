@@ -6,12 +6,12 @@ from pudu import pudu, plots
 
 
 # Load features (spectra) and targets (open circuit coltage, voc)
-features = spep.load('data/features.txt')
-targets = spep.load('data/targets.txt', transpose=True)[2]
+features = spep.load('examples/data/features.txt')
+targets = spep.load('examples/data/targets.txt', transpose=True)[2]
 
 # Load pre-trained LDA and PCA models
-lda = pickle.load(open('data/lda_model.sav', 'rb'))
-pca = pickle.load(open('data/pca_model.sav', 'rb'))
+lda = pickle.load(open('examples/data/lda_model.sav', 'rb'))
+pca = pickle.load(open('examples/data/pca_model.sav', 'rb'))
 
 
 ### PUDU ###
@@ -36,9 +36,9 @@ imp = pudu.pudu(x, y, pf)
 # This can be done for `importance` and `speed` only.
 
 # For this, we first define the areas of interest
-areas = [[170, 200], [225, 250], [250, 290], [300, 330]]
+areas = [[170, 200], [225, 255], [265, 290], [305, 335]]
 
-# In a loop we evaluate them individially. We make sure that `window`
+# In a loop we evaluate them individually. We make sure that `window`
 # and `scope` are equal so all the area is evaluated. The results are
 # saved in `custom`.
 custom = np.zeros(x_len)
@@ -47,7 +47,7 @@ for i in areas:
     custom[imp.imp[0, 0, :, 0] != 0] = imp.imp[0, 0, imp.imp[0, 0, :, 0] != 0, 0]
 
 custom = custom[np.newaxis, np.newaxis, :, np.newaxis]
-plots.plot(imp.x, custom, title="Importance", yticks=[], font_size=15, cmap='jet')
+plots.plot(imp.x, custom, title="Importance - Specific peaks", yticks=[], font_size=15, cmap='coolwarm')
 
 # Repeat the same for `speed`.
 custom = np.zeros(x_len)
@@ -56,4 +56,4 @@ for i in areas:
     custom[imp.spe[0, 0, :, 0] != 0] = imp.spe[0, 0, imp.spe[0, 0, :, 0] != 0, 0]
 
 custom = custom[np.newaxis, np.newaxis, :, np.newaxis]
-plots.plot(imp.x, custom, title="Speed", yticks=[], font_size=15, cmap='jet')
+plots.plot(imp.x, custom, title="Speed - Specific peaks", yticks=[], font_size=15, cmap='coolwarm')

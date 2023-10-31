@@ -8,7 +8,7 @@ from pudu import pudu, plots
 from pudu import perturbation as ptn
 
 # Load the file that contains the calculated areas from the spectras
-ra = spep.load('data/areas.txt', transpose=True)
+ra = spep.load('examples/data/areas.txt', transpose=True)
 
 # Shuffleing and spearating into area type and train/test
 ra0, ra1, ra2, ra3, voc = spep.shuffle([ra[0], ra[1], ra[2], ra[3], ra[4]])

@@ -9,7 +9,7 @@ from pudu import perturbation as ptn
 
 
 # Scale images to the [0, 1] range
-x = spep.load('data/for_1d_cnn_c3.txt')
+x = spep.load('examples/data/for_1d_cnn_c3.txt')
 x = np.expand_dims(x, 2)
 y = [3, 3, 3] # these are all class 3
 
@@ -17,7 +17,7 @@ y = [3, 3, 3] # these are all class 3
 y = keras.utils.to_categorical(y)
 
 # Load the model and test it
-model = load_model('data/1d_cnn.h5')
+model = load_model('examples/data/1d_cnn.h5')
 score = model.evaluate(x, y, verbose=0)
 print("Test loss:", score[0], "| Test accuracy:", score[1])
 model.summary()

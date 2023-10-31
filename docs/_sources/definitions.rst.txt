@@ -2,14 +2,7 @@
 Definitions
 ===========
 
-Spectroscopy studies the interaction between light and matter, and when analyzing this type of data, it is 
-all about change. Spectral data will show as an accumulation of peaks, and these will vary in shape, symetry, intensity, 
-position and convolutions. The most subtle changes can mean significant property differences in the 
-measured material, but also big changes could mean little (Vickerman & Gilmore, 2009). Thus, studying what these
-changes mean and how they occur is paramount. This is also true when using machine learning for spectroscopic data;
-change in spectral features remains the most important thing. Here we define 4 techniques included in **pudu** that
-evaluate ML models in terms of change, aiming to help scientists to further analyze their spectroscopic data beyond 
-the ML results.
+Spectroscopy studies the interaction between light and matter, and when analyzing this type of data, it is all about change. Spectral data will show as an accumulation of peaks, and these will vary in shape, symmetry, intensity, position and convolutions. The most subtle changes can mean significant property differences in the measured material, but also big changes could mean little (Vickerman & Gilmore, 2009). Thus, studying what these changes mean and how they occur is paramount. This is also true when using machine learning (ML) for spectroscopic data; change in spectral features remains the most important thing. Here we define four techniques included in **pudu** that evaluate ML models in terms of change, aiming to help scientists to further analyze their spectroscopic data beyond the ML results.
 
 
 Importance

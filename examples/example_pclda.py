@@ -9,14 +9,14 @@ from pudu import pudu, plots
 
 
 # Load features (spectra) and targets (open circuit coltage, voc)
-features = spep.load('data/features.txt')
-targets = spep.load('data/targets.txt', transpose=True)[2]
+features = spep.load('examples/data/features.txt')
+targets = spep.load('examples/data/targets.txt', transpose=True)[2]
 
 x = features[100]
 
 # Load pre-trained LDA and PCA models
-lda = pickle.load(open('data/lda_model.sav', 'rb'))
-pca = pickle.load(open('data/pca_model.sav', 'rb'))
+lda = pickle.load(open('examples/data/lda_model.sav', 'rb'))
+pca = pickle.load(open('examples/data/pca_model.sav', 'rb'))
 
 ### LIME ###
 # First we try LIME. then we try pudu and see the difference.

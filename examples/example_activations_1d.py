@@ -30,7 +30,7 @@ def cnn1d_prob(X):
     X = X[0,:,:,:]
     return model.predict(np.array(X), verbose=0)[0] # verbose 0 is important!
 
-# Dimention standarization for parameters
+# Dimension standardization for parameters
 y0 = np.argmax(y[0])
 x0 = np.expand_dims(np.expand_dims(x[0], 0), 1)
 
@@ -41,9 +41,9 @@ imp = pudu.pudu(x0, y0, cnn1d_prob, model)
 imp.importance(window=150, perturbation=ptn.Positive(delta=0.1))
 plots.plot(imp.x, imp.imp, axis=None, figsize=(10, 4), cmap='cool')
 
-# Now we explore the unit activations observed in layer 4 (last conv. layer)
-# We only consider the top 0.5% of the values as activated with `p=0.005`.
-# Negative values indicate that less units are being activated.
+# Now we explore the unit re-activations observed in layer 4 (last conv. layer)
+# We only consider the top 0.25% of the values as activated with `p=0.0025`.
+# Negative values indicate that less units are being re-activated.
 imp.reactivations(layer=4, slope=0, p=0.0025, window=150, perturbation=ptn.Positive(delta=0.1))
 plots.plot(imp.x, imp.lac, axis=None, figsize=(10, 4), cmap='cool', 
             title='Nº of unit activations in layer 0')
@@ -55,11 +55,10 @@ plots.feature_report(imp.fac, plot=True, print_report=False, show_top=10)
 plots.unit_report(imp.uac, plot=True, print_report=False, show_top=10)
 
 # We can extract more information when using several data points and `relatable`. 
-# This will check, after applying `activations` to N images, what units activate
+# This will check, after applying `reactivations` to N images, what units activate
 # with what feature changes the most. This can be very computer-intensive. Here 
-# it only tests for 3 samples, but
-# you will need a larger N to get significant results. If you can use a GPU it is
-# highly advised to do so.
+# it only tests for 3 samples, but you will need a larger N to get significant
+# results. If you can use a GPU it is highly advised to do so.
 x = x.reshape(3, 1, 14730, 1) # Change the shape of the array
 y = [np.argmax(i) for i in y]
 

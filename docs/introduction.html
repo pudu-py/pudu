@@ -101,16 +101,19 @@
 <li><p>Conda-forge: <a class="reference external" href="https://anaconda.org/conda-forge/pudu">https://anaconda.org/conda-forge/pudu</a></p></li>
 <li><p>Free software: MIT license</p></li>
 </ul>
-<p><strong>pudu</strong> is a Python package that helps intepret and explore the results of machinme learning algorythms. It does this by quantifying the change
-in probability according to the change in the features. This library works with any case that has a probability function, which is normally available in <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code> and <code class="docutils literal notranslate"><span class="pre">keras</span></code> methods, and works for both 1-d (vectrors) and 2-d problems (images). In order to see the exact procedure and format needed, please refer to the examples in the <code class="docutils literal notranslate"><span class="pre">docs</span></code>.</p>
+<p><strong>pudu</strong> is a Python package that helps interpret and explore the results of machine learning algorithms
+with spectroscopic data. It does this by quantifying the change in the prediction according to the change
+in the features. This library works with classification and regression problems with both 1-d and 2-d problems.</p>
 <section id="features">
 <h2>Features<a class="headerlink" href="#features" title="Permalink to this heading"></a></h2>
 <p>The following is a list of the main procedures that <strong>pudu</strong> package enables.</p>
+<p>The following is a list of the main features that <strong>pudu</strong> package enables.</p>
 <ul class="simple">
-<li><p>Importance: estimates the absolute or relative importance oif the features.</p></li>
-<li><p>Speed: calculates how fast a preditci0on changes according to the changes in the features.</p></li>
-<li><p>Synergy: tests teh synergy between features and the change in classification probability.</p></li>
-<li><p>Easy plotting of the results from the above.</p></li>
+<li><p>Importance: measures the change in prediction according to perturbations in the features.</p></li>
+<li><p>Speed: calculates how fast a prediction changes according to different perturbation levels.</p></li>
+<li><p>Synergy: tests the synergy between features and the change in classification probability.</p></li>
+<li><p>Re-activations: Evaluates how activations maps from CNNs change according to perturbations in the data.</p></li>
+<li><p>Easy plotting with ample personalization options for all the cases above.</p></li>
 </ul>
 </section>
 <section id="quickstart">

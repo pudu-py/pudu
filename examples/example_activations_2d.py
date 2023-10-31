@@ -25,7 +25,7 @@ y_train = keras.utils.to_categorical(y_train, num_classes)
 y_test = keras.utils.to_categorical(y_test, num_classes)
 
 # Load the model and test it
-model = load_model('mnist_class.h5')
+model = load_model('data/mnist_class.h5')
 score = model.evaluate(x_test, y_test, verbose=0)
 print("Test loss:", score[0], "| Test accuracy:", score[1])
 model.summary()
@@ -48,13 +48,13 @@ imp = pudu.pudu(x, y, cnn2d_prob, model)
 
 # First we check importance
 imp.importance(window=(3, 3), perturbation=ptn.Positive(delta=0.1), bias=0.1)
-plots.plot(imp.x, imp.imp, axis=None, figsize=(10, 10), cmap='cool')
+plots.plot(imp.x, imp.imp_rel, axis=None, figsize=(6, 6), cmap='cool')
 
 # Now we explore the unit activations observed in layer 2 (last conv. layer)
 # We only consider the top 0.5% of the values as activated with `p=0.005`.
 # Negative values indicate that less units are being activated.
 imp.reactivations(layer=2, slope=0, p=0.005, window=(5, 5), perturbation=ptn.Positive(delta=0.1))
-plots.plot(imp.x, imp.lac, axis=None, figsize=(10, 10), cmap='cool', 
+plots.plot(imp.x, imp.lac, axis=None, figsize=(6, 6), cmap='cool', 
             title='Nº of unit activations in layer 0')
 
 # There could be units that activate more frequently with changes in specific areas
@@ -64,7 +64,7 @@ plots.feature_report(imp.fac, plot=True, print_report=False, show_top=10)
 plots.unit_report(imp.uac, plot=True, print_report=False, show_top=20, font_size=12)
 
 # To better visualize the coordinates, we can better check with 'preview'
-imp.preview(window=(3, 3), figsize=(10, 10), yticks=None)
+imp.preview(window=(3, 3), figsize=(6, 6), yticks=None)
 
 # We can extract more infomration when using several images and `relatable`. 
 # This will see, after applying `activations` to N images, what units activate

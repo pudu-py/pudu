@@ -1,12 +1,9 @@
-import matplotlib.pyplot as plt
-from lime import lime_tabular
 import spectrapepper as spep
 import numpy as np
 import pickle
-import lime
 
 from pudu import pudu, plots
-import perturbation as ptn
+from pudu import perturbation as ptn
 
 
 # Other examples are with `bidirectional` or `positive` mode, that

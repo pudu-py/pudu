@@ -6,7 +6,6 @@ import numpy as np
 
 from pudu import pudu, plots
 from pudu import perturbation as ptn
-from pudu import masks as msk
 
 # Load the file that contains the calculated areas from the spectras
 ra = spep.load('data/areas.txt', transpose=True)

@@ -7,6 +7,7 @@ def plot(feature, image, axis=None, show_data=True, title='Importance',
         xlabel='Feature', ylabel='Intensity', xticks=None, yticks=[], cmap='Greens',
         font_size=15, figsize=(14, 4), padding=(0, 0, 1, 1), cbar_pad=0.05, vmin=None,
         vmax=None, xlims=None):
+    
     """
     Easy plot function for `importance`, `speed`, or `synergy`. It shows the analyzed
         feature `feature` with a colormap overlay indicating the result along with

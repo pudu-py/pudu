@@ -24,7 +24,7 @@ y_train = keras.utils.to_categorical(y_train, num_classes)
 y_test = keras.utils.to_categorical(y_test, num_classes)
 
 # Load the model and test it
-model = load_model('mnist_class.h5')
+model = load_model('data/mnist_class.h5')
 model.summary()
 score = model.evaluate(x_test, y_test, verbose=0)
 print("Test loss:", score[0], "| Test accuracy:", score[1])
@@ -47,12 +47,14 @@ imp = pudu.pudu(x, y, cnn2d_prob)
 
 # in this case, 'window' is a tuple that indicates the width and height.
 imp.importance(window=(3, 3), scope=None, padding='center')
-plots.plot(imp.x, imp.imp, axis=None, figsize=(10, 10), cmap='cool')
+plots.plot(imp.x, imp.imp_rel, axis=None, figsize=(7, 6), cmap='cool', title='Relative Importance',
+            xlabel='', ylabel='')
 
 # In this case, as there are many `0` values in the image, including some bias 
 # can help us to visualize importance in those areas, since 0*delta = 0
 imp.importance(window=(3, 3), scope=None, padding='center', bias=0.1)
-plots.plot(imp.x, imp.imp, axis=None, figsize=(10, 10), cmap='cool')
+plots.plot(imp.x, imp.imp_rel, axis=None, figsize=(7, 6), cmap='cool', title='Relative Importance - with bias',
+            xlabel='', ylabel='')
 
 ### LIME ###
 from lime import lime_image
@@ -73,8 +75,16 @@ def cnn2d_prob(X):
 explainer = lime_image.LimeImageExplainer()
 explanation = explainer.explain_instance(image, cnn2d_prob, batch_size=1, num_samples=1000)
 temp, mask = explanation.get_image_and_mask(explanation.top_labels[0], positive_only=True, num_features=10, hide_rest=True)
-plt.imshow(mark_boundaries(temp / 2 + 0.5, mask))
 
+plt.rc('font', size=15)
+plt.subplots_adjust(left=0, bottom=0, right=1, top=1)
+plt.figure(figsize=(6, 6))
+
+plt.imshow(mark_boundaries(temp / 2 + 0.5, mask), extent=[0, 28, 0, 28])
+
+plt.title('LIME') 
+plt.tight_layout()
+plt.show()  
 
 ### GRAD CAM ###
 import numpy as np
@@ -128,7 +138,16 @@ model.layers[-1].activation = None
 # Generate class activation heatmap
 heatmap = make_gradcam_heatmap(image, model, last_conv_layer_name)
 
-plt.figure(figsize=(10,10))
-plt.imshow(image[0,:,:,:], cmap='binary', alpha=1,extent=[0,28,0,28])
-plt.imshow(heatmap, cmap='jet', aspect="auto" , alpha=0.75,extent=[0,28,0,28])
+
+
+plt.rc('font', size=15)
+plt.subplots_adjust(left=0, bottom=0, right=1, top=1)
+plt.figure(figsize=(7, 6))
+
+plt.imshow(image[0,:,:,:], cmap='binary', alpha=1, extent=[0, 28, 0, 28])
+plt.imshow(heatmap, cmap='jet', aspect="auto", alpha=0.75, extent=[0, 28, 0, 28])
+
+plt.title('GRADCAM') 
+plt.tight_layout()
+plt.colorbar(pad=0.05)
 plt.show()

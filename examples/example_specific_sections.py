@@ -33,12 +33,12 @@ imp = pudu.pudu(x, y, pf)
 
 # To evaluate more specific areas, we can do ir one-by-one and the
 # put them all together in a vector for plotting and/or normalizing.
-# This can be done for `importnace` and `speed` only.
+# This can be done for `importance` and `speed` only.
 
 # For this, we first define the areas of interest
-areas = [[170, 200],[225, 250], [250, 290], [300, 330]]
+areas = [[170, 200], [225, 250], [250, 290], [300, 330]]
 
-# In aloop we evaluate them individially. We make sure that `window`
+# In a loop we evaluate them individially. We make sure that `window`
 # and `scope` are equal so all the area is evaluated. The results are
 # saved in `custom`.
 custom = np.zeros(x_len)

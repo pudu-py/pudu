@@ -4,9 +4,15 @@ from keras.models import Model
 import numpy as np
 import copy
 
-from . import error_handler, standards
-from . import masks as msk
-from . import perturbation as ptn
+# from . import error_handler, standards
+# from . import masks as msk
+# from . import perturbation as ptn
+
+# For Sphinx docs only:
+import error_handler, standards
+import masks as msk
+import perturbation as ptn
+
 
 class pudu:
     def __init__(self, x, y, pf, model=None):

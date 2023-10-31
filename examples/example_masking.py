@@ -1,9 +1,6 @@
-import matplotlib.pyplot as plt
-from lime import lime_tabular
 import spectrapepper as spep
 import numpy as np
 import pickle
-import lime
 
 from pudu import pudu, plots
 from pudu import masks as msk
@@ -41,4 +38,4 @@ masks = [msk.All(), msk.EveryOther(), msk.RandomMask()]
 m_names = ['All', 'EveryOther', 'RandomMask']
 for i,j in zip(masks, m_names):
     imp.importance(window=100, absolute=False, mask=i)
-    plots.plot(imp.x, imp.imp, title="Importance - "+j, yticks=[], font_size=15, cmap='jet')
+    plots.plot(imp.x, imp.imp, title="Importance - "+j, yticks=[], font_size=15, cmap='winter')

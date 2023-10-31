@@ -12,6 +12,8 @@ from pudu import pudu, plots
 features = spep.load('data/features.txt')
 targets = spep.load('data/targets.txt', transpose=True)[2]
 
+x = features[100]
+
 # Load pre-trained LDA and PCA models
 lda = pickle.load(open('data/lda_model.sav', 'rb'))
 pca = pickle.load(open('data/pca_model.sav', 'rb'))
@@ -24,14 +26,13 @@ def pcalda_proba(X):
     return lda.predict_proba(X)
 
 # Feature names and categorical features in the correct format
-fn = [str(i) for i in range(len(features[100]))]
-cf = [i for i in range(len(features[100]))]
-
+fn = [str(i) for i in range(len(x))]
+cf = [i for i in range(len(x))]
 
 # Make explainer and evaluate an instance
 explainer = lime.lime_tabular.LimeTabularExplainer(np.array(features),
     mode='classification', feature_names=fn, categorical_features=cf, verbose=False)
-exp = explainer.explain_instance(features[10], pcalda_proba, 
+exp = explainer.explain_instance(x, pcalda_proba, 
                                  num_features=len(fn), num_samples=1000)
 
 # Reformat the output so it is in order to plot over the feature
@@ -42,20 +43,22 @@ for i in e:
 
 # Plot the result with the evaluated feature
 plt.rc('font', size=15)
+plt.subplots_adjust(left=0, bottom=0, right=1, top=1)
 plt.figure(figsize=(14, 4))
 plt.imshow(np.expand_dims(lm, 0), cmap='Greens', aspect="auto", interpolation='nearest', 
-    extent=[0, 1536, min(features[100]), max(features[100])], alpha=1)
-plt.plot(features[100], 'k')
-plt.colorbar()
+    extent=[0, 1536, min(x), max(x)], alpha=1)
+plt.plot(x, 'k')
+plt.colorbar(pad=0.05)
 plt.title('Lime') 
 plt.xlabel('Feature')
 plt.ylabel('Intensity')
 plt.yticks([])
+plt.tight_layout()
+
 plt.show()
 
 ### PUDU ###
 # Select x (feature) and respective y (target)
-x = features[100]
 x = x[np.newaxis, np.newaxis, :, np.newaxis]
 y = targets[100]
 
@@ -71,13 +74,13 @@ imp = pudu.pudu(x, y, pf)
 
 # Evaluate `importance`. We use Vanilla settings for this one
 # except for `window`.
-imp.importance(window=50)
-plots.plot(imp.x, imp.imp, title="Importance", yticks=[], font_size=15)
+imp.importance(window=1)
+plots.plot(imp.x, imp.imp, title="Importance, w=1", yticks=[], font_size=15)
 
 # Single pixels might be irrelevant for spectroscopy. We can group features
 # to evaluate together.
 imp.importance(window=50)
-plots.plot(imp.x, imp.imp, title="Importance", yticks=[], font_size=15)
+plots.plot(imp.x, imp.imp, title="Importance, w=50", yticks=[], font_size=15)
 
 # We can see how fast would the classification change according to
 # the change in the features.

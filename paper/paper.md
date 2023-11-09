@@ -52,7 +52,8 @@ pudu is versatile as it can analyze classification and regression algorithms for
 
 # Acknowledgements
 
-Co-funded by the European Union (GA No. 101058459 Platform-ZERO). Views and opinions expressed are however those of the author(s) only and do not necessarily reflect those of the European Union or European Health and Digital Executive Agency (HADEA). Neither the European Union nor the granting authority can be held responsible for them. This project has received funding from the European Union's Horizon 2020 research and innovation programme under Marie Skłodowska-Curie GA No. 801342 (Tecniospring INDUSTRY) and the Government of Catalonia's Agency for Business Competitiveness (ACCIÓ). Authors from IREC belong to the MNT-Solar Consolidated Research Group of the “Generalitat de Catalunya” (ref. 2021 SGR 01286) and are grateful to European Regional Development Funds (ERDF, FEDER Programa Competitivitat de Catalunya 2007–2013).
+Co-funded by the European Union (GA Nº 101058459 Platform-ZERO). Views and opinions expressed are however those of the authors only and do not necessarily reflect those of the European Union (EU) or European Health and Digital Executive Agency (HADEA). Neither the EU nor the granting authority can be held responsible for them. This project has received funding from the EU's Horizon 2020 research and innovation programme under Marie Skłodowska-Curie GA Nº 801342 (Tecniospring INDUSTRY) and the Government of Catalonia's Agency for Business Competitiveness (ACCIÓ). This work has received funding from the EU's Horizon 2020 Research and Innovation Programme under GA Nº 958243 (SUNRISE project). Authors from IREC belong to the MNT-Solar Consolidated Research Group of the “Generalitat de Catalunya” (ref. 2021 SGR 01286) and are grateful to European Regional Development Funds (ERDF, FEDER Programa Competitivitat de Catalunya 2007–2013).
+
 
 # Authors contribution with [CRediT](https://credit.niso.org/)
 

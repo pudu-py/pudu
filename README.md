@@ -9,6 +9,7 @@
 [![Downloads](https://static.pepy.tech/personalized-badge/pudu?period=total&units=abbreviation&left_color=grey&right_color=blue&left_text=pypi%20downloads)](https://pepy.tech/project/pudu)
 [![image](https://img.shields.io/conda/dn/conda-forge/pudu?color=blue&label=conda%20downloads)](https://anaconda.org/conda-forge/pudu)
 [![image](https://img.shields.io/badge/stackoverflow-Ask%20a%20question-brown?logo=stackoverflow&logoWidth=18&logoColor=white)](https://stackoverflow.com/questions/tagged/pudu)
+[![status](https://joss.theoj.org/papers/cacb5b6520209b0c940bf46638df251d/status.svg)](https://joss.theoj.org/papers/cacb5b6520209b0c940bf46638df251d)
 
 **A Python library for explainability of machine learinng algorithms in an agnostic, deterministic, and simple way.**
 

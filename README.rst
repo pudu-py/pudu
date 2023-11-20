@@ -20,6 +20,8 @@ pudu
         :target: https://pepy.tech/project/pudu
 .. image:: https://img.shields.io/badge/stackoverflow-Ask%20a%20question-brown
         :target: https://stackoverflow.com/questions/tagged/pudu
+.. image:: https://joss.theoj.org/papers/cacb5b6520209b0c940bf46638df251d/status.svg
+        :target: https://joss.theoj.org/papers/cacb5b6520209b0c940bf46638df251d
 
 **A Python library for explainability of machine learinng algorithms in an agnostic, deterministic, and simple way.**
 * GitHub repo: https://github.com/pudu-py/pudu

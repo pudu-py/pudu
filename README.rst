@@ -23,7 +23,7 @@ pudu
 .. image:: https://joss.theoj.org/papers/cacb5b6520209b0c940bf46638df251d/status.svg
         :target: https://joss.theoj.org/papers/cacb5b6520209b0c940bf46638df251d
 
-**A Python library for explainability of machine learinng algorithms in an agnostic, deterministic, and simple way.**
+**A Python library for explainability of machine learning algorithms for spectroscopic data in an agnostic, deterministic, and simple way.**
 * GitHub repo: https://github.com/pudu-py/pudu
 * Documentation: https://pudu-py.github.io/pudu
 * PyPI: https://pypi.python.org/pypi/pudu

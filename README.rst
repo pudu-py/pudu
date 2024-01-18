@@ -4,7 +4,7 @@ pudu
 
 .. image:: https://img.shields.io/pypi/v/pudu.svg
         :target: https://pypi.python.org/pypi/pudu
-.. image:: https://img.shields.io/conda/vn/conda-forge/pudu.svg
+.. image:: https://anaconda.org/conda-forge/pudu/badges/version.svg   
         :target: https://anaconda.org/conda-forge/pudu
 .. image:: https://img.shields.io/badge/License-MIT-yellow.svg
         :target: https://opensource.org/licenses/MIT
@@ -14,9 +14,9 @@ pudu
         :target: https://pudu-py.github.io/pudu
 .. image:: https://codecov.io/gh/pudu-py/pudu/branch/main/graph/badge.svg?token=DC0QIwuYel
         :target: https://codecov.io/gh/pudu-py/pudu
-.. image:: https://img.shields.io/conda/dn/conda-forge/pudu.svg?color=blue&label=conda%20downloads
-        :target: https://pepy.tech/project/pudu
 .. image:: https://static.pepy.tech/personalized-badge/pudu?period=total&units=international_system&left_color=grey&left_text=pypi%20downloads&right_color=blue
+        :target: https://pepy.tech/project/pudu
+.. image:: https://img.shields.io/conda/dn/conda-forge/pudu.svg?color=blue&label=conda%20downloads
         :target: https://pepy.tech/project/pudu
 .. image:: https://img.shields.io/badge/stackoverflow-Ask%20a%20question-brown
         :target: https://stackoverflow.com/questions/tagged/pudu

@@ -1,7 +1,7 @@
 <img src="https://raw.githubusercontent.com/pudu-py/pudu/main/docs/_static/pudu-baner.png" width="70%">
 
 [![image](https://img.shields.io/pypi/v/pudu.svg)](https://pypi.python.org/pypi/pudu)
-[![image](https://img.shields.io/conda/vn/conda-forge/pudu.svg)](https://anaconda.org/conda-forge/pudu)
+[![Anaconda-Server Badge](https://anaconda.org/conda-forge/pudu/badges/version.svg)](https://anaconda.org/conda-forge/pudu)
 [![image](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![CodeQL](https://github.com/pudu-py/pudu/actions/workflows/codeql.yml/badge.svg)](https://github.com/pudu-py/pudu/actions/workflows/codeql.yml)
 [![image](https://github.com/pudu-py/pudu/workflows/docs/badge.svg)](https://pudu-py.github.io/pudu)

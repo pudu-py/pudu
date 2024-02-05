@@ -1,0 +1,5 @@
+pudu
+====
+
+.. autoclass:: pudu.pudu
+   :members: __init__, importance, speed, synergy, reactivations, relatable

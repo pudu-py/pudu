@@ -3,4 +3,4 @@ pandas
 matplotlib
 spectrapepper
 scikit-learn
-tensorflow
+tensorflow==2.11

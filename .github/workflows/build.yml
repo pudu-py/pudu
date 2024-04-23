@@ -31,7 +31,7 @@ jobs:
             SDKROOT: /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk
         steps:
             - name: CHECKOUT CODE
-              uses: actions/checkout@v3.1.0
+              uses: actions/checkout@v4
             - name: SETUP PYTHON
               uses: actions/setup-python@v4.3.0
               with:

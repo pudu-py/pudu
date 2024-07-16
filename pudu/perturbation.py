@@ -68,7 +68,7 @@ class Log:
     def __init__(self, base=10):
         self.base = base
     def apply(self, x, row, col, window, bias):
-        x[0, row:row+window[0], col:col+window[1], 0] = math.log(x[0, row:row+window[0], col:col+window[1], 0] + bias, self.base)
+        x[0, row:row+window[0], col:col+window[1], 0] = np.log(x[0, row:row+window[0], col:col+window[1], 0] + bias) / np.log(self.base)
         return x, None
 
 
@@ -151,7 +151,7 @@ class Sinusoidal:
         self.freq = freq
         self.amp = amp
     def apply(self, x, row, col, window, bias):
-        x[0, row:row+window[0], col:col+window[1], 0] = (x[0, row:row+window[0], col:col+window[1], 0] + bias) * math.sin(self.freq * x[0, row:row+window[0], col:col+window[1], 0]) + self.amp
+        x[0, row:row+window[0], col:col+window[1], 0] = (x[0, row:row+window[0], col:col+window[1], 0] + bias) * np.sin(self.freq * x[0, row:row+window[0], col:col+window[1], 0]) + self.amp
         return x, None
     
 
@@ -172,7 +172,7 @@ class Gaussian:
         self.mean = mean
         self.stdv = stdv
     def apply(self, x, row, col, window, bias):
-        x[0, row:row+window[0], col:col+window[1], 0] = (x[0, row:row+window[0], col:col+window[1], 0] + bias) * math.exp(-((x[0, row:row+window[0], col:col+window[1], 0] - self.mean) ** 2) / (2 * self.stdv ** 2))
+        x[0, row:row+window[0], col:col+window[1], 0] = (x[0, row:row+window[0], col:col+window[1], 0] + bias) * np.exp(-((x[0, row:row+window[0], col:col+window[1], 0] - self.mean) ** 2) / (2 * self.stdv ** 2))
         return x, None
 
 
@@ -189,7 +189,7 @@ class Tanh:
     def __init__(self, sf=1):
         self.sf = sf # scale factor
     def apply(self, x, row, col, window, bias):
-        x[0, row:row+window[0], col:col+window[1], 0] = math.tanh(self.sf * (x[0, row:row+window[0], col:col+window[1], 0] + bias))
+        x[0, row:row+window[0], col:col+window[1], 0] = np.tanh(self.sf * (x[0, row:row+window[0], col:col+window[1], 0] + bias))
         return x, None
 
 
@@ -206,7 +206,7 @@ class Sigmoid:
     def __init__(self, sf=1):
         self.sf = sf
     def apply(self, x, row, col, window, bias):
-        x[0, row:row+window[0], col:col+window[1], 0] = 1 / (1 + math.exp(-self.sf * (x[0, row:row+window[0], col:col+window[1], 0] + bias)))
+        x[0, row:row+window[0], col:col+window[1], 0] = 1 / (1 + np.exp(-self.sf * (x[0, row:row+window[0], col:col+window[1], 0] + bias)))
         return x, None
     
 
@@ -253,7 +253,7 @@ class Softplus:
     def __init__(self, sf=1):
         self.sf = sf
     def apply(self, x, row, col, window, bias):
-        x[0, row:row+window[0], col:col+window[1], 0] = math.log(1 + math.exp(self.sf * (x[0, row:row+window[0], col:col+window[1], 0] + bias)))
+        x[0, row:row+window[0], col:col+window[1], 0] = np.log(1 + np.exp(self.sf * (x[0, row:row+window[0], col:col+window[1], 0] + bias)))
         return x, None
     
 

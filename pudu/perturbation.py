@@ -419,3 +419,22 @@ class LowerThreshold:
         if x[0, row, col, 0] >= self.th:
             x[0, row:row+window[0], col:col+window[1], 0] = self.c
         return x, None
+    
+    
+class ClassInterchange:
+    """
+    Sets the values to a combination between the spectrum and another spectrum
+    (generally another class spectrum)
+
+    :type change: float
+    :param change: The percentage of change (0=no perturbation, 1=spectrum2)
+
+    :rtype: 4d array
+    :return: Custom perturbated array
+    """
+    def __init__(self, spectrum2, change=0):
+        self.spectrum2 = spectrum2
+        self.change = change
+    def apply(self, x, row, col, window, bias):
+        x[0, row:row+window[0], col:col+window[1], 0] = x[0, row:row+window[0], col:col+window[1], 0]*(1-self.change)+self.spectrum2[0, row:row+window[0], col:col+window[1], 0]*(self.change)
+        return x, None

@@ -86,3 +86,32 @@ def params_std(y, sh, scope, window, padding, evolution):
     total = sec_row*sec_col
 
     return scope, window, padding, evolution, total
+
+
+def subtract_from_index(vector, index):
+    """
+    This function substract the value of the index to all the vector values.
+
+    :type vector: numpy array
+    :param vector: Vector (or array 1d)
+
+    :type index: int
+    :param index: Index of the substracted value
+
+    :rtype: numpy array
+    :returns: Vector (or array 1d) with the substracted result
+    """
+    # Convert p0 to a numpy array of floats (in case it's not already)
+    vector = np.array(vector, dtype=float)
+
+    # Check that the index is within the valid range
+    if index < 0 or index >= len(vector):
+        raise IndexError("The index is out of bounds")
+
+    # Get the value at the selected index
+    value = vector[index]
+
+    # Subtract the value at the selected index from all other elements
+    result = vector - value
+
+    return result

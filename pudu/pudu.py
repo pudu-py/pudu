@@ -68,10 +68,12 @@ class pudu:
         
         # Some error handling        
         error_handler.for_constructor(model, x, y)
-        
 
-    def importance(self, window=1, scope=None, evolution=None, padding='center', bias=0,
-                    absolute=False, perturbation=ptn.Bidirectional(), mask=msk.All()):
+
+    def importance(self, window=1, scope=None, evolution=None,
+                   padding='center', bias=0, absolute=False,
+                   perturbation=ptn.Bidirectional(), method='1class',
+                   mask=msk.All()):
         """
         Calculates the importance vector for the input feature.
 
@@ -80,21 +82,33 @@ class pudu:
             
         :type scope: tupple(int, int)
         :param scope: Starting and ending point of the analysis for each feature.
-            If `None`, the all the vector is analysed. 
+            If `None`, the all the vector is analysed.
 
         :type evolution: int
         :param evolution: feature width to be changeg each time.
         
-        :type padding: string 
-        :param padding: Type of padding. If the legnth of `x` is not divisible 
-            by `window` then padding is applyed. If `center`, then equal padding 
-            to each side is applyed. If `right`, then paading to the right is 
+        :type padding: string
+        :param padding: Type of padding. If the legnth of `x` is not divisible
+            by `window` then padding is applyed. If `center`, then equal padding
+            to each side is applyed. If `right`, then paading to the right is
             added and `window`starts from `0`. If `left`, padding to the left
             is applyied and `window` ends at length `x`. If perfet `center` is
             not possible, then ipadding left is added `1`.
-        
+
         :type absolute: bool
-        :param absolute: Weather or not the result is in absolute value or not. Default is `False`.
+        :param absolute: Weather or not the result is in absolute value or not.
+            Default is `False`.
+
+        :type method: string
+        :param method: Method to compute the importance, there are 2
+            posibilities: '1class': only is used the evolution class or the
+            currect class (if evolution=None) to compute the difference in the
+            probabilities.
+            And 'comb_classes': is used all the probabilities
+            classes to see how is the change between the different classes
+            (looking at probability ratio changes) to compute the importance,
+            and only taking into account the dominant term (If evolution=None,
+            the method always is the '1class'). Default is `1class`.
         """
         error_handler.for_params(window, scope, padding, absolute, 0, None, None)
 
@@ -105,6 +119,7 @@ class pudu:
 
         scope, window, padd, evolution, total = standards.params_std(self.y, sh, scope, window, padding, evolution)
 
+        initial_class = int(self.y)
         p0 = self.pf(self.x)
         section = 1
         row = padd[0][0] + scope[0][0]
@@ -121,10 +136,33 @@ class pudu:
 
                     temp, temp2 = perturbation.apply(x_copy, row, col, window, bias)
 
-                    if temp2 is None:
-                        val = self.pf(temp) - p0
-                    else:
-                        val = (self.pf(temp2) + self.pf(temp) - 2*p0) / 2
+                    if (method == '1class' or evolution == initial_class or
+                        temp2 is not None):
+                        if temp2 is None:
+                            val = self.pf(temp) - p0
+                        else:
+                            val = (self.pf(temp2) + self.pf(temp) - 2*p0) / 2
+
+                    elif method == 'comb_classes':
+                        # The importance is computed by the change in the
+                        # difference between classes
+                        p1 = self.pf(temp)
+                        # Compute the difference between the class probs
+                        dif_p0 = standards.subtract_from_index(p0,
+                                                               initial_class)
+                        dif_p1 = standards.subtract_from_index(p1,
+                                                               initial_class)
+
+                        dif_probs = dif_p0 - dif_p1
+
+                        # Only keeps the dominate value
+                        # Find the index of the maximum absolute value
+                        max_index = np.argmax(np.abs(dif_probs))
+                        # Create a new array filled with zeros
+                        val = np.zeros_like(dif_probs)
+                        # Set the value at max_index to the original value
+                        # (not absolute)
+                        val[max_index] = dif_probs[max_index]
 
                     if absolute:
                         val = abs(val)
@@ -133,7 +171,7 @@ class pudu:
                         self.imp[0, row:row+window[0], col:col+window[1], 0] = val[evolution]
                     else:
                         self.imp[0, row:row+window[0], col:col+window[1], 0] = val
-                    
+
                     del x_copy, temp, temp2
                 else:
                     pass
@@ -142,10 +180,13 @@ class pudu:
 
                 col += window[1]
             row += window[0]
-        
-        max_val, min_val = self.imp.max(), self.imp.min()
-        self.imp_rel = (self.imp - min_val) / (max_val - min_val)
 
+        max_val, min_val = self.imp.max(), self.imp.min()
+
+        if max_val == min_val:
+            self.imp_rel = np.zeros_like(self.imp)
+        else:
+            self.imp_rel = (self.imp - min_val) / (max_val - min_val)
 
 
     def speed(self, window=1, scope=None, evolution=None, padding='center',

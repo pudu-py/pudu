@@ -1,0 +1,1 @@
+{"config":{"lang":["en"],"separator":"[\\s\\-]+","pipeline":["stopWordFilter"]},"docs":[{"location":"changelog/","title":"Changelog","text":""},{"location":"changelog/#v001-date","title":"v0.0.1 - Date","text":"<p>Improvement:</p> <ul> <li>TBD</li> </ul> <p>New Features:</p> <ul> <li>TBD</li> </ul>"}]}

@@ -1,0 +1,6 @@
+Functions
+---------
+
+.. autoclass:: pudu.pudu
+   :members: __init__, importance, speed, synergy, plot, save
+   :exclude-members:

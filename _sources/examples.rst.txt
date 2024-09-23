@@ -1,0 +1,241 @@
+Examples
+--------
+
+These examples show use cases and scenarios for **pudu**. Most examples use spectroscopic data, and some of them complement with images to show 2-D capability. The later data is the `MNIST` database and it downloads from the code itself using `keras`. The spectral data, parameters, and sample models can be found on the `data <https://github.com/pudu-py/pudu/tree/main/examples/data>`_ folder included in the `examples <https://github.com/pudu-py/pudu/tree/main/examples>`_ folder from the repository. To make sure you comply with all the libraries used in these examples, please use the additional requirements included in `examples/examples_requirements.txt`.
+
+
+Example 1: PC-LDA with Scikit-learn for classification of spectroscopic data
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In this example, a PC-LDA cascaded algorithm built with `Scikit-learn` is evaluated using `LIME` and `pudu`. The data set used by the model are Raman and Photoluminescence spectras merged into a single vector as features and performance as open circuit voltage (Voc) data as target for classification. These are measured from CIGSe photovoltaic cells from a combinatorial sample. `pudu`, in contrast to `LIME`, clearly highlights important sections of the spectras normally related to Voc.
+
+.. literalinclude:: ../examples/example_pclda.py
+    :linenos: 
+
+
+.. figure:: images/ex1_1.png
+   :scale: 50 %
+   :align: center
+   :alt: 
+
+.. figure:: images/ex1_2.png
+   :scale: 50 %
+   :align: center
+   :alt: 
+
+.. figure:: images/ex1_3.png
+   :scale: 50 %
+   :align: center
+   :alt: 
+ 
+.. figure:: images/ex1_4.png
+   :scale: 50 %
+   :align: center
+   :alt: 
+
+.. figure:: images/ex1_5.png
+   :scale: 50 %
+   :align: center
+   :alt: 
+
+
+
+Example 2: Regression for predicition of open circuit voltage of solar cells with RBFN
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Regression can be an important method for spectroscopy, especially when specific values, beyond classification, are of interest. Here, a Radial Basis Function Network (RBFN) is trained with `localreg` to perform the prediction of open circuit voltage (Voc) with spectral areas calculated from Raman and Photoluminescence spectras. These data are obtained from photovoltaic CIGSe cells from a combinatorial sample. The example shows which of these areas have more impact in the prediction and also how they interact with each other.
+
+.. literalinclude:: ../examples/example_rbnf.py
+    :language: python
+
+.. figure:: images/ex2_1.png
+   :scale: 50 %
+   :align: center
+   :alt: 
+
+.. figure:: images/ex2_2.png
+   :scale: 50 %
+   :align: center
+   :alt: 
+
+.. figure:: images/ex2_3.png
+   :scale: 50 %
+   :align: center
+   :alt: 
+
+.. figure:: images/ex2_4.png
+   :scale: 50 %
+   :align: center
+   :alt: 
+
+
+Example 3: Handwritten numbers recognition using CNN with Keras and Mnist
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This example showcases 2-D capabilities of `pudu`. The example loads a pre-trained model for the classification of handwritten numbers from the MNIST dataset, alongside with LIME and GRAD-CAM visualizations.
+
+.. literalinclude:: ../examples/example_cnn_mnist.py
+    :language: python
+
+.. figure:: images/ex3_1.png
+   :scale: 50 %
+   :align: center
+   :alt: 
+
+.. figure:: images/ex3_2.png
+   :scale: 50 %
+   :align: center
+   :alt: 
+
+.. figure:: images/ex3_3.png
+   :scale: 50 %
+   :align: center
+   :alt: 
+
+.. figure:: images/ex3_4.png
+   :scale: 50 %
+   :align: center
+   :alt: 
+
+
+Example 4: How to call different masks 
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Masking allows you to cover features from the analysis. It serves the same purpose of `scope` but it works in a structured and patterned way. This example shows the use of `mask` options available with a PC-LDA model using Raman and Photoluminescence spectras merged into a single vector as features and performance as open circuit voltage (Voc) data as target for classification. These are measured from CIGSe photovoltaic cells from a combinatorial sample.
+
+.. literalinclude:: ../examples/example_masking.py
+    :language: python
+
+.. figure:: images/ex4_1.png
+   :scale: 50 %
+   :align: center
+   :alt: 
+
+.. figure:: images/ex4_2.png
+   :scale: 50 %
+   :align: center
+   :alt: 
+
+.. figure:: images/ex4_3.png
+   :scale: 50 %
+   :align: center
+   :alt: 
+
+
+Example 5: How to call different perturbations 
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Depending on the nature of the data and the problem, different perturbation functions and patterns may be needed. `pudu` offers options to suit different scenarios. Some of the are shown in this example. This example uses a PC-LDA model that classifies Raman and Photoluminescence spectras merged into a single vector as features and performance as open circuit voltage (Voc) data as target. These are measured from CIGSe photovoltaic cells from a combinatorial sample.
+
+.. literalinclude:: ../examples/example_perturbation.py
+    :language: python
+
+.. figure:: images/ex5_1.png
+   :scale: 50 %
+   :align: center
+   :alt: 
+
+.. figure:: images/ex5_2.png
+   :scale: 50 %
+   :align: center
+   :alt: 
+
+.. figure:: images/ex5_3.png
+   :scale: 50 %
+   :align: center
+   :alt: 
+
+.. figure:: images/ex5_4.png
+   :scale: 50 %
+   :align: center
+   :alt: 
+
+
+Example 6: Re-activations with 1-D CNN 
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This example shows how to evaluate the ` re-activations < https://pudu-py.github.io/pudu/definitions.html#activations-and-re-activaiton>`_ on the activation maps for a CNN for classification of four Raman and four Photoluminescence spectras (eight in total) merged together into a single vector according to the open circuit voltage (Voc) of photovoltaic CIGSe samples. It also showcases the use of `relate`, `feature_report`, `unit_report`, and `relate_report`.
+
+.. literalinclude:: ../examples/example_activations_1d.py
+    :language: python
+
+.. figure:: images/ex6_1.png
+   :scale: 50 %
+   :align: center
+   :alt: 
+
+.. figure:: images/ex6_2.png
+   :scale: 50 %
+   :align: center
+   :alt: 
+
+.. figure:: images/ex6_3.png
+   :scale: 50 %
+   :align: center
+   :alt: 
+
+.. figure:: images/ex6_4.png
+   :scale: 50 %
+   :align: center
+   :alt: 
+
+.. figure:: images/ex6_5.png
+   :scale: 50 %
+   :align: center
+   :alt: 
+
+Example 7: Re-activations with 2-D CNN 
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This example shows how to evaluate the re-activations on the activation maps for a 2D CNN. The example loads a pre-trained model for the classification of handwritten numbers from the MNIST dataset. It also showcases the use of `relate`, `feature_report`, `unit_report`, and `relate_report`. 
+
+.. literalinclude:: ../examples/example_activations_2d.py
+    :language: python
+
+.. figure:: images/ex7_1.png
+   :scale: 50 %
+   :align: center
+   :alt: 
+
+.. figure:: images/ex7_2.png
+   :scale: 50 %
+   :align: center
+   :alt: 
+
+.. figure:: images/ex7_3.png
+   :scale: 50 %
+   :align: center
+   :alt: 
+
+.. figure:: images/ex7_4.png
+   :scale: 50 %
+   :align: center
+   :alt: 
+
+.. figure:: images/ex7_5.png
+   :scale: 50 %
+   :align: center
+   :alt:     
+
+.. figure:: images/ex7_6.png
+   :scale: 50 %
+   :align: center
+   :alt:     
+
+Example 8: Selecting specific sections to evaluate
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+To evaluate specific areas, peaks, and ranges, it is possible to be done one-by-one and then put them all together in a vector for plotting and/or normalizing. This can be performed for `importance` and `speed`. This example loads a pre-trained PC-LDA model built with `Scikit-learn` for classification of Raman and Photoluminescence spectras merged into a single vector as features according to performance as open circuit voltage (Voc).
+
+.. literalinclude:: ../examples/example_specific_sections.py
+    :language: python
+
+.. figure:: images/ex8_1.png
+   :scale: 50 %
+   :align: center
+   :alt: 
+
+.. figure:: images/ex8_2.png
+   :scale: 50 %
+   :align: center
+   :alt: 

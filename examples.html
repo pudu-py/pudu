@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Examples &mdash; pudu  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Contributing" href="contributions.html" />
+    <link rel="prev" title="Mask Functions" href="masks.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pudu
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction to pudu</a></li>
+<li class="toctree-l1"><a class="reference internal" href="definitions.html">Definitions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pudu.html">pudu</a></li>
+<li class="toctree-l1"><a class="reference internal" href="perturbations.html">Perturbation Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="masks.html">Mask Functions</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#example-1-pc-lda-with-scikit-learn-for-classification-of-spectroscopic-data">Example 1: PC-LDA with Scikit-learn for classification of spectroscopic data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-2-regression-for-predicition-of-open-circuit-voltage-of-solar-cells-with-rbfn">Example 2: Regression for predicition of open circuit voltage of solar cells with RBFN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-3-handwritten-numbers-recognition-using-cnn-with-keras-and-mnist">Example 3: Handwritten numbers recognition using CNN with Keras and Mnist</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-4-how-to-call-different-masks">Example 4: How to call different masks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-5-how-to-call-different-perturbations">Example 5: How to call different perturbations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-6-re-activations-with-1-d-cnn">Example 6: Re-activations with 1-D CNN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-7-re-activations-with-2-d-cnn">Example 7: Re-activations with 2-D CNN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-8-selecting-specific-sections-to-evaluate">Example 8: Selecting specific sections to evaluate</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contributions.html">Contributing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pudu</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Examples</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/examples.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="examples">
+<h1>Examples<a class="headerlink" href="#examples" title="Permalink to this heading"></a></h1>
+<p>These examples show use cases and scenarios for <strong>pudu</strong>. Most examples use spectroscopic data, and some of them complement with images to show 2-D capability. The later data is the <cite>MNIST</cite> database and it downloads from the code itself using <cite>keras</cite>. The spectral data, parameters, and sample models can be found on the <a class="reference external" href="https://github.com/pudu-py/pudu/tree/main/examples/data">data</a> folder included in the <a class="reference external" href="https://github.com/pudu-py/pudu/tree/main/examples">examples</a> folder from the repository. To make sure you comply with all the libraries used in these examples, please use the additional requirements included in <cite>examples/examples_requirements.txt</cite>.</p>
+<section id="example-1-pc-lda-with-scikit-learn-for-classification-of-spectroscopic-data">
+<h2>Example 1: PC-LDA with Scikit-learn for classification of spectroscopic data<a class="headerlink" href="#example-1-pc-lda-with-scikit-learn-for-classification-of-spectroscopic-data" title="Permalink to this heading"></a></h2>
+<p>In this example, a PC-LDA cascaded algorithm built with <cite>Scikit-learn</cite> is evaluated using <cite>LIME</cite> and <cite>pudu</cite>. The data set used by the model are Raman and Photoluminescence spectras merged into a single vector as features and performance as open circuit voltage (Voc) data as target for classification. These are measured from CIGSe photovoltaic cells from a combinatorial sample. <cite>pudu</cite>, in contrast to <cite>LIME</cite>, clearly highlights important sections of the spectras normally related to Voc.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">lime</span> <span class="kn">import</span> <span class="n">lime_tabular</span>
+<span class="linenos"> 3</span><span class="kn">import</span> <span class="nn">spectrapepper</span> <span class="k">as</span> <span class="nn">spep</span>
+<span class="linenos"> 4</span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="linenos"> 5</span><span class="kn">import</span> <span class="nn">pickle</span>
+<span class="linenos"> 6</span><span class="kn">import</span> <span class="nn">lime</span>
+<span class="linenos"> 7</span>
+<span class="linenos"> 8</span><span class="kn">from</span> <span class="nn">pudu</span> <span class="kn">import</span> <span class="n">pudu</span><span class="p">,</span> <span class="n">plots</span>
+<span class="linenos"> 9</span>
+<span class="linenos">10</span>
+<span class="linenos">11</span><span class="c1"># Load features (spectra) and targets (open circuit coltage, voc)</span>
+<span class="linenos">12</span><span class="n">features</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;examples/data/features.txt&#39;</span><span class="p">)</span>
+<span class="linenos">13</span><span class="n">targets</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;examples/data/targets.txt&#39;</span><span class="p">,</span> <span class="n">transpose</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span>
+<span class="linenos">14</span>
+<span class="linenos">15</span><span class="n">x</span> <span class="o">=</span> <span class="n">features</span><span class="p">[</span><span class="mi">100</span><span class="p">]</span>
+<span class="linenos">16</span>
+<span class="linenos">17</span><span class="c1"># Load pre-trained LDA and PCA models</span>
+<span class="linenos">18</span><span class="n">lda</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s1">&#39;examples/data/lda_model.sav&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">))</span>
+<span class="linenos">19</span><span class="n">pca</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s1">&#39;examples/data/pca_model.sav&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">))</span>
+<span class="linenos">20</span>
+<span class="linenos">21</span><span class="c1">### LIME ###</span>
+<span class="linenos">22</span><span class="c1"># First we try LIME. then we try pudu and see the difference.</span>
+<span class="linenos">23</span><span class="c1"># We need to wrap the probability function</span>
+<span class="linenos">24</span><span class="k">def</span> <span class="nf">pcalda_proba</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
+<span class="linenos">25</span>    <span class="n">X</span> <span class="o">=</span> <span class="n">pca</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="linenos">26</span>    <span class="k">return</span> <span class="n">lda</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="linenos">27</span>
+<span class="linenos">28</span><span class="c1"># Feature names and categorical features in the correct format</span>
+<span class="linenos">29</span><span class="n">fn</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))]</span>
+<span class="linenos">30</span><span class="n">cf</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))]</span>
+<span class="linenos">31</span>
+<span class="linenos">32</span><span class="c1"># Make explainer and evaluate an instance</span>
+<span class="linenos">33</span><span class="n">explainer</span> <span class="o">=</span> <span class="n">lime</span><span class="o">.</span><span class="n">lime_tabular</span><span class="o">.</span><span class="n">LimeTabularExplainer</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">features</span><span class="p">),</span>
+<span class="linenos">34</span>    <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;classification&#39;</span><span class="p">,</span> <span class="n">feature_names</span><span class="o">=</span><span class="n">fn</span><span class="p">,</span> <span class="n">categorical_features</span><span class="o">=</span><span class="n">cf</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="linenos">35</span><span class="n">exp</span> <span class="o">=</span> <span class="n">explainer</span><span class="o">.</span><span class="n">explain_instance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">pcalda_proba</span><span class="p">,</span> 
+<span class="linenos">36</span>                                 <span class="n">num_features</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">fn</span><span class="p">),</span> <span class="n">num_samples</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<span class="linenos">37</span>
+<span class="linenos">38</span><span class="c1"># Reformat the output so it is in order to plot over the feature</span>
+<span class="linenos">39</span><span class="n">e</span> <span class="o">=</span> <span class="n">exp</span><span class="o">.</span><span class="n">as_list</span><span class="p">()</span>
+<span class="linenos">40</span><span class="n">lm</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1536</span><span class="p">)]</span>
+<span class="linenos">41</span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">e</span><span class="p">:</span>
+<span class="linenos">42</span>    <span class="n">lm</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">str</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;=&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])]</span> <span class="o">=</span> <span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="linenos">43</span>
+<span class="linenos">44</span><span class="c1"># Plot the result with the evaluated feature</span>
+<span class="linenos">45</span><span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;font&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="linenos">46</span><span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="linenos">47</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="linenos">48</span><span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">lm</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Greens&#39;</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;nearest&#39;</span><span class="p">,</span> 
+<span class="linenos">49</span>    <span class="n">extent</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1536</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">x</span><span class="p">)],</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="linenos">50</span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s1">&#39;k&#39;</span><span class="p">)</span>
+<span class="linenos">51</span><span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">pad</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+<span class="linenos">52</span><span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Lime&#39;</span><span class="p">)</span> 
+<span class="linenos">53</span><span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Feature&#39;</span><span class="p">)</span>
+<span class="linenos">54</span><span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Intensity&#39;</span><span class="p">)</span>
+<span class="linenos">55</span><span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">([])</span>
+<span class="linenos">56</span><span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="linenos">57</span>
+<span class="linenos">58</span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="linenos">59</span>
+<span class="linenos">60</span><span class="c1">### PUDU ###</span>
+<span class="linenos">61</span><span class="c1"># Select x (feature) and respective y (target)</span>
+<span class="linenos">62</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+<span class="linenos">63</span><span class="n">y</span> <span class="o">=</span> <span class="n">targets</span><span class="p">[</span><span class="mi">100</span><span class="p">]</span>
+<span class="linenos">64</span>
+<span class="linenos">65</span><span class="c1"># Input should be 4d: (batch * rows * columns * depth)</span>
+<span class="linenos">66</span><span class="c1"># This is a classification problem, thus the output should be the </span>
+<span class="linenos">67</span><span class="c1"># probability by category: [prob_1, prob_2, ..., prob_c]</span>
+<span class="linenos">68</span><span class="k">def</span> <span class="nf">pf</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
+<span class="linenos">69</span>    <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,:,</span><span class="mi">0</span><span class="p">]</span>
+<span class="linenos">70</span>    <span class="k">return</span> <span class="n">lda</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">pca</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+<span class="linenos">71</span>
+<span class="linenos">72</span><span class="c1"># Build pudu</span>
+<span class="linenos">73</span><span class="n">imp</span> <span class="o">=</span> <span class="n">pudu</span><span class="o">.</span><span class="n">pudu</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">pf</span><span class="p">)</span>
+<span class="linenos">74</span>
+<span class="linenos">75</span><span class="c1"># Evaluate `importance`. We use Vanilla settings for this one</span>
+<span class="linenos">76</span><span class="c1"># except for `window`.</span>
+<span class="linenos">77</span><span class="n">imp</span><span class="o">.</span><span class="n">importance</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="linenos">78</span><span class="n">plots</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">imp</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">imp</span><span class="o">.</span><span class="n">imp</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Importance, w=1&quot;</span><span class="p">,</span> <span class="n">yticks</span><span class="o">=</span><span class="p">[],</span> <span class="n">font_size</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="linenos">79</span>
+<span class="linenos">80</span><span class="c1"># Single pixels might be irrelevant for spectroscopy. We can group features</span>
+<span class="linenos">81</span><span class="c1"># to evaluate together.</span>
+<span class="linenos">82</span><span class="n">imp</span><span class="o">.</span><span class="n">importance</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+<span class="linenos">83</span><span class="n">plots</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">imp</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">imp</span><span class="o">.</span><span class="n">imp</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Importance, w=50&quot;</span><span class="p">,</span> <span class="n">yticks</span><span class="o">=</span><span class="p">[],</span> <span class="n">font_size</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="linenos">84</span>
+<span class="linenos">85</span><span class="c1"># We can see how fast would the classification change according to</span>
+<span class="linenos">86</span><span class="c1"># the change in the features.</span>
+<span class="linenos">87</span><span class="n">imp</span><span class="o">.</span><span class="n">speed</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+<span class="linenos">88</span><span class="n">plots</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">imp</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">imp</span><span class="o">.</span><span class="n">spe</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Speed&quot;</span><span class="p">,</span> <span class="n">yticks</span><span class="o">=</span><span class="p">[],</span> <span class="n">font_size</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="linenos">89</span>
+<span class="linenos">90</span><span class="c1"># Finally we evaluate how different changes complement each other.</span>
+<span class="linenos">91</span><span class="c1"># We want ot evaluate the main Raman peak (aprox. 3rd position) and see</span>
+<span class="linenos">92</span><span class="c1"># its synergy with the rest of the data</span>
+<span class="linenos">93</span><span class="n">imp</span><span class="o">.</span><span class="n">synergy</span><span class="p">(</span><span class="n">inspect</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+<span class="linenos">94</span><span class="n">plots</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">imp</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">imp</span><span class="o">.</span><span class="n">syn</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Synergy&quot;</span><span class="p">,</span> <span class="n">yticks</span><span class="o">=</span><span class="p">[],</span> <span class="n">font_size</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+</pre></div>
+</div>
+<figure class="align-center">
+<a class="reference internal image-reference" href="_images/ex1_1.png"><img alt="" src="_images/ex1_1.png" style="width: 700.0px; height: 200.0px;" /></a>
+</figure>
+<figure class="align-center">
+<a class="reference internal image-reference" href="_images/ex1_2.png"><img alt="" src="_images/ex1_2.png" style="width: 700.0px; height: 200.0px;" /></a>
+</figure>
+<figure class="align-center">
+<a class="reference internal image-reference" href="_images/ex1_3.png"><img alt="" src="_images/ex1_3.png" style="width: 700.0px; height: 200.0px;" /></a>
+</figure>
+<figure class="align-center">
+<a class="reference internal image-reference" href="_images/ex1_4.png"><img alt="" src="_images/ex1_4.png" style="width: 700.0px; height: 200.0px;" /></a>
+</figure>
+<figure class="align-center">
+<a class="reference internal image-reference" href="_images/ex1_5.png"><img alt="" src="_images/ex1_5.png" style="width: 700.0px; height: 200.0px;" /></a>
+</figure>
+</section>
+<section id="example-2-regression-for-predicition-of-open-circuit-voltage-of-solar-cells-with-rbfn">
+<h2>Example 2: Regression for predicition of open circuit voltage of solar cells with RBFN<a class="headerlink" href="#example-2-regression-for-predicition-of-open-circuit-voltage-of-solar-cells-with-rbfn" title="Permalink to this heading"></a></h2>
+<p>Regression can be an important method for spectroscopy, especially when specific values, beyond classification, are of interest. Here, a Radial Basis Function Network (RBFN) is trained with <cite>localreg</cite> to perform the prediction of open circuit voltage (Voc) with spectral areas calculated from Raman and Photoluminescence spectras. These data are obtained from photovoltaic CIGSe cells from a combinatorial sample. The example shows which of these areas have more impact in the prediction and also how they interact with each other.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">localreg</span> <span class="kn">import</span> <span class="n">RBFnet</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">r2_score</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">spectrapepper</span> <span class="k">as</span> <span class="nn">spep</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">pudu</span> <span class="kn">import</span> <span class="n">pudu</span><span class="p">,</span> <span class="n">plots</span>
+<span class="kn">from</span> <span class="nn">pudu</span> <span class="kn">import</span> <span class="n">perturbation</span> <span class="k">as</span> <span class="n">ptn</span>
+
+<span class="c1"># Load the file that contains the calculated areas from the spectras</span>
+<span class="n">ra</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;examples/data/areas.txt&#39;</span><span class="p">,</span> <span class="n">transpose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Shuffleing and spearating into area type and train/test</span>
+<span class="n">ra0</span><span class="p">,</span> <span class="n">ra1</span><span class="p">,</span> <span class="n">ra2</span><span class="p">,</span> <span class="n">ra3</span><span class="p">,</span> <span class="n">voc</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">shuffle</span><span class="p">([</span><span class="n">ra</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ra</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">ra</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">ra</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">ra</span><span class="p">[</span><span class="mi">4</span><span class="p">]])</span>
+<span class="n">ra0_te</span><span class="p">,</span> <span class="n">ra1_te</span><span class="p">,</span> <span class="n">ra2_te</span><span class="p">,</span> <span class="n">ra3_te</span><span class="p">,</span> <span class="n">voc_te</span> <span class="o">=</span> <span class="n">ra0</span><span class="p">[</span><span class="mi">1494</span><span class="p">:],</span> <span class="n">ra1</span><span class="p">[</span><span class="mi">1494</span><span class="p">:],</span> <span class="n">ra2</span><span class="p">[</span><span class="mi">1494</span><span class="p">:],</span> <span class="n">ra3</span><span class="p">[</span><span class="mi">1494</span><span class="p">:],</span> <span class="n">voc</span><span class="p">[</span><span class="mi">1494</span><span class="p">:]</span>
+<span class="n">ra0_tr</span><span class="p">,</span> <span class="n">ra1_tr</span><span class="p">,</span> <span class="n">ra2_tr</span><span class="p">,</span> <span class="n">ra3_tr</span><span class="p">,</span> <span class="n">voc_tr</span> <span class="o">=</span> <span class="n">ra0</span><span class="p">[:</span><span class="mi">1494</span><span class="p">],</span> <span class="n">ra1</span><span class="p">[:</span><span class="mi">1494</span><span class="p">],</span> <span class="n">ra2</span><span class="p">[:</span><span class="mi">1494</span><span class="p">],</span> <span class="n">ra3</span><span class="p">[:</span><span class="mi">1494</span><span class="p">],</span> <span class="n">voc</span><span class="p">[:</span><span class="mi">1494</span><span class="p">]</span>
+
+<span class="c1"># Preparation, training, and testing of the RBNF</span>
+<span class="nb">input</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">ra0_tr</span><span class="p">,</span> <span class="n">ra1_tr</span><span class="p">,</span> <span class="n">ra2_tr</span><span class="p">,</span> <span class="n">ra3_tr</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">voc_tr</span>
+<span class="n">net</span> <span class="o">=</span> <span class="n">RBFnet</span><span class="p">()</span>
+<span class="n">net</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">z_hat</span> <span class="o">=</span> <span class="n">net</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>
+<span class="n">z_hat_te</span> <span class="o">=</span> <span class="n">net</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">ra0_te</span><span class="p">,</span> <span class="n">ra1_te</span><span class="p">,</span> <span class="n">ra2_te</span><span class="p">,</span> <span class="n">ra3_te</span><span class="p">])</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Train R2: &#39;</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">r2_score</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">z_hat</span><span class="p">),</span> <span class="mi">2</span><span class="p">),</span> <span class="s1">&#39; | Test R2: &#39;</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">r2_score</span><span class="p">(</span><span class="n">voc_te</span><span class="p">,</span> <span class="n">z_hat_te</span><span class="p">),</span> <span class="mi">2</span><span class="p">))</span>
+
+<span class="c1"># Plot the regression</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">z_hat</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">z_hat_te</span><span class="p">,</span> <span class="n">voc_te</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Value&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Prediction&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1">### PUDU ###</span>
+<span class="c1"># Wrap the probability function</span>
+<span class="k">def</span> <span class="nf">rbf_pred</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,:,</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">net</span><span class="o">.</span><span class="n">predict</span><span class="p">([</span><span class="n">X</span><span class="p">,</span> <span class="n">X</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># Formatting as (batch, rows, columns, depth)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="nb">input</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">z</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># Build pudu and evaluate importance, speed, and synergy</span>
+<span class="n">imp</span> <span class="o">=</span> <span class="n">pudu</span><span class="o">.</span><span class="n">pudu</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">rbf_pred</span><span class="p">)</span>
+<span class="n">imp</span><span class="o">.</span><span class="n">importance</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">perturbation</span><span class="o">=</span><span class="n">ptn</span><span class="o">.</span><span class="n">Bidirectional</span><span class="p">(</span><span class="n">delta</span><span class="o">=</span><span class="mf">0.1</span><span class="p">))</span>
+<span class="n">imp</span><span class="o">.</span><span class="n">speed</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">perturbation</span><span class="o">=</span><span class="p">[</span>
+                                  <span class="n">ptn</span><span class="o">.</span><span class="n">Bidirectional</span><span class="p">(</span><span class="n">delta</span><span class="o">=</span><span class="mf">0.1</span><span class="p">),</span> 
+                                  <span class="n">ptn</span><span class="o">.</span><span class="n">Bidirectional</span><span class="p">(</span><span class="n">delta</span><span class="o">=</span><span class="mf">0.2</span><span class="p">),</span> 
+                                  <span class="n">ptn</span><span class="o">.</span><span class="n">Bidirectional</span><span class="p">(</span><span class="n">delta</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+                                <span class="p">])</span>
+<span class="n">imp</span><span class="o">.</span><span class="n">synergy</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">inspect</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">perturbation</span><span class="o">=</span><span class="n">ptn</span><span class="o">.</span><span class="n">Bidirectional</span><span class="p">(</span><span class="n">delta</span><span class="o">=</span><span class="mf">0.1</span><span class="p">))</span>
+
+<span class="c1"># Plot the ouput</span>
+<span class="n">axis</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mf">3.5</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
+<span class="n">ticks</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;A1&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;A2&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;A3&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;A4&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">]</span>
+
+<span class="n">plots</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">imp</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">imp</span><span class="o">.</span><span class="n">imp</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Importance&quot;</span><span class="p">,</span> <span class="n">font_size</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">show_data</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
+            <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">,</span> <span class="n">xticks</span><span class="o">=</span><span class="n">ticks</span><span class="p">)</span>
+
+<span class="n">plots</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">imp</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">imp</span><span class="o">.</span><span class="n">spe</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Speed&quot;</span><span class="p">,</span> <span class="n">font_size</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">show_data</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
+            <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">,</span> <span class="n">xticks</span><span class="o">=</span><span class="n">ticks</span><span class="p">)</span>
+
+<span class="n">plots</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">imp</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">imp</span><span class="o">.</span><span class="n">syn</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Synergy&quot;</span><span class="p">,</span> <span class="n">font_size</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">show_data</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
+            <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">,</span> <span class="n">xticks</span><span class="o">=</span><span class="n">ticks</span><span class="p">)</span>
+</pre></div>
+</div>
+<figure class="align-center">
+<a class="reference internal image-reference" href="_images/ex2_1.png"><img alt="" src="_images/ex2_1.png" style="width: 320.0px; height: 240.0px;" /></a>
+</figure>
+<figure class="align-center">
+<a class="reference internal image-reference" href="_images/ex2_2.png"><img alt="" src="_images/ex2_2.png" style="width: 700.0px; height: 200.0px;" /></a>
+</figure>
+<figure class="align-center">
+<a class="reference internal image-reference" href="_images/ex2_3.png"><img alt="" src="_images/ex2_3.png" style="width: 700.0px; height: 200.0px;" /></a>
+</figure>
+<figure class="align-center">
+<a class="reference internal image-reference" href="_images/ex2_4.png"><img alt="" src="_images/ex2_4.png" style="width: 700.0px; height: 200.0px;" /></a>
+</figure>
+</section>
+<section id="example-3-handwritten-numbers-recognition-using-cnn-with-keras-and-mnist">
+<h2>Example 3: Handwritten numbers recognition using CNN with Keras and Mnist<a class="headerlink" href="#example-3-handwritten-numbers-recognition-using-cnn-with-keras-and-mnist" title="Permalink to this heading"></a></h2>
+<p>This example showcases 2-D capabilities of <cite>pudu</cite>. The example loads a pre-trained model for the classification of handwritten numbers from the MNIST dataset, alongside with LIME and GRAD-CAM visualizations.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">tensorflow</span> <span class="kn">import</span> <span class="n">keras</span>
+<span class="kn">from</span> <span class="nn">keras.models</span> <span class="kn">import</span> <span class="n">load_model</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="kn">from</span> <span class="nn">pudu</span> <span class="kn">import</span> <span class="n">pudu</span><span class="p">,</span> <span class="n">plots</span>
+
+<span class="c1"># Model / data parameters</span>
+<span class="n">num_classes</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">input_shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Load the data and split it between train and test sets</span>
+<span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">),</span> <span class="p">(</span><span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span> <span class="o">=</span> <span class="n">keras</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">mnist</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span>
+
+<span class="c1"># Scale images to the [0, 1] range</span>
+<span class="n">x_train</span> <span class="o">=</span> <span class="n">x_train</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span> <span class="o">/</span> <span class="mi">255</span>
+<span class="n">x_test</span> <span class="o">=</span> <span class="n">x_test</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span> <span class="o">/</span> <span class="mi">255</span>
+
+<span class="c1"># Make sure images have shape (28, 28, 1)</span>
+<span class="n">x_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># convert class vectors to binary class matrices</span>
+<span class="n">y_train</span> <span class="o">=</span> <span class="n">keras</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">to_categorical</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">num_classes</span><span class="p">)</span>
+<span class="n">y_test</span> <span class="o">=</span> <span class="n">keras</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">to_categorical</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">num_classes</span><span class="p">)</span>
+
+<span class="c1"># Load the model and test it</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">load_model</span><span class="p">(</span><span class="s1">&#39;examples/data/mnist_class.h5&#39;</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
+<span class="n">score</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Test loss:&quot;</span><span class="p">,</span> <span class="n">score</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;| Test accuracy:&quot;</span><span class="p">,</span> <span class="n">score</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+
+<span class="c1">### PUDU ###</span>
+<span class="c1"># Input should be 4d: (batch * rows * columns * depth)</span>
+<span class="c1"># This is a classification problem, thus the output should be the </span>
+<span class="c1"># probability by category: [prob_1, prob_2, ..., prob_c]</span>
+<span class="k">def</span> <span class="nf">cnn2d_prob</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,:,:]</span>
+    <span class="k">return</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">X</span><span class="p">,</span> <span class="n">X</span><span class="p">]),</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># verbose 0 is important!</span>
+
+<span class="c1"># Dimention standarization for parameters</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">y_train</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">x_train</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># Build `pudu`, evaluate importance, and plot</span>
+<span class="n">imp</span> <span class="o">=</span> <span class="n">pudu</span><span class="o">.</span><span class="n">pudu</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">cnn2d_prob</span><span class="p">)</span>
+
+<span class="c1"># in this case, &#39;window&#39; is a tuple that indicates the width and height.</span>
+<span class="n">imp</span><span class="o">.</span><span class="n">importance</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">scope</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">)</span>
+<span class="n">plots</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">imp</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">imp</span><span class="o">.</span><span class="n">imp_rel</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;cool&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Relative Importance&#39;</span><span class="p">,</span>
+            <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+<span class="c1"># In this case, as there are many `0` values in the image, including some bias </span>
+<span class="c1"># can help us to visualize importance in those areas, since 0*delta = 0</span>
+<span class="n">imp</span><span class="o">.</span><span class="n">importance</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">scope</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="n">plots</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">imp</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">imp</span><span class="o">.</span><span class="n">imp_rel</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;cool&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Relative Importance - with bias&#39;</span><span class="p">,</span>
+            <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+<span class="c1">### LIME ###</span>
+<span class="kn">from</span> <span class="nn">lime</span> <span class="kn">import</span> <span class="n">lime_image</span>
+<span class="kn">from</span> <span class="nn">skimage.segmentation</span> <span class="kn">import</span> <span class="n">mark_boundaries</span>
+<span class="kn">from</span> <span class="nn">skimage.color</span> <span class="kn">import</span> <span class="n">gray2rgb</span>
+
+<span class="c1"># lime_image works with 3D RGB arrays. Our image is non-RGB. We transform it</span>
+<span class="c1"># to RGB with gray2rgb which needs a 2D input.</span>
+<span class="n">image</span> <span class="o">=</span> <span class="n">x_train</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,:,</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">image</span> <span class="o">=</span> <span class="n">gray2rgb</span><span class="p">(</span><span class="n">image</span><span class="p">)</span> 
+
+<span class="c1"># model.predict is not for RGB, so we have to wrap it so the input is RBG.</span>
+<span class="k">def</span> <span class="nf">cnn2d_prob</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="n">explainer</span> <span class="o">=</span> <span class="n">lime_image</span><span class="o">.</span><span class="n">LimeImageExplainer</span><span class="p">()</span>
+<span class="n">explanation</span> <span class="o">=</span> <span class="n">explainer</span><span class="o">.</span><span class="n">explain_instance</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">cnn2d_prob</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_samples</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<span class="n">temp</span><span class="p">,</span> <span class="n">mask</span> <span class="o">=</span> <span class="n">explanation</span><span class="o">.</span><span class="n">get_image_and_mask</span><span class="p">(</span><span class="n">explanation</span><span class="o">.</span><span class="n">top_labels</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">positive_only</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">num_features</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">hide_rest</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;font&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">mark_boundaries</span><span class="p">(</span><span class="n">temp</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">mask</span><span class="p">),</span> <span class="n">extent</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">28</span><span class="p">])</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;LIME&#39;</span><span class="p">)</span> 
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>  
+
+<span class="c1">### GRAD CAM ###</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
+<span class="kn">from</span> <span class="nn">tensorflow</span> <span class="kn">import</span> <span class="n">keras</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">Image</span><span class="p">,</span> <span class="n">display</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">matplotlib.cm</span> <span class="k">as</span> <span class="nn">cm</span>
+
+<span class="k">def</span> <span class="nf">make_gradcam_heatmap</span><span class="p">(</span><span class="n">img_array</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">last_conv_layer_name</span><span class="p">,</span> <span class="n">pred_index</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="c1"># First, we create a model that maps the input image to the activations</span>
+    <span class="c1"># of the last conv layer as well as the output predictions</span>
+    <span class="n">grad_model</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">model</span><span class="o">.</span><span class="n">inputs</span><span class="p">],</span> <span class="p">[</span><span class="n">model</span><span class="o">.</span><span class="n">get_layer</span><span class="p">(</span><span class="n">last_conv_layer_name</span><span class="p">)</span><span class="o">.</span><span class="n">output</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">output</span><span class="p">]</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Then, we compute the gradient of the top predicted class for our input image</span>
+    <span class="c1"># with respect to the activations of the last conv layer</span>
+    <span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">GradientTape</span><span class="p">()</span> <span class="k">as</span> <span class="n">tape</span><span class="p">:</span>
+        <span class="n">last_conv_layer_output</span><span class="p">,</span> <span class="n">preds</span> <span class="o">=</span> <span class="n">grad_model</span><span class="p">(</span><span class="n">img_array</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">pred_index</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">pred_index</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">preds</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">class_channel</span> <span class="o">=</span> <span class="n">preds</span><span class="p">[:,</span> <span class="n">pred_index</span><span class="p">]</span>
+
+    <span class="c1"># This is the gradient of the output neuron (top predicted or chosen)</span>
+    <span class="c1"># with regard to the output feature map of the last conv layer</span>
+    <span class="n">grads</span> <span class="o">=</span> <span class="n">tape</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">class_channel</span><span class="p">,</span> <span class="n">last_conv_layer_output</span><span class="p">)</span>
+
+    <span class="c1"># This is a vector where each entry is the mean intensity of the gradient</span>
+    <span class="c1"># over a specific feature map channel</span>
+    <span class="n">pooled_grads</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">grads</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+
+    <span class="c1"># We multiply each channel in the feature map array</span>
+    <span class="c1"># by &quot;how important this channel is&quot; with regard to the top predicted class</span>
+    <span class="c1"># then sum all the channels to obtain the heatmap class activation</span>
+    <span class="n">last_conv_layer_output</span> <span class="o">=</span> <span class="n">last_conv_layer_output</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">heatmap</span> <span class="o">=</span> <span class="n">last_conv_layer_output</span> <span class="o">@</span> <span class="n">pooled_grads</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+    <span class="n">heatmap</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">heatmap</span><span class="p">)</span>
+
+    <span class="c1"># For visualization purpose, we will also normalize the heatmap between 0 &amp; 1</span>
+    <span class="n">heatmap</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">heatmap</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">/</span> <span class="n">tf</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">reduce_max</span><span class="p">(</span><span class="n">heatmap</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">heatmap</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+
+
+<span class="n">last_conv_layer_name</span> <span class="o">=</span> <span class="s1">&#39;conv2d_5&#39;</span>
+<span class="n">image</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">x_train</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># Remove last layer&#39;s softmax</span>
+<span class="n">model</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">activation</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="c1"># Generate class activation heatmap</span>
+<span class="n">heatmap</span> <span class="o">=</span> <span class="n">make_gradcam_heatmap</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">last_conv_layer_name</span><span class="p">)</span>
+
+
+
+<span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;font&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">image</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,:,:],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;binary&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">28</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">heatmap</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">28</span><span class="p">])</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;GRADCAM&#39;</span><span class="p">)</span> 
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">pad</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<figure class="align-center">
+<a class="reference internal image-reference" href="_images/ex3_1.png"><img alt="" src="_images/ex3_1.png" style="width: 350.0px; height: 300.0px;" /></a>
+</figure>
+<figure class="align-center">
+<a class="reference internal image-reference" href="_images/ex3_2.png"><img alt="" src="_images/ex3_2.png" style="width: 350.0px; height: 300.0px;" /></a>
+</figure>
+<figure class="align-center">
+<a class="reference internal image-reference" href="_images/ex3_3.png"><img alt="" src="_images/ex3_3.png" style="width: 300.0px; height: 300.0px;" /></a>
+</figure>
+<figure class="align-center">
+<a class="reference internal image-reference" href="_images/ex3_4.png"><img alt="" src="_images/ex3_4.png" style="width: 350.0px; height: 300.0px;" /></a>
+</figure>
+</section>
+<section id="example-4-how-to-call-different-masks">
+<h2>Example 4: How to call different masks<a class="headerlink" href="#example-4-how-to-call-different-masks" title="Permalink to this heading"></a></h2>
+<p>Masking allows you to cover features from the analysis. It serves the same purpose of <cite>scope</cite> but it works in a structured and patterned way. This example shows the use of <cite>mask</cite> options available with a PC-LDA model using Raman and Photoluminescence spectras merged into a single vector as features and performance as open circuit voltage (Voc) data as target for classification. These are measured from CIGSe photovoltaic cells from a combinatorial sample.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">spectrapepper</span> <span class="k">as</span> <span class="nn">spep</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+
+<span class="kn">from</span> <span class="nn">pudu</span> <span class="kn">import</span> <span class="n">pudu</span><span class="p">,</span> <span class="n">plots</span>
+<span class="kn">from</span> <span class="nn">pudu</span> <span class="kn">import</span> <span class="n">masks</span> <span class="k">as</span> <span class="n">msk</span>
+
+<span class="c1"># Masking allows you to cover your featuresof analysis. It serves the</span>
+<span class="c1"># same purpose of `scope` but it works ni a structured and patterned way.</span>
+<span class="c1"># This example shows the use of `mask` options available.</span>
+
+<span class="c1"># Load features (spectra) and targets (open circuit coltage, voc)</span>
+<span class="n">features</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;examples/data/features.txt&#39;</span><span class="p">)</span>
+<span class="n">targets</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;examples/data/targets.txt&#39;</span><span class="p">,</span> <span class="n">transpose</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span>
+
+<span class="c1"># Load pre-trained LDA and PCA models</span>
+<span class="n">lda</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s1">&#39;examples/data/lda_model.sav&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">))</span>
+<span class="n">pca</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s1">&#39;examples/data/pca_model.sav&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">))</span>
+
+<span class="c1">### PUDU ###</span>
+<span class="c1"># Select x (feature) and respective y (target)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">features</span><span class="p">[</span><span class="mi">100</span><span class="p">]</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">targets</span><span class="p">[</span><span class="mi">100</span><span class="p">]</span>
+
+<span class="c1"># Input should be 4d: (batch * rows * columns * depth)</span>
+<span class="c1"># This is a classification problem, thus the output should be the </span>
+<span class="c1"># probability by category: [prob_1, prob_2, ..., prob_c]</span>
+<span class="k">def</span> <span class="nf">pf</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,:,</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">lda</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">pca</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># Build pudu</span>
+<span class="n">imp</span> <span class="o">=</span> <span class="n">pudu</span><span class="o">.</span><span class="n">pudu</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">pf</span><span class="p">)</span>
+
+<span class="c1"># Evaluate `importance` with no mask first, then &#39;everyother&#39; and &#39;random&#39;</span>
+<span class="n">masks</span> <span class="o">=</span> <span class="p">[</span><span class="n">msk</span><span class="o">.</span><span class="n">All</span><span class="p">(),</span> <span class="n">msk</span><span class="o">.</span><span class="n">EveryOther</span><span class="p">(),</span> <span class="n">msk</span><span class="o">.</span><span class="n">RandomMask</span><span class="p">()]</span>
+<span class="n">m_names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;All&#39;</span><span class="p">,</span> <span class="s1">&#39;EveryOther&#39;</span><span class="p">,</span> <span class="s1">&#39;RandomMask&#39;</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">masks</span><span class="p">,</span> <span class="n">m_names</span><span class="p">):</span>
+    <span class="n">imp</span><span class="o">.</span><span class="n">importance</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span> <span class="n">absolute</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">i</span><span class="p">)</span>
+    <span class="n">plots</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">imp</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">imp</span><span class="o">.</span><span class="n">imp</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Importance - &quot;</span><span class="o">+</span><span class="n">j</span><span class="p">,</span> <span class="n">yticks</span><span class="o">=</span><span class="p">[],</span> <span class="n">font_size</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;winter&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<figure class="align-center">
+<a class="reference internal image-reference" href="_images/ex4_1.png"><img alt="" src="_images/ex4_1.png" style="width: 700.0px; height: 200.0px;" /></a>
+</figure>
+<figure class="align-center">
+<a class="reference internal image-reference" href="_images/ex4_2.png"><img alt="" src="_images/ex4_2.png" style="width: 700.0px; height: 200.0px;" /></a>
+</figure>
+<figure class="align-center">
+<a class="reference internal image-reference" href="_images/ex4_3.png"><img alt="" src="_images/ex4_3.png" style="width: 700.0px; height: 200.0px;" /></a>
+</figure>
+</section>
+<section id="example-5-how-to-call-different-perturbations">
+<h2>Example 5: How to call different perturbations<a class="headerlink" href="#example-5-how-to-call-different-perturbations" title="Permalink to this heading"></a></h2>
+<p>Depending on the nature of the data and the problem, different perturbation functions and patterns may be needed. <cite>pudu</cite> offers options to suit different scenarios. Some of the are shown in this example. This example uses a PC-LDA model that classifies Raman and Photoluminescence spectras merged into a single vector as features and performance as open circuit voltage (Voc) data as target. These are measured from CIGSe photovoltaic cells from a combinatorial sample.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">spectrapepper</span> <span class="k">as</span> <span class="nn">spep</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+
+<span class="kn">from</span> <span class="nn">pudu</span> <span class="kn">import</span> <span class="n">pudu</span><span class="p">,</span> <span class="n">plots</span>
+<span class="kn">from</span> <span class="nn">pudu</span> <span class="kn">import</span> <span class="n">perturbation</span> <span class="k">as</span> <span class="n">ptn</span>
+
+
+<span class="c1"># Other examples are with `bidirectional` or `positive` mode, that</span>
+<span class="c1"># is an average of changing positevly and neatively the feature by </span>
+<span class="c1"># `delta` times. Depending on the nature of your features, you can</span>
+<span class="c1"># diferent modes that will yield different results</span>
+
+<span class="c1"># Load features (spectra) and targets (open circuit coltage, voc)</span>
+<span class="n">features</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;examples/data/features.txt&#39;</span><span class="p">)</span>
+<span class="n">targets</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;examples/data/targets.txt&#39;</span><span class="p">,</span> <span class="n">transpose</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span>
+
+<span class="c1"># Load pre-trained LDA and PCA models</span>
+<span class="n">lda</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s1">&#39;examples/data/lda_model.sav&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">))</span>
+<span class="n">pca</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s1">&#39;examples/data/pca_model.sav&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">))</span>
+
+<span class="c1">### PUDU ###</span>
+<span class="c1"># Select x (feature) and respective y (target)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">features</span><span class="p">[</span><span class="mi">100</span><span class="p">]</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">targets</span><span class="p">[</span><span class="mi">100</span><span class="p">]</span>
+
+<span class="c1"># Input should be 4d: (batch * rows * columns * depth)</span>
+<span class="c1"># This is a classification problem, thus the output should be the </span>
+<span class="c1"># probability by category: [prob_1, prob_2, ..., prob_c]</span>
+<span class="k">def</span> <span class="nf">pf</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,:,</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">lda</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">pca</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># Build pudu</span>
+<span class="n">imp</span> <span class="o">=</span> <span class="n">pudu</span><span class="o">.</span><span class="n">pudu</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">pf</span><span class="p">)</span>
+
+<span class="c1"># Evaluate `importance` with &#39;bidirectional&#39;, &#39;positive&#39;, &#39;negative&#39;, and &#39;relu&#39;</span>
+<span class="c1"># Note that some of these work only with `w=1`, like `relu` and `leakyrelu`</span>
+<span class="n">pert</span> <span class="o">=</span> <span class="p">[</span><span class="n">ptn</span><span class="o">.</span><span class="n">Bidirectional</span><span class="p">(),</span> <span class="n">ptn</span><span class="o">.</span><span class="n">Positive</span><span class="p">(),</span> <span class="n">ptn</span><span class="o">.</span><span class="n">Negative</span><span class="p">(),</span> <span class="n">ptn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">()]</span>
+<span class="n">ptn_names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;bidirectional&#39;</span><span class="p">,</span> <span class="s1">&#39;positive&#39;</span><span class="p">,</span> <span class="s1">&#39;negative&#39;</span><span class="p">,</span> <span class="s1">&#39;relu&#39;</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">pert</span><span class="p">,</span> <span class="n">ptn_names</span><span class="p">):</span>
+    <span class="n">imp</span><span class="o">.</span><span class="n">importance</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">perturbation</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">absolute</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">plots</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">imp</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">imp</span><span class="o">.</span><span class="n">imp</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Importance - &quot;</span><span class="o">+</span><span class="n">j</span><span class="p">,</span> <span class="n">yticks</span><span class="o">=</span><span class="p">[],</span> <span class="n">font_size</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+</pre></div>
+</div>
+<figure class="align-center">
+<a class="reference internal image-reference" href="_images/ex5_1.png"><img alt="" src="_images/ex5_1.png" style="width: 700.0px; height: 200.0px;" /></a>
+</figure>
+<figure class="align-center">
+<a class="reference internal image-reference" href="_images/ex5_2.png"><img alt="" src="_images/ex5_2.png" style="width: 700.0px; height: 200.0px;" /></a>
+</figure>
+<figure class="align-center">
+<a class="reference internal image-reference" href="_images/ex5_3.png"><img alt="" src="_images/ex5_3.png" style="width: 700.0px; height: 200.0px;" /></a>
+</figure>
+<figure class="align-center">
+<a class="reference internal image-reference" href="_images/ex5_4.png"><img alt="" src="_images/ex5_4.png" style="width: 700.0px; height: 200.0px;" /></a>
+</figure>
+</section>
+<section id="example-6-re-activations-with-1-d-cnn">
+<h2>Example 6: Re-activations with 1-D CNN<a class="headerlink" href="#example-6-re-activations-with-1-d-cnn" title="Permalink to this heading"></a></h2>
+<p>This example shows how to evaluate the ` re-activations &lt; <a class="reference external" href="https://pudu-py.github.io/pudu/definitions.html#activations-and-re-activaiton">https://pudu-py.github.io/pudu/definitions.html#activations-and-re-activaiton</a>&gt;`_ on the activation maps for a CNN for classification of four Raman and four Photoluminescence spectras (eight in total) merged together into a single vector according to the open circuit voltage (Voc) of photovoltaic CIGSe samples. It also showcases the use of <cite>relate</cite>, <cite>feature_report</cite>, <cite>unit_report</cite>, and <cite>relate_report</cite>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">tensorflow</span> <span class="kn">import</span> <span class="n">keras</span>
+<span class="kn">from</span> <span class="nn">keras.models</span> <span class="kn">import</span> <span class="n">load_model</span>
+<span class="kn">import</span> <span class="nn">spectrapepper</span> <span class="k">as</span> <span class="nn">spep</span>
+
+<span class="kn">from</span> <span class="nn">pudu</span> <span class="kn">import</span> <span class="n">pudu</span><span class="p">,</span> <span class="n">plots</span>
+<span class="kn">from</span> <span class="nn">pudu</span> <span class="kn">import</span> <span class="n">masks</span> <span class="k">as</span> <span class="n">msk</span>
+<span class="kn">from</span> <span class="nn">pudu</span> <span class="kn">import</span> <span class="n">perturbation</span> <span class="k">as</span> <span class="n">ptn</span>
+
+
+<span class="c1"># Scale images to the [0, 1] range</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;examples/data/for_1d_cnn_c3.txt&#39;</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="c1"># these are all class 3</span>
+
+<span class="c1"># convert class vectors to binary class matrices</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">keras</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">to_categorical</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+<span class="c1"># Load the model and test it</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">load_model</span><span class="p">(</span><span class="s1">&#39;examples/data/1d_cnn.h5&#39;</span><span class="p">)</span>
+<span class="n">score</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Test loss:&quot;</span><span class="p">,</span> <span class="n">score</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;| Test accuracy:&quot;</span><span class="p">,</span> <span class="n">score</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">model</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
+
+<span class="c1">### PUDU ###</span>
+<span class="c1"># Input should be 4d: (batch * rows * columns * depth)</span>
+<span class="c1"># This is a classification problem, thus the output should be the </span>
+<span class="c1"># probability by category: [prob_1, prob_2, ..., prob_c]</span>
+<span class="k">def</span> <span class="nf">cnn1d_prob</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,:,:]</span>
+    <span class="k">return</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">X</span><span class="p">),</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># verbose 0 is important!</span>
+
+<span class="c1"># Dimension standardization for parameters</span>
+<span class="n">y0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">x0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">0</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Build `pudu`, evaluate importance, and plot</span>
+<span class="n">imp</span> <span class="o">=</span> <span class="n">pudu</span><span class="o">.</span><span class="n">pudu</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">cnn1d_prob</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+
+<span class="c1"># First we check importance</span>
+<span class="n">imp</span><span class="o">.</span><span class="n">importance</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="mi">150</span><span class="p">,</span> <span class="n">perturbation</span><span class="o">=</span><span class="n">ptn</span><span class="o">.</span><span class="n">Positive</span><span class="p">(</span><span class="n">delta</span><span class="o">=</span><span class="mf">0.1</span><span class="p">))</span>
+<span class="n">plots</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">imp</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">imp</span><span class="o">.</span><span class="n">imp</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;cool&#39;</span><span class="p">)</span>
+
+<span class="c1"># Now we explore the unit re-activations observed in layer 4 (last conv. layer)</span>
+<span class="c1"># We only consider the top 0.25% of the values as activated with `p=0.0025`.</span>
+<span class="c1"># Negative values indicate that less units are being re-activated.</span>
+<span class="n">imp</span><span class="o">.</span><span class="n">reactivations</span><span class="p">(</span><span class="n">layer</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">slope</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mf">0.0025</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">150</span><span class="p">,</span> <span class="n">perturbation</span><span class="o">=</span><span class="n">ptn</span><span class="o">.</span><span class="n">Positive</span><span class="p">(</span><span class="n">delta</span><span class="o">=</span><span class="mf">0.1</span><span class="p">))</span>
+<span class="n">plots</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">imp</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">imp</span><span class="o">.</span><span class="n">lac</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;cool&#39;</span><span class="p">,</span> 
+            <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Nº of unit activations in layer 0&#39;</span><span class="p">)</span>
+
+<span class="c1"># There could be units that activate more frequently with changes in specific areas</span>
+<span class="c1"># We can explore that too using the information obtained from &#39;activations&#39;</span>
+<span class="c1"># and generate a visual (and/or printed) report</span>
+<span class="n">plots</span><span class="o">.</span><span class="n">feature_report</span><span class="p">(</span><span class="n">imp</span><span class="o">.</span><span class="n">fac</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">print_report</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">show_top</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">plots</span><span class="o">.</span><span class="n">unit_report</span><span class="p">(</span><span class="n">imp</span><span class="o">.</span><span class="n">uac</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">print_report</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">show_top</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="c1"># We can extract more information when using several data points and `relatable`. </span>
+<span class="c1"># This will check, after applying `reactivations` to N images, what units activate</span>
+<span class="c1"># with what feature changes the most. This can be very computer-intensive. Here </span>
+<span class="c1"># it only tests for 3 samples, but you will need a larger N to get significant</span>
+<span class="c1"># results. If you can use a GPU it is highly advised to do so.</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">14730</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="c1"># Change the shape of the array</span>
+<span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">y</span><span class="p">]</span>
+
+<span class="n">imp</span> <span class="o">=</span> <span class="n">pudu</span><span class="o">.</span><span class="n">pudu</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">cnn1d_prob</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span> <span class="c1"># we need to build another pudu</span>
+<span class="n">imp</span><span class="o">.</span><span class="n">relatable</span><span class="p">(</span><span class="n">layer</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">slope</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mf">0.0025</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">perturbation</span><span class="o">=</span><span class="n">ptn</span><span class="o">.</span><span class="n">Positive</span><span class="p">(</span><span class="n">delta</span><span class="o">=</span><span class="mf">0.1</span><span class="p">))</span>
+<span class="n">idx</span><span class="p">,</span> <span class="n">cnt</span><span class="p">,</span> <span class="n">cor</span> <span class="o">=</span> <span class="n">imp</span><span class="o">.</span><span class="n">icc</span> <span class="c1"># this outputs the unit index, activation counts, and position of the feature</span>
+<span class="n">plots</span><span class="o">.</span><span class="n">relate_report</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">cnt</span><span class="p">,</span> <span class="n">cor</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">show_top</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">font_size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">rot_ticks</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span> <span class="n">sort</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<figure class="align-center">
+<a class="reference internal image-reference" href="_images/ex6_1.png"><img alt="" src="_images/ex6_1.png" style="width: 500.0px; height: 200.0px;" /></a>
+</figure>
+<figure class="align-center">
+<a class="reference internal image-reference" href="_images/ex6_2.png"><img alt="" src="_images/ex6_2.png" style="width: 500.0px; height: 200.0px;" /></a>
+</figure>
+<figure class="align-center">
+<a class="reference internal image-reference" href="_images/ex6_3.png"><img alt="" src="_images/ex6_3.png" style="width: 350.0px; height: 250.0px;" /></a>
+</figure>
+<figure class="align-center">
+<a class="reference internal image-reference" href="_images/ex6_4.png"><img alt="" src="_images/ex6_4.png" style="width: 350.0px; height: 250.0px;" /></a>
+</figure>
+<figure class="align-center">
+<a class="reference internal image-reference" href="_images/ex6_5.png"><img alt="" src="_images/ex6_5.png" style="width: 350.0px; height: 250.0px;" /></a>
+</figure>
+</section>
+<section id="example-7-re-activations-with-2-d-cnn">
+<h2>Example 7: Re-activations with 2-D CNN<a class="headerlink" href="#example-7-re-activations-with-2-d-cnn" title="Permalink to this heading"></a></h2>
+<p>This example shows how to evaluate the re-activations on the activation maps for a 2D CNN. The example loads a pre-trained model for the classification of handwritten numbers from the MNIST dataset. It also showcases the use of <cite>relate</cite>, <cite>feature_report</cite>, <cite>unit_report</cite>, and <cite>relate_report</cite>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">tensorflow</span> <span class="kn">import</span> <span class="n">keras</span>
+<span class="kn">from</span> <span class="nn">keras.models</span> <span class="kn">import</span> <span class="n">load_model</span>
+
+<span class="kn">from</span> <span class="nn">pudu</span> <span class="kn">import</span> <span class="n">pudu</span><span class="p">,</span> <span class="n">plots</span>
+<span class="kn">from</span> <span class="nn">pudu</span> <span class="kn">import</span> <span class="n">perturbation</span> <span class="k">as</span> <span class="n">ptn</span>
+
+
+<span class="c1"># Model / data parameters</span>
+<span class="n">num_classes</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">input_shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Load the data and split it between train and test sets</span>
+<span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">),</span> <span class="p">(</span><span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span> <span class="o">=</span> <span class="n">keras</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">mnist</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span>
+
+<span class="c1"># Scale images to the [0, 1] range</span>
+<span class="n">x_train</span> <span class="o">=</span> <span class="n">x_train</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span> <span class="o">/</span> <span class="mi">255</span>
+<span class="n">x_test</span> <span class="o">=</span> <span class="n">x_test</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span> <span class="o">/</span> <span class="mi">255</span>
+
+<span class="c1"># Make sure images have shape (28, 28, 1)</span>
+<span class="n">x_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># convert class vectors to binary class matrices</span>
+<span class="n">y_train</span> <span class="o">=</span> <span class="n">keras</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">to_categorical</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">num_classes</span><span class="p">)</span>
+<span class="n">y_test</span> <span class="o">=</span> <span class="n">keras</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">to_categorical</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">num_classes</span><span class="p">)</span>
+
+<span class="c1"># Load the model and test it</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">load_model</span><span class="p">(</span><span class="s1">&#39;examples/data/mnist_class.h5&#39;</span><span class="p">)</span>
+<span class="n">score</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Test loss:&quot;</span><span class="p">,</span> <span class="n">score</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;| Test accuracy:&quot;</span><span class="p">,</span> <span class="n">score</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">model</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
+
+<span class="c1">### PUDU ###</span>
+<span class="c1"># Input should be 4d: (batch * rows * columns * depth)</span>
+<span class="c1"># This is a classification problem, thus the output should be the </span>
+<span class="c1"># probability by category: [prob_1, prob_2, ..., prob_c]</span>
+<span class="k">def</span> <span class="nf">cnn2d_prob</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,:,:]</span>
+    <span class="k">return</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">X</span><span class="p">,</span> <span class="n">X</span><span class="p">]),</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># verbose 0 is important!</span>
+
+<span class="c1"># Dimention standarization for parameters</span>
+<span class="n">sample</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">y_train</span><span class="p">[</span><span class="n">sample</span><span class="p">])</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">x_train</span><span class="p">[</span><span class="n">sample</span><span class="p">],</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># Build `pudu`, evaluate importance, and plot</span>
+<span class="n">imp</span> <span class="o">=</span> <span class="n">pudu</span><span class="o">.</span><span class="n">pudu</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">cnn2d_prob</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+
+<span class="c1"># First we check importance</span>
+<span class="n">imp</span><span class="o">.</span><span class="n">importance</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">perturbation</span><span class="o">=</span><span class="n">ptn</span><span class="o">.</span><span class="n">Positive</span><span class="p">(</span><span class="n">delta</span><span class="o">=</span><span class="mf">0.1</span><span class="p">),</span> <span class="n">bias</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="n">plots</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">imp</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">imp</span><span class="o">.</span><span class="n">imp_rel</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;cool&#39;</span><span class="p">)</span>
+
+<span class="c1"># Now we explore the unit activations observed in layer 2 (last conv. layer)</span>
+<span class="c1"># We only consider the top 0.5% of the values as activated with `p=0.005`.</span>
+<span class="c1"># Negative values indicate that less units are being activated.</span>
+<span class="n">imp</span><span class="o">.</span><span class="n">reactivations</span><span class="p">(</span><span class="n">layer</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">slope</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mf">0.005</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">perturbation</span><span class="o">=</span><span class="n">ptn</span><span class="o">.</span><span class="n">Positive</span><span class="p">(</span><span class="n">delta</span><span class="o">=</span><span class="mf">0.1</span><span class="p">))</span>
+<span class="n">plots</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">imp</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">imp</span><span class="o">.</span><span class="n">lac</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;cool&#39;</span><span class="p">,</span> 
+            <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Nº of unit activations in layer 0&#39;</span><span class="p">)</span>
+
+<span class="c1"># There could be units that activate more frequently with changes in specific areas</span>
+<span class="c1"># We can explore that too using the information obtained from &#39;activations&#39;</span>
+<span class="c1"># and generate a visual (and/or printed) report</span>
+<span class="n">plots</span><span class="o">.</span><span class="n">feature_report</span><span class="p">(</span><span class="n">imp</span><span class="o">.</span><span class="n">fac</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">print_report</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">show_top</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">plots</span><span class="o">.</span><span class="n">unit_report</span><span class="p">(</span><span class="n">imp</span><span class="o">.</span><span class="n">uac</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">print_report</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">show_top</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">font_size</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+
+<span class="c1"># To better visualize the coordinates, we can better check with &#39;preview&#39;</span>
+<span class="n">imp</span><span class="o">.</span><span class="n">preview</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">yticks</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+<span class="c1"># We can extract more infomration when using several images and `relatable`. </span>
+<span class="c1"># This will see, after applying `activations` to N images, what units activate</span>
+<span class="c1"># with what features the most. </span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">10</span> <span class="c1"># The more the better, 10 to keep computational times &quot;low&quot;</span>
+<span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">y_train</span><span class="p">[:</span><span class="n">N</span><span class="p">]]</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">x_train</span><span class="p">[:</span><span class="n">N</span><span class="p">]</span>
+<span class="n">imp</span> <span class="o">=</span> <span class="n">pudu</span><span class="o">.</span><span class="n">pudu</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">cnn2d_prob</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span> <span class="c1"># we need to build another pudu</span>
+<span class="n">imp</span><span class="o">.</span><span class="n">relatable</span><span class="p">(</span><span class="n">layer</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">slope</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mf">0.005</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">perturbation</span><span class="o">=</span><span class="n">ptn</span><span class="o">.</span><span class="n">Positive</span><span class="p">(</span><span class="n">delta</span><span class="o">=</span><span class="mf">0.1</span><span class="p">))</span>
+<span class="n">idx</span><span class="p">,</span> <span class="n">cnt</span><span class="p">,</span> <span class="n">cor</span> <span class="o">=</span> <span class="n">imp</span><span class="o">.</span><span class="n">icc</span> <span class="c1"># this outputs the unit index, activation counts, and position of the feature</span>
+<span class="n">plots</span><span class="o">.</span><span class="n">relate_report</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">cnt</span><span class="p">,</span> <span class="n">cor</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">print_report</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">show_top</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">font_size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">rot_ticks</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">sort</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<figure class="align-center">
+<a class="reference internal image-reference" href="_images/ex7_1.png"><img alt="" src="_images/ex7_1.png" style="width: 300.0px; height: 300.0px;" /></a>
+</figure>
+<figure class="align-center">
+<a class="reference internal image-reference" href="_images/ex7_2.png"><img alt="" src="_images/ex7_2.png" style="width: 300.0px; height: 300.0px;" /></a>
+</figure>
+<figure class="align-center">
+<a class="reference internal image-reference" href="_images/ex7_3.png"><img alt="" src="_images/ex7_3.png" style="width: 350.0px; height: 250.0px;" /></a>
+</figure>
+<figure class="align-center">
+<a class="reference internal image-reference" href="_images/ex7_4.png"><img alt="" src="_images/ex7_4.png" style="width: 350.0px; height: 250.0px;" /></a>
+</figure>
+<figure class="align-center">
+<a class="reference internal image-reference" href="_images/ex7_5.png"><img alt="" src="_images/ex7_5.png" style="width: 300.0px; height: 300.0px;" /></a>
+</figure>
+<figure class="align-center">
+<a class="reference internal image-reference" href="_images/ex7_6.png"><img alt="" src="_images/ex7_6.png" style="width: 350.0px; height: 250.0px;" /></a>
+</figure>
+</section>
+<section id="example-8-selecting-specific-sections-to-evaluate">
+<h2>Example 8: Selecting specific sections to evaluate<a class="headerlink" href="#example-8-selecting-specific-sections-to-evaluate" title="Permalink to this heading"></a></h2>
+<p>To evaluate specific areas, peaks, and ranges, it is possible to be done one-by-one and then put them all together in a vector for plotting and/or normalizing. This can be performed for <cite>importance</cite> and <cite>speed</cite>. This example loads a pre-trained PC-LDA model built with <cite>Scikit-learn</cite> for classification of Raman and Photoluminescence spectras merged into a single vector as features according to performance as open circuit voltage (Voc).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">spectrapepper</span> <span class="k">as</span> <span class="nn">spep</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+
+<span class="kn">from</span> <span class="nn">pudu</span> <span class="kn">import</span> <span class="n">pudu</span><span class="p">,</span> <span class="n">plots</span>
+
+
+<span class="c1"># Load features (spectra) and targets (open circuit coltage, voc)</span>
+<span class="n">features</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;examples/data/features.txt&#39;</span><span class="p">)</span>
+<span class="n">targets</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;examples/data/targets.txt&#39;</span><span class="p">,</span> <span class="n">transpose</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span>
+
+<span class="c1"># Load pre-trained LDA and PCA models</span>
+<span class="n">lda</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s1">&#39;examples/data/lda_model.sav&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">))</span>
+<span class="n">pca</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s1">&#39;examples/data/pca_model.sav&#39;</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">))</span>
+
+
+<span class="c1">### PUDU ###</span>
+<span class="c1"># Select x (feature) and respective y (target)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">features</span><span class="p">[</span><span class="mi">100</span><span class="p">]</span>
+<span class="n">x_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">targets</span><span class="p">[</span><span class="mi">100</span><span class="p">]</span>
+
+<span class="c1"># Input should be 4d: (batch * rows * columns * depth)</span>
+<span class="c1"># This is a classification problem, thus the output should be the </span>
+<span class="c1"># probability by category: [prob_1, prob_2, ..., prob_c]</span>
+<span class="k">def</span> <span class="nf">pf</span><span class="p">(</span><span class="n">X</span><span class="p">):</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">,:,:,</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">lda</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">pca</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># Build pudu</span>
+<span class="n">imp</span> <span class="o">=</span> <span class="n">pudu</span><span class="o">.</span><span class="n">pudu</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">pf</span><span class="p">)</span>
+
+<span class="c1"># To evaluate more specific areas, we can do ir one-by-one and the</span>
+<span class="c1"># put them all together in a vector for plotting and/or normalizing.</span>
+<span class="c1"># This can be done for `importance` and `speed` only.</span>
+
+<span class="c1"># For this, we first define the areas of interest</span>
+<span class="n">areas</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">170</span><span class="p">,</span> <span class="mi">200</span><span class="p">],</span> <span class="p">[</span><span class="mi">225</span><span class="p">,</span> <span class="mi">255</span><span class="p">],</span> <span class="p">[</span><span class="mi">265</span><span class="p">,</span> <span class="mi">290</span><span class="p">],</span> <span class="p">[</span><span class="mi">305</span><span class="p">,</span> <span class="mi">335</span><span class="p">]]</span>
+
+<span class="c1"># In a loop we evaluate them individually. We make sure that `window`</span>
+<span class="c1"># and `scope` are equal so all the area is evaluated. The results are</span>
+<span class="c1"># saved in `custom`.</span>
+<span class="n">custom</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">x_len</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">areas</span><span class="p">:</span>
+    <span class="n">imp</span><span class="o">.</span><span class="n">importance</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">scope</span><span class="o">=</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="n">custom</span><span class="p">[</span><span class="n">imp</span><span class="o">.</span><span class="n">imp</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">imp</span><span class="o">.</span><span class="n">imp</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">imp</span><span class="o">.</span><span class="n">imp</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+
+<span class="n">custom</span> <span class="o">=</span> <span class="n">custom</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+<span class="n">plots</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">imp</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">custom</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Importance - Specific peaks&quot;</span><span class="p">,</span> <span class="n">yticks</span><span class="o">=</span><span class="p">[],</span> <span class="n">font_size</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;coolwarm&#39;</span><span class="p">)</span>
+
+<span class="c1"># Repeat the same for `speed`.</span>
+<span class="n">custom</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">x_len</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">areas</span><span class="p">:</span>
+    <span class="n">imp</span><span class="o">.</span><span class="n">speed</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">scope</span><span class="o">=</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+    <span class="n">custom</span><span class="p">[</span><span class="n">imp</span><span class="o">.</span><span class="n">spe</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">imp</span><span class="o">.</span><span class="n">spe</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">imp</span><span class="o">.</span><span class="n">spe</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+
+<span class="n">custom</span> <span class="o">=</span> <span class="n">custom</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+<span class="n">plots</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">imp</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">custom</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Speed - Specific peaks&quot;</span><span class="p">,</span> <span class="n">yticks</span><span class="o">=</span><span class="p">[],</span> <span class="n">font_size</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;coolwarm&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<figure class="align-center">
+<a class="reference internal image-reference" href="_images/ex8_1.png"><img alt="" src="_images/ex8_1.png" style="width: 700.0px; height: 200.0px;" /></a>
+</figure>
+<figure class="align-center">
+<a class="reference internal image-reference" href="_images/ex8_2.png"><img alt="" src="_images/ex8_2.png" style="width: 700.0px; height: 200.0px;" /></a>
+</figure>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="masks.html" class="btn btn-neutral float-left" title="Mask Functions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="contributions.html" class="btn btn-neutral float-right" title="Contributing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Institut de Recerca en Energia de Catalunya.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

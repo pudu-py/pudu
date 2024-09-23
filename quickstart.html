@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pudu &mdash; pudu  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Functions" href="functions.html" />
+    <link rel="prev" title="&lt;no title&gt;" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> pudu
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">pudu</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#features">Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#quickstart">Quickstart</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#credits">Credits</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="functions.html">Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributions.html">Contributing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pudu</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">pudu</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/quickstart.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="pudu">
+<h1>pudu<a class="headerlink" href="#pudu" title="Permalink to this heading"></a></h1>
+<a class="reference external image-reference" href="https://pypi.python.org/pypi/pudu"><img alt="https://img.shields.io/pypi/v/pudu.svg" src="https://img.shields.io/pypi/v/pudu.svg" /></a>
+<a class="reference external image-reference" href="https://anaconda.org/conda-forge/pudu"><img alt="https://img.shields.io/conda/vn/conda-forge/pudu.svg" src="https://img.shields.io/conda/vn/conda-forge/pudu.svg" /></a>
+<a class="reference external image-reference" href="https://opensource.org/licenses/MIT"><img alt="https://img.shields.io/badge/License-MIT-yellow.svg" src="https://img.shields.io/badge/License-MIT-yellow.svg" /></a>
+<a class="reference external image-reference" href="https://github.com/pudu-py/pudu/actions/workflows/codeql.yml"><img alt="https://github.com/pudu-py/pudu/actions/workflows/codeql.yml/badge.svg" src="https://github.com/pudu-py/pudu/actions/workflows/codeql.yml/badge.svg" /></a>
+<a class="reference external image-reference" href="https://pudu-py.github.io/pudu"><img alt="https://github.com/pudu-py/pudu/workflows/docs/badge.svg" src="https://github.com/pudu-py/pudu/workflows/docs/badge.svg" /></a>
+<a class="reference external image-reference" href="https://codecov.io/gh/spectrapepper/spectrapepper"><img alt="https://codecov.io/gh/spectrapepper/pudu/branch/main/graph/badge.svg?token=DC0QIwuYel" src="https://codecov.io/gh/spectrapepper/pudu/branch/main/graph/badge.svg?token=DC0QIwuYel" /></a>
+<a class="reference external image-reference" href="https://pepy.tech/project/pudu"><img alt="https://img.shields.io/conda/dn/conda-forge/pudu.svg?color=blue&amp;label=conda%20downloads" src="https://img.shields.io/conda/dn/conda-forge/pudu.svg?color=blue&amp;label=conda%20downloads" /></a>
+<a class="reference external image-reference" href="https://pepy.tech/project/pudu"><img alt="https://static.pepy.tech/personalized-badge/pudu?period=total&amp;units=international_system&amp;left_color=grey&amp;left_text=pypi%20downloads&amp;right_color=blue" src="https://static.pepy.tech/personalized-badge/pudu?period=total&amp;units=international_system&amp;left_color=grey&amp;left_text=pypi%20downloads&amp;right_color=blue" /></a>
+<a class="reference external image-reference" href="https://stackoverflow.com/questions/tagged/pudu"><img alt="https://img.shields.io/badge/stackoverflow-Ask%20a%20question-brown" src="https://img.shields.io/badge/stackoverflow-Ask%20a%20question-brown" /></a>
+<p><strong>A Python library for explainability of machine learinng algorithms in an agnostic, deterministic, and simple way.</strong>
+* GitHub repo: <a class="reference external" href="https://github.com/pudu-py/pudu">https://github.com/pudu-py/pudu</a>
+* Documentation: <a class="reference external" href="https://pudu-py.github.io/pudu">https://pudu-py.github.io/pudu</a>
+* PyPI: <a class="reference external" href="https://pypi.python.org/pypi/pudu">https://pypi.python.org/pypi/pudu</a>
+* Conda-forge: <a class="reference external" href="https://anaconda.org/conda-forge/pudu">https://anaconda.org/conda-forge/pudu</a>
+* Free software: MIT license</p>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading"></a></h2>
+<p><strong>pudu</strong> is a Python package that helps intepret and explore the results of machinme learning algorythms. It does this by quantifying the change
+in probability according to the change in the features. This library works with any case that has a probability function, which is normally available in <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code> and <code class="docutils literal notranslate"><span class="pre">keras</span></code> methods, and works for both 1-d (vectrors) and 2-d problems (images). In order to see the exact procedure and format needed, please refer to the examples in the <code class="docutils literal notranslate"><span class="pre">docs</span></code>.</p>
+<section id="features">
+<h3>Features<a class="headerlink" href="#features" title="Permalink to this heading"></a></h3>
+<p>The following is a list of the main procedures that <strong>pudu</strong> package enables.</p>
+<ul class="simple">
+<li><p>Importance: estimates the absolute or relative importance oif the features.</p></li>
+<li><p>Speed: calculates how fast a preditci0on changes according to the changes in the features.</p></li>
+<li><p>Synergy: tests teh synergy between features and the change in classification probability.</p></li>
+<li><p>Easy plotting of the results from the above.</p></li>
+</ul>
+</section>
+<section id="quickstart">
+<h3>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this heading"></a></h3>
+<ol class="arabic">
+<li><p>Install this library using <code class="docutils literal notranslate"><span class="pre">pip</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">pudu</span>
+</pre></div>
+</div>
+</li>
+<li><p>Install this library using <code class="docutils literal notranslate"><span class="pre">conda-forge</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">pudu</span>
+</pre></div>
+</div>
+</li>
+<li><p>Test it by running one of the examples in the <code class="docutils literal notranslate"><span class="pre">docs</span></code>.</p></li>
+<li><p>If you find this library useful, please consider a reference or citation as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
+</pre></div>
+</div>
+</li>
+<li><p>Stay up-to-date by updating the library using:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">update</span> <span class="n">pudu</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">update</span> <span class="n">pudu</span>
+</pre></div>
+</div>
+</li>
+<li><p>If you encounter problems when updating, try uninstalling and then re-installing:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">uninstall</span> <span class="n">pudu</span>
+<span class="n">conda</span> <span class="n">remove</span> <span class="n">pudu</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="credits">
+<h3>Credits<a class="headerlink" href="#credits" title="Permalink to this heading"></a></h3>
+<p>This package was created with <a class="reference external" href="https://github.com/audreyr/cookiecutter">Cookiecutter</a> and the <a class="reference external" href="https://github.com/giswqs/pypackage">giswqs/pypackage</a> project template.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="&lt;no title&gt;" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="functions.html" class="btn btn-neutral float-right" title="Functions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Institut de Recerca en Energia de Catalunya.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
